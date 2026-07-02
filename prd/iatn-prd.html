@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IATN — Product Requirements Document</title>
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Typography ── */
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 11pt;
+      line-height: 1.7;
+      color: #1a1a2e;
+      background: #fff;
+    }
+    h1 { font-size: 28pt; font-weight: 700; letter-spacing: -0.5px; }
+    h2 { font-size: 16pt; font-weight: 700; margin-top: 2rem; margin-bottom: 0.6rem; color: #16213e; border-bottom: 2px solid #0f3460; padding-bottom: 0.3rem; }
+    h3 { font-size: 12pt; font-weight: 700; margin-top: 1.4rem; margin-bottom: 0.4rem; color: #0f3460; }
+    h4 { font-size: 11pt; font-weight: 700; margin-top: 1rem; margin-bottom: 0.3rem; color: #533483; }
+    p  { margin-bottom: 0.7rem; }
+    ul, ol { margin-left: 1.4rem; margin-bottom: 0.7rem; }
+    li { margin-bottom: 0.25rem; }
+    strong { color: #0f3460; }
+    a  { color: #0f3460; text-decoration: none; }
+    code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 9.5pt; color: #533483; }
+
+    /* ── Layout ── */
+    .page { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm; }
+
+    /* ── Cover ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(135deg, #16213e 0%, #0f3460 60%, #533483 100%);
+      color: #fff;
+      padding: 40mm 20mm;
+      page-break-after: always;
+    }
+    .cover .badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #e0e0ff; font-size: 9pt; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 2rem; font-family: sans-serif; }
+    .cover h1 { font-size: 42pt; color: #fff; line-height: 1.15; margin-bottom: 1rem; }
+    .cover .subtitle { font-size: 15pt; color: rgba(255,255,255,0.75); margin-bottom: 3rem; font-style: italic; }
+    .cover .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 400px; }
+    .cover .meta-item { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; }
+    .cover .meta-item .label { font-size: 8pt; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.5); font-family: sans-serif; }
+    .cover .meta-item .value { font-size: 11pt; color: #fff; font-weight: 600; font-family: sans-serif; }
+    .cover .logo-mark { font-size: 48pt; font-weight: 900; color: #fff; letter-spacing: -3px; font-family: sans-serif; margin-bottom: 0.5rem; }
+    .cover .logo-sub { font-size: 10pt; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.6); font-family: sans-serif; margin-bottom: 3rem; }
+
+    /* ── Table of Contents ── */
+    .toc { page-break-after: always; }
+    .toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px dotted #ddd; }
+    .toc-item a { color: #0f3460; font-family: sans-serif; font-size: 10.5pt; }
+    .toc-item .page-num { color: #999; font-family: sans-serif; font-size: 9pt; }
+    .toc-section { font-size: 8pt; text-transform: uppercase; letter-spacing: 2px; color: #533483; font-family: sans-serif; margin: 1.2rem 0 0.4rem; font-weight: 700; }
+
+    /* ── Section breaks ── */
+    .section { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.4rem; font-size: 10pt; font-family: sans-serif; }
+    th { background: #0f3460; color: #fff; padding: 8px 12px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 7px 12px; border-bottom: 1px solid #e8eaf6; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8f9ff; }
+
+    /* ── Callout boxes ── */
+    .callout { background: #f0f4ff; border-left: 4px solid #0f3460; padding: 12px 16px; margin: 1rem 0; border-radius: 0 6px 6px 0; }
+    .callout.purple { background: #f5f0ff; border-left-color: #533483; }
+    .callout.green { background: #f0fff4; border-left-color: #22863a; }
+    .callout.amber { background: #fffbf0; border-left-color: #d97706; }
+    .callout .callout-title { font-family: sans-serif; font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #0f3460; }
+    .callout.purple .callout-title { color: #533483; }
+    .callout.green .callout-title { color: #22863a; }
+    .callout.amber .callout-title { color: #d97706; }
+
+    /* ── Phase cards ── */
+    .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .phase-card { border: 1px solid #e0e0f0; border-radius: 8px; padding: 14px 16px; }
+    .phase-card .phase-num { font-size: 8pt; text-transform: uppercase; letter-spacing: 2px; color: #533483; font-family: sans-serif; font-weight: 700; }
+    .phase-card .phase-title { font-size: 12pt; font-weight: 700; color: #0f3460; font-family: sans-serif; margin: 2px 0 8px; }
+    .phase-card ul { font-size: 9.5pt; font-family: sans-serif; color: #444; margin-left: 1rem; }
+    .phase-card .timeline { font-size: 8.5pt; color: #999; font-family: sans-serif; margin-top: 8px; }
+
+    /* ── KPI cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin: 1rem 0; }
+    .kpi-card { background: linear-gradient(135deg, #16213e, #0f3460); color: #fff; border-radius: 8px; padding: 16px; text-align: center; }
+    .kpi-card .kpi-val { font-size: 22pt; font-weight: 900; font-family: sans-serif; color: #a78bfa; }
+    .kpi-card .kpi-label { font-size: 8.5pt; color: rgba(255,255,255,0.7); font-family: sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+    .kpi-card .kpi-period { font-size: 8pt; color: rgba(255,255,255,0.45); font-family: sans-serif; }
+
+    /* ── User persona cards ── */
+    .persona-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; margin: 1rem 0; }
+    .persona-card { border: 1px solid #e0e0f0; border-radius: 8px; padding: 14px; }
+    .persona-card .persona-icon { font-size: 20pt; margin-bottom: 6px; }
+    .persona-card .persona-name { font-family: sans-serif; font-weight: 700; font-size: 11pt; color: #0f3460; }
+    .persona-card .persona-desc { font-size: 9pt; color: #666; font-family: sans-serif; margin-top: 4px; }
+    .persona-card .persona-need { font-size: 9pt; font-family: sans-serif; margin-top: 8px; }
+    .persona-card .persona-need strong { color: #533483; }
+
+    /* ── Flow diagram (text-based) ── */
+    .flow { background: #f8f9ff; border: 1px solid #e0e0f0; border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 9pt; line-height: 1.8; margin: 1rem 0; color: #1a1a2e; }
+
+    /* ── Print ── */
+    @media print {
+      body { font-size: 10.5pt; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .kpi-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      h2 { page-break-after: avoid; }
+      h3 { page-break-after: avoid; }
+      table { page-break-inside: avoid; }
+      .phase-grid { page-break-inside: avoid; }
+      .kpi-grid { page-break-inside: avoid; }
+    }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid #e0e0f0; margin: 2rem 0; }
+
+    /* ── Footer ── */
+    .doc-footer { font-family: sans-serif; font-size: 8pt; color: #999; text-align: center; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e0e0f0; }
+
+    .tag { display: inline-block; background: #f0f4ff; color: #0f3460; font-family: sans-serif; font-size: 8.5pt; padding: 2px 8px; border-radius: 12px; margin: 2px; border: 1px solid #c7d2fe; }
+    .tag.purple { background: #f5f0ff; color: #533483; border-color: #ddd6fe; }
+    .tag.green { background: #f0fff4; color: #166534; border-color: #bbf7d0; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════ COVER -->
+<div class="cover page">
+  <div class="logo-mark">IATN</div>
+  <div class="logo-sub">International Academic Tutors Nigeria</div>
+  <div class="badge">Product Requirements Document · v1.0</div>
+  <h1>Nigeria's International<br>Education Ecosystem</h1>
+  <p class="subtitle">A verified marketplace connecting students, parents, tutors,<br>schools, and universities across IGCSE, A-Level, IB, and SAT curricula.</p>
+  <div class="meta">
+    <div class="meta-item">
+      <div class="label">Version</div>
+      <div class="value">1.0 — MVP</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Date</div>
+      <div class="value">July 2026</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Status</div>
+      <div class="value">Approved</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Market</div>
+      <div class="value">Nigeria</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ TOC -->
+<div class="page toc">
+  <h2 style="border-bottom-color: #533483; color: #533483;">Table of Contents</h2>
+  <div class="toc-section">Overview</div>
+  <div class="toc-item"><a href="#exec-summary">1. Executive Summary</a><span class="page-num">3</span></div>
+  <div class="toc-item"><a href="#problem">2. Problem Statement</a><span class="page-num">3</span></div>
+  <div class="toc-item"><a href="#market">3. Market Opportunity</a><span class="page-num">4</span></div>
+  <div class="toc-item"><a href="#vision">4. Platform Vision & Goals</a><span class="page-num">4</span></div>
+
+  <div class="toc-section">Users</div>
+  <div class="toc-item"><a href="#personas">5. User Personas</a><span class="page-num">5</span></div>
+  <div class="toc-item"><a href="#user-flows">6. User Flows</a><span class="page-num">6</span></div>
+
+  <div class="toc-section">Features</div>
+  <div class="toc-item"><a href="#tutors-feat">7. Tutor Features</a><span class="page-num">7</span></div>
+  <div class="toc-item"><a href="#students-feat">8. Student Features</a><span class="page-num">9</span></div>
+  <div class="toc-item"><a href="#parents-feat">9. Parent Features</a><span class="page-num">10</span></div>
+  <div class="toc-item"><a href="#schools-feat">10. School Features</a><span class="page-num">11</span></div>
+  <div class="toc-item"><a href="#universities-feat">11. University Directory</a><span class="page-num">11</span></div>
+  <div class="toc-item"><a href="#exams-feat">12. Examination Hub</a><span class="page-num">12</span></div>
+  <div class="toc-item"><a href="#ai-feat">13. AI Features</a><span class="page-num">12</span></div>
+  <div class="toc-item"><a href="#community-feat">14. Community & Marketplace</a><span class="page-num">13</span></div>
+
+  <div class="toc-section">Technical</div>
+  <div class="toc-item"><a href="#tech-stack">15. Tech Stack</a><span class="page-num">14</span></div>
+  <div class="toc-item"><a href="#schema">16. Database Schema</a><span class="page-num">14</span></div>
+  <div class="toc-item"><a href="#security">17. Security & Trust</a><span class="page-num">16</span></div>
+
+  <div class="toc-section">Business</div>
+  <div class="toc-item"><a href="#monetization">18. Monetization Model</a><span class="page-num">17</span></div>
+  <div class="toc-item"><a href="#phases">19. Implementation Phases</a><span class="page-num">17</span></div>
+  <div class="toc-item"><a href="#kpis">20. Success Metrics (KPIs)</a><span class="page-num">18</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ BODY -->
+<div class="page">
+
+  <!-- 1. Executive Summary -->
+  <h2 id="exec-summary">1. Executive Summary</h2>
+  <p>IATN (International Academic Tutors Nigeria) is a comprehensive digital education ecosystem designed to become Nigeria's premier platform for international curriculum education. The platform connects students and parents with verified, high-performing tutors and schools specialising in Cambridge IGCSE, Cambridge AS & A Level, Edexcel, OxfordAQA, the International Baccalaureate Diploma, and SAT/ACT preparation.</p>
+  <p>IATN goes beyond a simple tutor directory. It functions as a <strong>verified professional marketplace, learning management platform, school discovery engine, university pathway guide, and AI-powered study companion</strong> — all in one destination.</p>
+  <div class="callout">
+    <div class="callout-title">North Star</div>
+    To be the most trusted gateway to international education in Nigeria — where every student finds the right tutor, every parent makes informed school choices, and every educator builds a verifiable professional reputation.
+  </div>
+
+  <!-- 2. Problem Statement -->
+  <h2 id="problem">2. Problem Statement</h2>
+  <div class="two-col">
+    <div>
+      <h3>For Students & Parents</h3>
+      <ul>
+        <li>No reliable way to verify a tutor's Cambridge track record</li>
+        <li>No structured comparison of IGCSE/A-Level schools in Nigeria</li>
+        <li>No centralised source for past papers, study plans, or mock exams</li>
+        <li>No clear university pathway guidance post-A-Level</li>
+        <li>Payments are informal and unprotected</li>
+      </ul>
+    </div>
+    <div>
+      <h3>For Tutors & Schools</h3>
+      <ul>
+        <li>No professional identity platform for international curriculum teachers</li>
+        <li>No verifiable portfolio of student results</li>
+        <li>No structured booking, scheduling, or payment infrastructure</li>
+        <li>Schools cannot efficiently recruit verified Cambridge teachers</li>
+        <li>No CPD (continuing professional development) tracking</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Market Opportunity -->
+  <h2 id="market" class="page-break">3. Market Opportunity</h2>
+  <table>
+    <tr><th>Indicator</th><th>Data Point</th><th>Implication</th></tr>
+    <tr><td>Nigeria population</td><td>220 million+ (2026)</td><td>Largest addressable market in Africa</td></tr>
+    <tr><td>Private school enrolment growth</td><td>~15% YoY</td><td>Rapidly expanding fee-paying segment</td></tr>
+    <tr><td>IGCSE/A-Level centres in Nigeria</td><td>300+ registered Cambridge centres</td><td>Institutional demand for qualified teachers</td></tr>
+    <tr><td>University aspirants seeking UK/US admission</td><td>50,000+ annually</td><td>High demand for SAT/A-Level preparation</td></tr>
+    <tr><td>Online tutoring global market (2026)</td><td>USD 18 billion</td><td>Nigeria claims an increasing share</td></tr>
+    <tr><td>Nigerian EdTech investment (2024–2025)</td><td>USD 120M+</td><td>Investors are active in this space</td></tr>
+  </table>
+  <div class="callout green">
+    <div class="callout-title">Strategic Position</div>
+    No platform in Nigeria today combines tutor verification, Cambridge success metrics, school discovery, AI tutoring, and university pathway guidance. IATN owns this uncrowded space.
+  </div>
+
+  <!-- 4. Vision & Goals -->
+  <h2 id="vision">4. Platform Vision & Goals</h2>
+  <h3>Vision</h3>
+  <p>A trusted, AI-powered education ecosystem where Nigerian students can access world-class international curriculum support — from finding a verified tutor to gaining admission to a global university.</p>
+  <h3>Goals (Year 1)</h3>
+  <ul>
+    <li>Onboard <strong>2,000+ verified tutors</strong> across all 36 Nigerian states</li>
+    <li>List <strong>200+ IGCSE/A-Level schools</strong> with verified profiles</li>
+    <li>Facilitate <strong>10,000+ lesson bookings</strong> per month by Month 9</li>
+    <li>Provide <strong>AI-assisted study tools</strong> to 20,000+ students</li>
+    <li>Generate sustainable revenue through subscriptions and booking commissions</li>
+  </ul>
+
+  <!-- 5. User Personas -->
+  <h2 id="personas" class="page-break">5. User Personas</h2>
+  <div class="persona-grid">
+    <div class="persona-card">
+      <div class="persona-icon">👩‍🏫</div>
+      <div class="persona-name">The Tutor</div>
+      <div class="persona-desc">Cambridge-trained educator, 5–20 years experience, teaching IGCSE Maths and A-Level Physics privately.</div>
+      <div class="persona-need"><strong>Needs:</strong> Professional identity, verified Cambridge record, booking system, payment protection, CPD credits.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-icon">📚</div>
+      <div class="persona-name">The Student</div>
+      <div class="persona-desc">15–19 year old in a Lagos private school, preparing for Cambridge IGCSE exams in May/June.</div>
+      <div class="persona-need"><strong>Needs:</strong> Qualified tutor, mock exams, AI study assistant, past papers, progress tracking.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-icon">👪</div>
+      <div class="persona-name">The Parent</div>
+      <div class="persona-desc">High-income professional in Abuja, wants verifiable results before hiring a tutor or choosing a school.</div>
+      <div class="persona-need"><strong>Needs:</strong> Trust signals, school comparison, progress monitoring, secure fee payment.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-icon">🏫</div>
+      <div class="persona-name">The School</div>
+      <div class="persona-desc">Registered Cambridge centre in Port Harcourt, needs to recruit qualified teachers and attract prospective students.</div>
+      <div class="persona-need"><strong>Needs:</strong> Teacher recruitment, school profile, admissions management, marketing tools.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-icon">🎓</div>
+      <div class="persona-name">The University</div>
+      <div class="persona-desc">UK/US/Nigerian university accepting Cambridge A-Level, wanting to reach qualified Nigerian applicants.</div>
+      <div class="persona-need"><strong>Needs:</strong> Sponsored listing, entry requirements page, scholarship announcements.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-icon">⚙️</div>
+      <div class="persona-name">The Admin</div>
+      <div class="persona-desc">IATN platform operator responsible for quality control, verification, and platform health.</div>
+      <div class="persona-need"><strong>Needs:</strong> Verification queue, analytics dashboard, content moderation, user management.</div>
+    </div>
+  </div>
+
+  <!-- 6. User Flows -->
+  <h2 id="user-flows">6. Key User Flows</h2>
+  <h3>Tutor Registration Flow</h3>
+  <div class="flow">
+[Landing Page]
+  → Click "Register as Tutor"
+  → [Step 1: Account] Email + password + role = tutor
+  → [Step 2: Personal Info] Name, photo, phone, state, city
+  → [Step 3: Professional] Institution, years experience, bio, teaching mode
+  → [Step 4: Subjects & Curricula] Select subjects + curricula + proficiency
+  → [Step 5: Qualifications] Upload degree, teaching certs (Supabase Storage)
+  → [Step 6: Cambridge Metrics] Students taught, pass rate, A*/A percentage
+  → [Step 7: Rates & Schedule] Hourly rate, availability, class size
+  → [Registration Complete] → IATN-2026-XXXXXX number generated (Supabase trigger)
+  → Profile live (status: "Pending Verification")
+  → Admin reviews → Verified ✓ → Badge awarded
+  </div>
+
+  <h3>Student Search & Booking Flow</h3>
+  <div class="flow">
+[Search Page] → Filter: Subject + Curriculum + State + Max Price + Min Rating
+  → [Results Grid] Tutor cards with rating, rate, verified badge
+  → [Tutor Profile Page] Full profile, Cambridge metrics, reviews, portfolio
+  → Click "Book a Lesson"
+  → [Booking Calendar] Select date/time slot
+  → [Lesson Details] Subject, curriculum, notes
+  → [Payment] Paystack checkout (NGN)
+  → [Confirmation] Email to both tutor and student
+  → [Lesson Day] Video call link sent
+  → [Post-lesson] Leave review → updates tutor rating
+  </div>
+
+  <!-- 7. Tutor Features -->
+  <h2 id="tutors-feat" class="page-break">7. Tutor Features</h2>
+
+  <h3>7.1 Registration & Identity</h3>
+  <ul>
+    <li><strong>Unique Registration Number</strong> — auto-generated on completion: <code>IATN-YYYY-NNNNNN</code> (e.g., IATN-2026-000123)</li>
+    <li>7-step onboarding wizard with progress indicator and save-and-resume</li>
+    <li>Professional profile photo upload</li>
+    <li>Email and phone verification</li>
+  </ul>
+
+  <h3>7.2 Professional Profile</h3>
+  <table>
+    <tr><th>Section</th><th>Fields</th></tr>
+    <tr><td>Personal</td><td>Full name, photo, email, phone, state, city, current school/institution, bio, languages</td></tr>
+    <tr><td>Teaching</td><td>Years of experience, teaching mode (Online / Physical / Both), time zone, hourly rate (NGN), max class size, group classes, trial lesson available</td></tr>
+    <tr><td>Subjects</td><td>Mathematics, Further Mathematics, Physics, Chemistry, Biology, Economics, Business Studies, Computer Science, English Language, Geography, History, and others — each with curriculum and proficiency level</td></tr>
+    <tr><td>Curricula</td><td>Cambridge IGCSE, Cambridge AS & A Level, Edexcel, OxfordAQA, SAT, ACT, IB Diploma</td></tr>
+    <tr><td>Qualifications</td><td>Bachelor's, Master's, PhD, PGDE, QTS, TRCN — with document uploads</td></tr>
+    <tr><td>Tools</td><td>AI-assisted teaching, Google Classroom, Zoom, Microsoft Teams, Moodle, Digital Whiteboard, Interactive Assessments</td></tr>
+  </table>
+
+  <h3>7.3 Cambridge Success Metrics</h3>
+  <ul>
+    <li>Total students taught</li>
+    <li>Total examination sittings facilitated</li>
+    <li>Percentage of A*/A grades achieved by students</li>
+    <li>Average student improvement (grade uplift)</li>
+    <li>Pass rate percentage</li>
+    <li>Outstanding Learner Awards received</li>
+    <li>Top student achievements (free text)</li>
+  </ul>
+
+  <h3>7.4 Verification & Badges</h3>
+  <table>
+    <tr><th>Badge</th><th>Criteria</th></tr>
+    <tr><td>Identity Verified</td><td>Government ID uploaded and confirmed</td></tr>
+    <tr><td>Qualification Verified</td><td>Degree/teaching certificate validated by admin</td></tr>
+    <tr><td>Background Verified</td><td>Background check completed (optional premium)</td></tr>
+    <tr><td>Cambridge Expert</td><td>3+ years, 50+ students, 75%+ A*/A rate</td></tr>
+    <tr><td>Top Tutor</td><td>Rating ≥ 4.8, 50+ reviews, response time &lt; 2h</td></tr>
+    <tr><td>Verified Tutor</td><td>All core verification steps complete</td></tr>
+  </table>
+
+  <h3>7.5 Tutor Dashboard</h3>
+  <ul>
+    <li>Booking calendar — upcoming and past sessions</li>
+    <li>Earnings tracker — total earned, pending payouts, transaction history</li>
+    <li>Student roster — all students taught</li>
+    <li>Analytics — profile views, booking conversion, response time, student retention</li>
+    <li>Resource marketplace — upload and sell lesson notes, past paper solutions, courses</li>
+    <li>Job board — browse open teaching positions at IGCSE/A-Level schools</li>
+    <li>CPD tracker — log professional development activities and earn CPD credits</li>
+    <li>AI profile summary — Claude-generated professional bio based on profile data</li>
+  </ul>
+
+  <!-- 8. Student Features -->
+  <h2 id="students-feat" class="page-break">8. Student Features</h2>
+  <h3>8.1 Tutor Discovery</h3>
+  <ul>
+    <li>Search by subject, curriculum, Nigerian state, price range, rating, availability</li>
+    <li>Filter by verified status, teaching mode, trial lesson availability</li>
+    <li>Sort by rating, price, most reviewed, newest</li>
+    <li>AI-powered tutor matching — personalised recommendations based on student profile</li>
+  </ul>
+  <h3>8.2 Learning Tools</h3>
+  <ul>
+    <li><strong>Mock Exams</strong> — timed IGCSE and A-Level past paper simulations with auto-marking</li>
+    <li><strong>AI Study Assistant</strong> — conversational AI for concept explanations, worked examples, and exam tips</li>
+    <li><strong>Personalised Study Plans</strong> — AI-generated timetables based on exam date and subject gaps</li>
+    <li><strong>Past Questions & Mark Schemes</strong> — organised by subject, year, and curriculum</li>
+    <li><strong>Revision Notes</strong> — tutor-uploaded and platform-curated notes by topic</li>
+    <li><strong>AI Homework Feedback</strong> — upload a photo of work and receive AI feedback</li>
+    <li><strong>AI Essay Marking</strong> — AI scores and comments on written responses</li>
+    <li><strong>AI Exam Readiness Prediction</strong> — predicts likely grade based on mock performance</li>
+  </ul>
+  <h3>8.3 Student Dashboard</h3>
+  <ul>
+    <li>Upcoming and past bookings</li>
+    <li>Progress dashboard — scores over time, subject performance heatmap</li>
+    <li>Digital certificates and achievement badges</li>
+    <li>University application guidance module</li>
+    <li>Scholarship finder</li>
+    <li>Career aptitude test</li>
+    <li>Messaging — secure chat with tutors</li>
+  </ul>
+
+  <!-- 9. Parent Features -->
+  <h2 id="parents-feat">9. Parent Features</h2>
+  <ul>
+    <li>Add and manage multiple children under one parent account</li>
+    <li>View each child's bookings, lesson history, and progress reports</li>
+    <li>Compare tutors side-by-side (rate, rating, Cambridge metrics)</li>
+    <li>Compare schools — fees, curricula, inspection ratings, student outcomes</li>
+    <li>Fee payment tracking and receipts for tutor bookings</li>
+    <li>Parent-teacher messaging — communicate directly with child's tutor</li>
+    <li>Attendance reports — lessons attended vs. missed</li>
+    <li>Alerts — exam registration deadlines, scholarship windows, school open days</li>
+    <li>Educational blog and resource library</li>
+  </ul>
+
+  <!-- 10. School Features -->
+  <h2 id="schools-feat" class="page-break">10. School Features</h2>
+  <h3>10.1 School Profile</h3>
+  <ul>
+    <li>School name, logo, cover image, address, state, school type</li>
+    <li>Curricula offered (IGCSE, A-Level, IB, Edexcel, OxfordAQA)</li>
+    <li>Registration number: <code>IATN-SCH-YYYY-NNNN</code></li>
+    <li>Founded year, student count, fee range</li>
+    <li>Verified badge and inspection rating</li>
+    <li>Student outcome statistics (A*/A rates, university placements)</li>
+    <li>Gallery, testimonials, upcoming open days</li>
+  </ul>
+  <h3>10.2 School Dashboard</h3>
+  <ul>
+    <li><strong>Teacher Recruitment</strong> — post vacancies, receive applications from verified tutors on the platform</li>
+    <li><strong>Admissions Management</strong> — enquiry tracking, application forms, status pipeline</li>
+    <li><strong>Analytics</strong> — profile views, enquiry conversion, comparison rankings</li>
+    <li><strong>Event Management</strong> — create and publish Open Days, webinars, school tours</li>
+    <li><strong>Marketing Tools</strong> — sponsored placement in search results, featured school badge</li>
+  </ul>
+
+  <!-- 11. University Directory -->
+  <h2 id="universities-feat">11. University Directory</h2>
+  <p>IATN hosts a curated directory of universities in Nigeria and globally that accept Cambridge A-Level, IGCSE, IB, SAT, and foundation programmes.</p>
+  <h3>Per University Listing</h3>
+  <ul>
+    <li>Entry requirements per curriculum (A-Level grades, SAT scores, IB points)</li>
+    <li>Tuition fees (NGN and foreign currency)</li>
+    <li>Available scholarships for Nigerian students</li>
+    <li>Application deadlines and acceptance statistics</li>
+    <li>Popular courses and contact details</li>
+    <li>Alumni testimonials</li>
+  </ul>
+  <h3>University Finder Tool</h3>
+  <ul>
+    <li>Filter by country, subject area, tuition range, minimum entry grade</li>
+    <li>AI university matching — enter your predicted grades and get ranked recommendations</li>
+  </ul>
+
+  <!-- 12. Examination Hub -->
+  <h2 id="exams-feat">12. Examination Hub</h2>
+  <table>
+    <tr><th>Examination Body</th><th>Information Provided</th></tr>
+    <tr><td>Cambridge Assessment International Education (CAIE)</td><td>Registration guide, exam timetables, grade boundaries, result dates, Edexcel</td></tr>
+    <tr><td>Pearson Edexcel</td><td>Subject syllabi, entry requirements, past papers, registration centres</td></tr>
+    <tr><td>OxfordAQA</td><td>Available subjects, assessment structure, Nigerian centres</td></tr>
+    <tr><td>SAT (College Board)</td><td>Test dates in Nigeria, registration guide, score submission, prep resources</td></tr>
+    <tr><td>ACT</td><td>Test locations, registration, score benchmarks for US universities</td></tr>
+    <tr><td>IELTS</td><td>Test centres in Nigeria, band score requirements, preparation tips</td></tr>
+    <tr><td>TOEFL</td><td>Test dates, ETS registration, university acceptance thresholds</td></tr>
+  </table>
+
+  <!-- 13. AI Features -->
+  <h2 id="ai-feat" class="page-break">13. AI Features</h2>
+  <div class="callout purple">
+    <div class="callout-title">Powered by Claude (Anthropic)</div>
+    All AI features are built on the Claude API, leveraging its strength in education, long-context reasoning, and structured generation.
+  </div>
+  <table>
+    <tr><th>Feature</th><th>Description</th><th>User</th></tr>
+    <tr><td>AI Profile Summary</td><td>Auto-generates a professional tutor bio from structured profile data</td><td>Tutor</td></tr>
+    <tr><td>AI Tutor Matching</td><td>Ranks tutors by fit score based on student's subject, curriculum, budget, and learning style</td><td>Student / Parent</td></tr>
+    <tr><td>AI Study Assistant</td><td>Conversational assistant for concept explanations, past paper walkthroughs, and exam tips</td><td>Student</td></tr>
+    <tr><td>AI Study Plan</td><td>Generates personalised weekly timetable based on exam date, weak topics, and available hours</td><td>Student</td></tr>
+    <tr><td>AI Homework Feedback</td><td>Student uploads work image; AI provides structured feedback and grade estimate</td><td>Student</td></tr>
+    <tr><td>AI Essay Marking</td><td>Scores extended writing against Cambridge mark scheme criteria</td><td>Student</td></tr>
+    <tr><td>AI Exam Readiness</td><td>Predicts likely exam grade based on mock scores and topic coverage</td><td>Student</td></tr>
+    <tr><td>AI University Match</td><td>Matches predicted grades to university entry requirements; ranks best-fit universities</td><td>Student / Parent</td></tr>
+    <tr><td>AI Career Guidance</td><td>Suggests degree pathways and careers based on subject strengths and interests</td><td>Student</td></tr>
+    <tr><td>AI Lesson Planning</td><td>Generates structured lesson plans for tutors based on topic and student level</td><td>Tutor</td></tr>
+    <tr><td>AI Performance Analytics</td><td>Summarises tutor performance trends and suggests improvements</td><td>Tutor</td></tr>
+    <tr><td>AI School Recommendation</td><td>Recommends best-fit IGCSE/A-Level schools based on location and preferences</td><td>Parent</td></tr>
+  </table>
+
+  <!-- 14. Community & Marketplace -->
+  <h2 id="community-feat">14. Community & Marketplace</h2>
+  <h3>Community</h3>
+  <ul>
+    <li>Student discussion forums by subject and curriculum</li>
+    <li>Parent community — school reviews, advice threads</li>
+    <li>Teacher community — lesson ideas, curriculum updates, CPD sharing</li>
+    <li>School announcements — public posts from registered schools</li>
+    <li>Educational webinars — live and recorded sessions hosted by tutors and schools</li>
+    <li>Competitions and Olympiads — listings and registration</li>
+    <li>Annual IATN Education Awards — recognising top tutors, schools, and students</li>
+  </ul>
+  <h3>Resource Marketplace</h3>
+  <ul>
+    <li>Tutors sell lesson notes, past paper solutions, mini-courses, and video tutorials</li>
+    <li>Platform takes 20% commission; tutors receive 80%</li>
+    <li>Ratings and reviews on each resource</li>
+    <li>Students purchase directly with Paystack (NGN)</li>
+  </ul>
+  <h3>Physical Marketplace</h3>
+  <ul>
+    <li>IGCSE/A-Level textbooks (affiliate links or direct listings)</li>
+    <li>Scientific calculators, lab equipment</li>
+    <li>Educational software licences</li>
+  </ul>
+  <h3>Premium Services</h3>
+  <ul>
+    <li>One-on-one university admissions consulting</li>
+    <li>Personal statement review and coaching</li>
+    <li>Study abroad and visa guidance</li>
+    <li>Interview preparation (Oxbridge, US Ivy League)</li>
+    <li>Teacher recruitment service (schools)</li>
+    <li>School consultancy packages</li>
+  </ul>
+
+  <!-- 15. Tech Stack -->
+  <h2 id="tech-stack" class="page-break">15. Tech Stack</h2>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Rationale</th></tr>
+    <tr><td>Frontend</td><td>Next.js 14 (App Router) + Tailwind CSS + shadcn/ui</td><td>SSR for SEO-critical tutor/school pages; component-first UI</td></tr>
+    <tr><td>Backend</td><td>Next.js API Routes (serverless)</td><td>Co-located with frontend; zero DevOps overhead on Vercel</td></tr>
+    <tr><td>Database</td><td>Supabase (PostgreSQL)</td><td>Relational schema with JSONB flexibility; built-in RLS</td></tr>
+    <tr><td>Auth</td><td>Supabase Auth</td><td>Email/password, magic links, social OAuth</td></tr>
+    <tr><td>File Storage</td><td>Supabase Storage</td><td>Certificates, photos, portfolio files; RLS-protected buckets</td></tr>
+    <tr><td>Realtime</td><td>Supabase Realtime</td><td>In-app messaging between tutors and students</td></tr>
+    <tr><td>Payments</td><td>Paystack</td><td>Nigerian NGN payments; widely trusted by Nigerian consumers</td></tr>
+    <tr><td>AI</td><td>Claude API (claude-sonnet-4-6)</td><td>Profile generation, tutoring assistant, essay marking</td></tr>
+    <tr><td>Email</td><td>Resend</td><td>Transactional emails (booking confirmations, verifications)</td></tr>
+    <tr><td>Video</td><td>Daily.co (embedded)</td><td>In-platform video lessons; no third-party app needed</td></tr>
+    <tr><td>Deployment</td><td>Vercel</td><td>Edge network; zero-config Next.js deployment</td></tr>
+    <tr><td>Language</td><td>TypeScript (strict)</td><td>Type safety across full stack</td></tr>
+  </table>
+
+  <!-- 16. Database Schema -->
+  <h2 id="schema">16. Database Schema (Core Tables)</h2>
+  <h3>tutors</h3>
+  <table>
+    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>id</td><td>UUID PK</td><td>Auto-generated</td></tr>
+    <tr><td>user_id</td><td>UUID FK → auth.users</td><td>Supabase auth link</td></tr>
+    <tr><td>registration_number</td><td>TEXT UNIQUE</td><td>IATN-YYYY-NNNNNN, generated by trigger</td></tr>
+    <tr><td>full_name, photo_url, email, phone</td><td>TEXT</td><td>Core identity</td></tr>
+    <tr><td>state, city, current_institution</td><td>TEXT</td><td>Location & employer</td></tr>
+    <tr><td>years_experience</td><td>INTEGER</td><td></td></tr>
+    <tr><td>teaching_mode</td><td>TEXT</td><td>online | physical | both</td></tr>
+    <tr><td>languages, tools</td><td>TEXT[]</td><td>Arrays</td></tr>
+    <tr><td>bio, ai_profile_summary</td><td>TEXT</td><td>AI-generated summary stored here</td></tr>
+    <tr><td>hourly_rate_ngn</td><td>INTEGER</td><td>Rate in Nigerian Naira</td></tr>
+    <tr><td>verification_status</td><td>TEXT</td><td>pending | under_review | verified | rejected</td></tr>
+    <tr><td>overall_rating, review_count</td><td>DECIMAL, INTEGER</td><td>Aggregated from reviews table</td></tr>
+    <tr><td>profile_views, total_teaching_hours</td><td>INTEGER</td><td>Analytics counters</td></tr>
+  </table>
+
+  <h3>bookings</h3>
+  <table>
+    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+    <tr><td>id</td><td>UUID PK</td><td></td></tr>
+    <tr><td>tutor_id, student_id</td><td>UUID FK</td><td>References tutors and students</td></tr>
+    <tr><td>subject, curriculum</td><td>TEXT</td><td></td></tr>
+    <tr><td>lesson_type</td><td>TEXT</td><td>one_on_one | group | trial</td></tr>
+    <tr><td>start_time, end_time</td><td>TIMESTAMPTZ</td><td>Africa/Lagos timezone</td></tr>
+    <tr><td>status</td><td>TEXT</td><td>pending | confirmed | completed | cancelled</td></tr>
+    <tr><td>amount_ngn, payment_status</td><td>INTEGER, TEXT</td><td>Payment tracking</td></tr>
+    <tr><td>paystack_reference</td><td>TEXT</td><td>For payment verification</td></tr>
+    <tr><td>meeting_link</td><td>TEXT</td><td>Daily.co room URL</td></tr>
+  </table>
+
+  <h3>Additional Tables</h3>
+  <table>
+    <tr><th>Table</th><th>Purpose</th></tr>
+    <tr><td>tutor_subjects</td><td>Subjects and curricula per tutor (many-to-many)</td></tr>
+    <tr><td>tutor_qualifications</td><td>Degree, teaching certs with document URLs</td></tr>
+    <tr><td>tutor_cambridge_metrics</td><td>Pass rates, A*/A percentage, student count</td></tr>
+    <tr><td>tutor_portfolio</td><td>Videos, notes, testimonials, recommendation letters</td></tr>
+    <tr><td>tutor_badges</td><td>Badge assignments per tutor</td></tr>
+    <tr><td>students</td><td>Student profiles linked to auth.users</td></tr>
+    <tr><td>parents</td><td>Parent accounts, linked children</td></tr>
+    <tr><td>schools</td><td>School profiles with IATN-SCH-YYYY-NNNN registration</td></tr>
+    <tr><td>universities</td><td>University directory entries</td></tr>
+    <tr><td>reviews</td><td>Post-lesson student reviews; aggregated to tutor rating</td></tr>
+    <tr><td>messages / conversations</td><td>Realtime messaging between users</td></tr>
+    <tr><td>payments</td><td>All financial transactions</td></tr>
+    <tr><td>resources</td><td>Marketplace items (notes, courses)</td></tr>
+    <tr><td>mock_exams</td><td>Past paper questions and student attempts</td></tr>
+    <tr><td>community_posts</td><td>Forum posts and replies</td></tr>
+  </table>
+
+  <!-- 17. Security -->
+  <h2 id="security" class="page-break">17. Security & Trust</h2>
+  <h3>Platform Security</h3>
+  <ul>
+    <li>All database access protected by Supabase Row Level Security (RLS) policies</li>
+    <li>Tutors can only read/write their own profile rows; admins bypass RLS</li>
+    <li>Document uploads stored in private Supabase Storage buckets (signed URLs only)</li>
+    <li>All payments processed server-side through Paystack; no card data touches IATN servers</li>
+    <li>Webhook endpoints protected with signature verification (Paystack HMAC)</li>
+    <li>API routes protected with Supabase session tokens</li>
+    <li>PII (phone, email) never exposed in public API responses</li>
+  </ul>
+  <h3>Tutor Verification Pipeline</h3>
+  <ol>
+    <li>Tutor submits registration with document uploads</li>
+    <li>System sends admin notification</li>
+    <li>Admin reviews qualifications and identity document</li>
+    <li>Admin approves → <code>verification_status = 'verified'</code> → badges granted</li>
+    <li>Admin rejects → tutor notified with reason → can resubmit</li>
+  </ol>
+  <h3>Trust Signals Displayed to Users</h3>
+  <ul>
+    <li>Verified Tutor badge (green checkmark)</li>
+    <li>Cambridge Expert badge (blue star) for proven Cambridge track record</li>
+    <li>Top Tutor badge (gold) for platform rating leaders</li>
+    <li>Background Verified badge (shield) for tutors who opt into background check</li>
+    <li>School Verified badge on institution profiles</li>
+    <li>Exam result statistics with admin-verified label</li>
+  </ul>
+
+  <!-- 18. Monetization -->
+  <h2 id="monetization">18. Monetization Model</h2>
+  <table>
+    <tr><th>Revenue Stream</th><th>Model</th><th>Price</th></tr>
+    <tr><td>Tutor Basic Plan</td><td>Subscription</td><td>Free (limited profile, 3 bookings/month)</td></tr>
+    <tr><td>Tutor Pro Plan</td><td>Subscription</td><td>NGN 5,000 / month</td></tr>
+    <tr><td>Tutor Elite Plan</td><td>Subscription</td><td>NGN 15,000 / month (top placement + analytics)</td></tr>
+    <tr><td>School Standard</td><td>Subscription</td><td>NGN 20,000 / month</td></tr>
+    <tr><td>School Premium</td><td>Subscription</td><td>NGN 50,000 / month (featured, recruitment tools)</td></tr>
+    <tr><td>Booking Commission</td><td>Per transaction</td><td>10–15% of lesson fee</td></tr>
+    <tr><td>Resource Marketplace</td><td>Per sale</td><td>20% platform commission</td></tr>
+    <tr><td>University Listings</td><td>Sponsored</td><td>NGN 100,000 / year</td></tr>
+    <tr><td>Job Board Postings</td><td>Per posting</td><td>NGN 10,000 per vacancy</td></tr>
+    <tr><td>Premium Services</td><td>Per engagement</td><td>Admissions consulting, personal statement review</td></tr>
+    <tr><td>Background Checks</td><td>Per check</td><td>NGN 15,000 (tutor pays)</td></tr>
+  </table>
+
+  <!-- 19. Implementation Phases -->
+  <h2 id="phases" class="page-break">19. Implementation Phases</h2>
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-num">Phase 0</div>
+      <div class="phase-title">Foundation & PRD</div>
+      <ul>
+        <li>PRD document (this file)</li>
+        <li>Next.js 14 project scaffold</li>
+        <li>Supabase schema (18 migration files)</li>
+        <li>Design system & UI components</li>
+        <li>Environment configuration</li>
+      </ul>
+      <div class="timeline">Week 1</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-title">Tutor MVP</div>
+      <ul>
+        <li>Auth (login, register, role selection)</li>
+        <li>7-step tutor registration + IATN number</li>
+        <li>Tutor profile page (public)</li>
+        <li>Tutor search & filters</li>
+        <li>Landing page</li>
+      </ul>
+      <div class="timeline">Week 2–3</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-title">Marketplace Core</div>
+      <ul>
+        <li>Booking calendar</li>
+        <li>Paystack payments</li>
+        <li>Reviews & ratings</li>
+        <li>Document upload & admin verification</li>
+        <li>Student & parent dashboards</li>
+      </ul>
+      <div class="timeline">Week 4–5</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-title">Schools & Universities</div>
+      <ul>
+        <li>School registration & profiles</li>
+        <li>School search & comparison</li>
+        <li>University directory</li>
+        <li>Examination Hub</li>
+        <li>Parent monitoring tools</li>
+      </ul>
+      <div class="timeline">Week 6–7</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 4</div>
+      <div class="phase-title">AI & Learning Tools</div>
+      <ul>
+        <li>AI tutor matching (Claude API)</li>
+        <li>AI study assistant (chat)</li>
+        <li>Mock exam system</li>
+        <li>Personalised study plans</li>
+        <li>AI essay marking & homework feedback</li>
+      </ul>
+      <div class="timeline">Week 8–9</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 5</div>
+      <div class="phase-title">Community & Marketplace</div>
+      <ul>
+        <li>In-app messaging (Supabase Realtime)</li>
+        <li>Video lessons (Daily.co)</li>
+        <li>Resource marketplace</li>
+        <li>Community forums</li>
+        <li>Job board & CPD tracker</li>
+      </ul>
+      <div class="timeline">Week 10–11</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 6</div>
+      <div class="phase-title">Monetisation & Launch</div>
+      <ul>
+        <li>Tutor & school subscription plans</li>
+        <li>Premium services module</li>
+        <li>SEO optimisation</li>
+        <li>Leaderboards & annual awards</li>
+        <li>PWA & mobile polish</li>
+      </ul>
+      <div class="timeline">Week 12</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 7</div>
+      <div class="phase-title">Scale & Partnerships</div>
+      <ul>
+        <li>Cambridge centre partnerships</li>
+        <li>University partner programme</li>
+        <li>Corporate training (B2B)</li>
+        <li>Mobile app (React Native)</li>
+        <li>West Africa expansion (Ghana, Kenya)</li>
+      </ul>
+      <div class="timeline">Month 4+</div>
+    </div>
+  </div>
+
+  <!-- 20. KPIs -->
+  <h2 id="kpis" class="page-break">20. Success Metrics (KPIs)</h2>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val">2,000</div>
+      <div class="kpi-label">Verified Tutors</div>
+      <div class="kpi-period">Month 6 target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">10K</div>
+      <div class="kpi-label">Monthly Bookings</div>
+      <div class="kpi-period">Month 9 target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">200+</div>
+      <div class="kpi-label">Schools Listed</div>
+      <div class="kpi-period">Month 6 target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">50K</div>
+      <div class="kpi-label">Monthly Active Users</div>
+      <div class="kpi-period">Year 1 target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">4.8★</div>
+      <div class="kpi-label">Platform Rating</div>
+      <div class="kpi-period">Ongoing quality bar</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">60%</div>
+      <div class="kpi-label">Tutor Verification Rate</div>
+      <div class="kpi-period">% of registered tutors</div>
+    </div>
+  </div>
+
+  <h3>Additional KPIs</h3>
+  <table>
+    <tr><th>Metric</th><th>Month 3</th><th>Month 6</th><th>Year 1</th></tr>
+    <tr><td>Registered tutors</td><td>500</td><td>2,000</td><td>10,000</td></tr>
+    <tr><td>Monthly bookings</td><td>1,000</td><td>5,000</td><td>30,000</td></tr>
+    <tr><td>Monthly active students</td><td>2,000</td><td>10,000</td><td>50,000</td></tr>
+    <tr><td>Schools listed</td><td>50</td><td>200</td><td>500</td></tr>
+    <tr><td>Resource marketplace items</td><td>100</td><td>500</td><td>5,000</td></tr>
+    <tr><td>AI study sessions / month</td><td>500</td><td>5,000</td><td>50,000</td></tr>
+    <tr><td>Monthly recurring revenue (NGN)</td><td>500K</td><td>3M</td><td>20M</td></tr>
+    <tr><td>Avg tutor response time</td><td>&lt; 4h</td><td>&lt; 2h</td><td>&lt; 1h</td></tr>
+  </table>
+
+  <hr />
+
+  <div class="doc-footer">
+    IATN — International Academic Tutors Nigeria &nbsp;·&nbsp; Product Requirements Document v1.0 &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; July 2026<br>
+    This document is the property of IATN and is intended for internal planning purposes only.
+  </div>
+
+</div>
+</body>
+</html>

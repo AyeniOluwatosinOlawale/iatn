@@ -1,0 +1,57 @@
+import crypto from 'crypto'
+
+const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY!
+const PAYSTACK_BASE = 'https://api.paystack.co'
+
+async function paystackFetch(path: string, options: RequestInit = {}) {
+  const res = await fetch(`${PAYSTACK_BASE}${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${PAYSTACK_SECRET}`,
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  })
+  return res.json()
+}
+
+export async function initializeTransaction(params: {
+  email: string
+  amountNgn: number
+  reference: string
+  callbackUrl: string
+  metadata?: Record<string, unknown>
+}) {
+  return paystackFetch('/transaction/initialize', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: params.email,
+      amount: params.amountNgn * 100,
+      reference: params.reference,
+      callback_url: params.callbackUrl,
+      metadata: params.metadata,
+      currency: 'NGN',
+    }),
+  })
+}
+
+export async function verifyTransaction(reference: string) {
+  return paystackFetch(`/transaction/verify/${reference}`)
+}
+
+export function verifyWebhookSignature(body: string, signature: string): boolean {
+  const hash = crypto
+    .createHmac('sha512', PAYSTACK_SECRET)
+    .update(body)
+    .digest('hex')
+  return hash === signature
+}
+
+export function calculatePlatformFee(amountNgn: number, ratePercent = 12): { fee: number; tutorPayout: number } {
+  const fee = Math.round(amountNgn * (ratePercent / 100))
+  return { fee, tutorPayout: amountNgn - fee }
+}
+
+export function generatePaymentReference(prefix = 'IATN'): string {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+}

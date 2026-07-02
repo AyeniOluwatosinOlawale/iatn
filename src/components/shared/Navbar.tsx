@@ -15,6 +15,9 @@ const navLinks = [
       { label: 'A-Level Tutors', href: '/tutors?curriculum=a_level' },
       { label: 'SAT Tutors', href: '/tutors?curriculum=sat' },
       { label: 'IB Tutors', href: '/tutors?curriculum=ib' },
+      { label: 'WAEC Tutors', href: '/tutors?curriculum=waec' },
+      { label: 'NECO Tutors', href: '/tutors?curriculum=neco' },
+      { label: 'JAMB Tutors', href: '/tutors?curriculum=jamb' },
     ],
   },
   {

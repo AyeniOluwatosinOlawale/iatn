@@ -57,6 +57,7 @@ export const CURRICULA = [
   { value: 'ib', label: 'IB Diploma' },
   { value: 'jamb', label: 'JAMB / UTME' },
   { value: 'neco', label: 'NECO' },
+  { value: 'waec', label: 'WAEC / WASSCE' },
   { value: 'jupeb', label: 'JUPEB' },
 ]
 

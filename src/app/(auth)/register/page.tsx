@@ -59,7 +59,7 @@ export default function RegisterPage() {
 
       <div className="text-center mb-10">
         <h1 className="text-3xl font-black text-slate-900">Join Nexora Academic</h1>
-        <p className="text-slate-500 mt-2">Nigeria&apos;s international education platform. Who are you?</p>
+        <p className="text-slate-500 mt-2">Nigeria&apos;s academic excellence platform. Who are you?</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl w-full">

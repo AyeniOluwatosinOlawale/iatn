@@ -1,7 +1,7 @@
 export type UserRole = 'tutor' | 'student' | 'parent' | 'school' | 'admin'
 export type TeachingMode = 'online' | 'physical' | 'both'
 export type VerificationStatus = 'pending' | 'under_review' | 'verified' | 'rejected'
-export type CurriculumType = 'igcse' | 'a_level' | 'edexcel' | 'oxfordaqa' | 'sat' | 'act' | 'ib' | 'jamb' | 'neco' | 'jupeb'
+export type CurriculumType = 'igcse' | 'a_level' | 'edexcel' | 'oxfordaqa' | 'sat' | 'act' | 'ib' | 'jamb' | 'neco' | 'waec' | 'jupeb'
 export type BadgeType = 'identity_verified' | 'qualification_verified' | 'background_verified' | 'cambridge_expert' | 'top_tutor' | 'verified_tutor'
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
 export type LessonType = 'one_on_one' | 'group' | 'trial'

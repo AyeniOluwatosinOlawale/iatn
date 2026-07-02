@@ -113,7 +113,7 @@ export interface Database {
       user_role: 'tutor' | 'student' | 'parent' | 'school' | 'admin'
       teaching_mode: 'online' | 'physical' | 'both'
       verification_status: 'pending' | 'under_review' | 'verified' | 'rejected'
-      curriculum_type: 'igcse' | 'a_level' | 'edexcel' | 'oxfordaqa' | 'sat' | 'act' | 'ib' | 'jamb' | 'neco' | 'jupeb'
+      curriculum_type: 'igcse' | 'a_level' | 'edexcel' | 'oxfordaqa' | 'sat' | 'act' | 'ib' | 'jamb' | 'neco' | 'waec' | 'jupeb'
     }
   }
 }

@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { Search, Star, Shield, Award, Users, BookOpen, TrendingUp, ArrowRight, CheckCircle2, ChevronRight, Building2, GraduationCap, MapPin } from 'lucide-react'
+import { Star, Shield, Award, Users, BookOpen, TrendingUp, ArrowRight, CheckCircle2, ChevronRight, Building2, GraduationCap, MapPin } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { NIGERIAN_STATES } from '@/lib/utils'
+import HeroSearch from '@/components/shared/HeroSearch'
 
 const stats = [
   { value: '2,000+', label: 'Verified Tutors' },
@@ -139,58 +139,7 @@ export default function HomePage() {
             Verified tutors and top international schools — Cambridge results, reviews, fees and bookings all in one trusted platform.
           </p>
 
-          {/* Search tabs */}
-          <div className="max-w-2xl mx-auto">
-            <div className="flex gap-1 bg-white/10 rounded-xl p-1 mb-3 w-fit mx-auto">
-              <Link href="/tutors" className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-[#0f3460] text-sm font-bold shadow">
-                <Search className="w-4 h-4" /> Find Tutors
-              </Link>
-              <Link href="/schools" className="flex items-center gap-2 px-5 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 text-sm font-semibold transition-colors">
-                <Building2 className="w-4 h-4" /> Find Schools
-              </Link>
-            </div>
-
-            {/* Search bar */}
-            <div className="bg-white rounded-2xl p-2 shadow-2xl flex flex-col sm:flex-row gap-2">
-              <div className="flex-1 flex items-center gap-3 px-4">
-                <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Subject, curriculum, or tutor name..."
-                  className="flex-1 text-slate-800 placeholder:text-slate-400 outline-none text-sm bg-transparent"
-                />
-              </div>
-              <select className="border-l border-slate-200 px-4 text-sm text-slate-700 bg-transparent outline-none">
-                <option value="">All states</option>
-                {NIGERIAN_STATES.map((state) => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-              <Link
-                href="/tutors"
-                className="iatn-gradient text-white text-sm font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
-              >
-                Search Tutors
-              </Link>
-            </div>
-          </div>
-
-          {/* Quick links */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-5">
-            <span className="text-white/50 text-sm">Popular:</span>
-            {['IGCSE Maths', 'A-Level Physics', 'A-Level Chemistry', 'IB English', 'SAT Prep'].map((tag) => (
-              <Link
-                key={tag}
-                href={`/tutors?q=${encodeURIComponent(tag)}`}
-                className="text-sm bg-white/10 hover:bg-white/20 text-white/80 px-3 py-1 rounded-full transition-colors"
-              >
-                {tag}
-              </Link>
-            ))}
-            <Link href="/schools?curriculum=a_level" className="text-sm bg-purple-500/30 hover:bg-purple-500/50 text-purple-200 px-3 py-1 rounded-full transition-colors border border-purple-400/30">
-              A-Level Schools
-            </Link>
-          </div>
+          <HeroSearch />
         </div>
       </section>
 

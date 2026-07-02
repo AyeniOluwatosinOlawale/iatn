@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { Search, MapPin, Star, Users, BookOpen, CheckCircle2, SlidersHorizontal, ChevronRight, Building2, Award } from 'lucide-react'
+import { Search, MapPin, Star, Users, CheckCircle2, SlidersHorizontal, ChevronRight, Building2, Award } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { NIGERIAN_STATES, CURRICULA, formatNgn } from '@/lib/utils'
+import { NIGERIAN_STATES, formatNgn } from '@/lib/utils'
 
 const SAMPLE_SCHOOLS = [
   {

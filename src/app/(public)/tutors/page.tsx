@@ -98,7 +98,7 @@ export default function TutorsSearchPage() {
             </div>
             <select className="border-l border-slate-200 px-4 text-sm text-slate-700 bg-transparent outline-none">
               <option value="">All states</option>
-              {NIGERIAN_STATES.slice(0, 10).map((s) => <option key={s}>{s}</option>)}
+              {NIGERIAN_STATES.map((s) => <option key={s}>{s}</option>)}
             </select>
             <button className="iatn-gradient text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
               Search

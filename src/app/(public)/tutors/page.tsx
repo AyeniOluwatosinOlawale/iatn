@@ -126,7 +126,7 @@ export default function TutorsSearchPage() {
               </FilterSection>
 
               <FilterSection title="Subject">
-                {SUBJECTS.slice(0, 8).map((s) => (
+                {SUBJECTS.map((s) => (
                   <label key={s} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:text-[#0f3460]">
                     <input type="checkbox" className="accent-[#0f3460]" />
                     {s}

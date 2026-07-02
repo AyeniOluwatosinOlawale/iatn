@@ -134,6 +134,13 @@ export default function TutorsSearchPage() {
                 ))}
               </FilterSection>
 
+              <FilterSection title="State">
+                <select className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f3460] bg-white">
+                  <option value="">All states</option>
+                  {NIGERIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </FilterSection>
+
               <FilterSection title="Teaching mode">
                 {['Online', 'Physical', 'Both'].map((m) => (
                   <label key={m} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:text-[#0f3460]">

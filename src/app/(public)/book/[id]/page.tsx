@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Calendar, Clock, Video, MapPin, CheckCircle2, ArrowLeft } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { formatNgn } from '@/lib/utils'
 
 // Hardcoded sample tutor data for id '1'
 const TUTOR_DATA = {
@@ -39,7 +38,7 @@ export default function BookingPage() {
       <Navbar />
 
       {/* Purple/blue gradient header */}
-      <div className="iatn-gradient text-white py-10 px-4">
+      <div className="nexora-gradient text-white py-10 px-4">
         <div className="max-w-5xl mx-auto">
           <Link
             href="/tutors"
@@ -65,7 +64,7 @@ export default function BookingPage() {
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
               {/* Avatar */}
               <div className="flex items-center gap-4 mb-5">
-                <div className="w-16 h-16 rounded-xl iatn-gradient flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl nexora-gradient flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                   {tutor.initials}
                 </div>
                 <div>
@@ -89,15 +88,6 @@ export default function BookingPage() {
                 </div>
               </div>
 
-              {/* Hourly rate */}
-              <div className="bg-slate-50 rounded-xl px-4 py-3 mb-4">
-                <div className="text-xs text-slate-500 mb-0.5">Hourly rate</div>
-                <div className="text-2xl font-black text-slate-900">
-                  {formatNgn(tutor.hourly_rate_ngn)}
-                  <span className="text-sm font-normal text-slate-500"> / hr</span>
-                </div>
-              </div>
-
               {/* Subjects */}
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
@@ -117,25 +107,6 @@ export default function BookingPage() {
               </div>
             </div>
 
-            {/* Pricing breakdown card */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-              <h3 className="font-bold text-slate-900 mb-4">Pricing breakdown</h3>
-              <div className="space-y-2 text-sm">
-                {DURATIONS.map((d) => (
-                  <div key={d.hours} className="flex justify-between items-center py-1.5 border-b border-slate-100 last:border-0">
-                    <span className="text-slate-600">
-                      {formatNgn(tutor.hourly_rate_ngn)} &times; {d.label}
-                    </span>
-                    <span className="font-semibold text-slate-900">
-                      {formatNgn(tutor.hourly_rate_ngn * d.hours)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-slate-400 mt-3">
-                Final total depends on your selected duration below.
-              </p>
-            </div>
           </div>
 
           {/* RIGHT — Booking form */}
@@ -224,7 +195,7 @@ export default function BookingPage() {
                 <div className="pt-2">
                   <Link
                     href={`/tutors/${tutor.id}`}
-                    className="block w-full iatn-gradient text-white text-center font-semibold py-3.5 rounded-xl hover:opacity-90 transition-opacity"
+                    className="block w-full nexora-gradient text-white text-center font-semibold py-3.5 rounded-xl hover:opacity-90 transition-opacity"
                   >
                     Proceed to Payment
                   </Link>

@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { MapPin, Star, Users, BookOpen, CheckCircle2, Award, ArrowLeft, Phone, Mail, Globe, Calendar, Building2, GraduationCap, ChevronRight, ExternalLink } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { formatNgn } from '@/lib/utils'
 
 const SCHOOL_DATA: Record<string, {
   id: string
@@ -36,7 +35,7 @@ const SCHOOL_DATA: Record<string, {
 }> = {
   '1': {
     id: '1',
-    registration_number: 'IATN-SCH-2026-0001',
+    registration_number: 'NXR-SCH-2026-0001',
     school_name: 'Greensprings School',
     logo_initial: 'GS',
     state: 'Lagos', city: 'Anthony Village',
@@ -72,7 +71,7 @@ const SCHOOL_DATA: Record<string, {
   },
   '2': {
     id: '2',
-    registration_number: 'IATN-SCH-2026-0002',
+    registration_number: 'NXR-SCH-2026-0002',
     school_name: 'Corona Secondary School',
     logo_initial: 'CS',
     state: 'Lagos', city: 'Lekki',
@@ -161,7 +160,7 @@ export default function SchoolProfilePage({ params }: { params: { id: string } }
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900">{school.school_name}</h1>
                 {school.is_verified && (
                   <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> IATN Verified
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Nexora Verified
                   </span>
                 )}
               </div>
@@ -330,14 +329,6 @@ export default function SchoolProfilePage({ params }: { params: { id: string } }
             <h3 className="font-black text-slate-900 text-lg mb-1">{school.school_name}</h3>
             <p className="text-slate-600 text-sm mb-4">{school.city}, {school.state}</p>
 
-            <div className="bg-slate-50 rounded-xl p-4 mb-5 text-left space-y-2">
-              <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-2">Annual Fees</div>
-              <div className="text-xl font-black text-slate-900">
-                {formatNgn(school.fee_range_ngn_min)} – {formatNgn(school.fee_range_ngn_max)}
-              </div>
-              <div className="text-xs text-slate-500">per academic year</div>
-            </div>
-
             <a
               href={`mailto:${school.email}?subject=Admission Enquiry — ${school.school_name}`}
               className="block w-full py-3 px-4 rounded-xl text-white font-bold text-sm transition-opacity hover:opacity-90 mb-3"
@@ -379,7 +370,7 @@ export default function SchoolProfilePage({ params }: { params: { id: string } }
 
           {/* Registration number */}
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-            <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">IATN Registration</div>
+            <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Nexora Registration</div>
             <div className="font-mono font-bold text-slate-700 text-sm">{school.registration_number}</div>
           </div>
 

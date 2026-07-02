@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Menu, X, BookOpen, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -37,52 +37,79 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
+  const navRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setActiveDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  function toggleDropdown(label: string) {
+    setActiveDropdown(prev => (prev === label ? null : label))
+  }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm" ref={navRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 iatn-gradient rounded-lg flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0" onClick={() => setActiveDropdown(null)}>
+            <div className="w-8 h-8 nexora-gradient rounded-lg flex items-center justify-center">
               <BookOpen className="w-4 h-4 text-white" />
             </div>
             <div className="leading-none">
-              <div className="font-black text-slate-900 text-lg tracking-tight">IATN</div>
-              <div className="text-[9px] text-slate-500 font-medium tracking-widest uppercase hidden sm:block">Int&apos;l Academic Tutors Nigeria</div>
+              <div className="font-black text-slate-900 text-lg tracking-tight">Nexora Academic</div>
+              <div className="text-[9px] text-slate-500 font-medium tracking-widest uppercase hidden sm:block">Connecting Knowledge, Unlocking Futures</div>
             </div>
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <div
-                key={link.label}
-                className="relative"
-                onMouseEnter={() => link.children && setActiveDropdown(link.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <Link
-                  href={link.href}
-                  className={cn(
-                    'flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-700 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg transition-colors'
-                  )}
-                >
-                  {link.label}
-                  {link.children && <ChevronDown className="w-3 h-3 opacity-60" />}
-                </Link>
-                {link.children && activeDropdown === link.label && (
-                  <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
-                    {link.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#0f3460] transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
+              <div key={link.label} className="relative">
+                {link.children ? (
+                  <>
+                    <button
+                      onClick={() => toggleDropdown(link.label)}
+                      className={cn(
+                        'flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+                        activeDropdown === link.label
+                          ? 'text-[#0f3460] bg-slate-50'
+                          : 'text-slate-700 hover:text-[#0f3460] hover:bg-slate-50'
+                      )}
+                    >
+                      {link.label}
+                      <ChevronDown className={cn('w-3 h-3 opacity-60 transition-transform', activeDropdown === link.label && 'rotate-180')} />
+                    </button>
+                    {activeDropdown === link.label && (
+                      <div className="absolute top-full left-0 mt-0 w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-1 z-50">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setActiveDropdown(null)}
+                            className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#0f3460] transition-colors"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={link.href}
+                    onClick={() => setActiveDropdown(null)}
+                    className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-700 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg transition-colors"
+                  >
+                    {link.label}
+                  </Link>
                 )}
               </div>
             ))}
@@ -95,7 +122,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/register"
-              className="text-sm font-semibold text-white iatn-gradient px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              className="text-sm font-semibold text-white nexora-gradient px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
             >
               Get Started
             </Link>
@@ -114,18 +141,45 @@ export default function Navbar() {
         {mobileOpen && (
           <div className="lg:hidden border-t border-slate-100 py-4 space-y-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="block px-4 py-2 text-sm font-medium text-slate-700 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
+              <div key={link.label}>
+                {link.children ? (
+                  <>
+                    <button
+                      onClick={() => setMobileExpanded(prev => prev === link.label ? null : link.label)}
+                      className="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-slate-700 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg"
+                    >
+                      {link.label}
+                      <ChevronDown className={cn('w-4 h-4 opacity-60 transition-transform', mobileExpanded === link.label && 'rotate-180')} />
+                    </button>
+                    {mobileExpanded === link.label && (
+                      <div className="ml-4 mt-1 space-y-1 border-l-2 border-slate-100 pl-3">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => { setMobileOpen(false); setMobileExpanded(null) }}
+                            className="block px-3 py-2 text-sm text-slate-600 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="block px-4 py-2 text-sm font-medium text-slate-700 hover:text-[#0f3460] hover:bg-slate-50 rounded-lg"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )}
+              </div>
             ))}
             <div className="pt-3 border-t border-slate-100 mt-3 flex flex-col gap-2 px-4">
               <Link href="/login" className="text-sm font-medium text-slate-700 py-2 text-center border border-slate-200 rounded-lg">Sign in</Link>
-              <Link href="/register" className="text-sm font-semibold text-white text-center iatn-gradient py-2 rounded-lg">Get Started</Link>
+              <Link href="/register" className="text-sm font-semibold text-white text-center nexora-gradient py-2 rounded-lg">Get Started</Link>
             </div>
           </div>
         )}

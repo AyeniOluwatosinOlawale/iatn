@@ -1,0 +1,307 @@
+{
+  ".eslintrc.json": {
+    "mtime": 1782995055.8646233,
+    "ast_hash": "5cc89077d438e3d0d0a8308ab7e06a5a",
+    "semantic_hash": "5cc89077d438e3d0d0a8308ab7e06a5a"
+  },
+  "next.config.mjs": {
+    "mtime": 1782995055.8648233,
+    "ast_hash": "21958f5752add43cc47ab0ff5172cd46",
+    "semantic_hash": "21958f5752add43cc47ab0ff5172cd46"
+  },
+  "package.json": {
+    "mtime": 1782995114.6868224,
+    "ast_hash": "204a1859f990e973e1cc78bb20c13112",
+    "semantic_hash": "204a1859f990e973e1cc78bb20c13112"
+  },
+  "postcss.config.mjs": {
+    "mtime": 1782995055.8648865,
+    "ast_hash": "b7941c02b947e17ae32f67ae7e664ec8",
+    "semantic_hash": "b7941c02b947e17ae32f67ae7e664ec8"
+  },
+  "src/app/(auth)/forgot-password/page.tsx": {
+    "mtime": 1783015908.6087682,
+    "ast_hash": "8e3df6fed01cc359ba00ff266b52d4cb",
+    "semantic_hash": "8e3df6fed01cc359ba00ff266b52d4cb"
+  },
+  "src/app/(auth)/login/page.tsx": {
+    "mtime": 1783015908.6090739,
+    "ast_hash": "225b818a31665b6a7fcdae5ddb156ab2",
+    "semantic_hash": "225b818a31665b6a7fcdae5ddb156ab2"
+  },
+  "src/app/(auth)/register/page.tsx": {
+    "mtime": 1783015908.608004,
+    "ast_hash": "58f7dd7382721b77740f448f639654bb",
+    "semantic_hash": "58f7dd7382721b77740f448f639654bb"
+  },
+  "src/app/(auth)/register/parent/page.tsx": {
+    "mtime": 1783015908.60765,
+    "ast_hash": "551f80eab9f31cdaa55ab1402e837cf0",
+    "semantic_hash": "551f80eab9f31cdaa55ab1402e837cf0"
+  },
+  "src/app/(auth)/register/school/page.tsx": {
+    "mtime": 1783015908.608432,
+    "ast_hash": "d277c95e361c09330416452087f74e70",
+    "semantic_hash": "d277c95e361c09330416452087f74e70"
+  },
+  "src/app/(auth)/register/student/page.tsx": {
+    "mtime": 1783015908.6064835,
+    "ast_hash": "f1c116051b2369b65c30edcea8583aca",
+    "semantic_hash": "f1c116051b2369b65c30edcea8583aca"
+  },
+  "src/app/(auth)/register/tutor/page.tsx": {
+    "mtime": 1783017304.4949641,
+    "ast_hash": "49c31bc1a6d56ef2d0e89e76d04dd574",
+    "semantic_hash": "49c31bc1a6d56ef2d0e89e76d04dd574"
+  },
+  "src/app/(parent-dashboard)/parent-dashboard/dashboard/page.tsx": {
+    "mtime": 1783017564.6250925,
+    "ast_hash": "60f165ab04d0f3bcc25b86d319cf547c",
+    "semantic_hash": "60f165ab04d0f3bcc25b86d319cf547c"
+  },
+  "src/app/(public)/book/[id]/page.tsx": {
+    "mtime": 1783017411.724454,
+    "ast_hash": "f799f735c83cac49418ad5183c2a10d7",
+    "semantic_hash": "f799f735c83cac49418ad5183c2a10d7"
+  },
+  "src/app/(public)/community/page.tsx": {
+    "mtime": 1783015908.6046066,
+    "ast_hash": "faa35ab3652277994292942bd8a9aaad",
+    "semantic_hash": "faa35ab3652277994292942bd8a9aaad"
+  },
+  "src/app/(public)/exams/page.tsx": {
+    "mtime": 1783015908.6041987,
+    "ast_hash": "2b42aa3cd0a37e7175fa49ad98e869fa",
+    "semantic_hash": "2b42aa3cd0a37e7175fa49ad98e869fa"
+  },
+  "src/app/(public)/resources/page.tsx": {
+    "mtime": 1783015908.6020372,
+    "ast_hash": "9ede03458ff95e8061fd4d42949c84a2",
+    "semantic_hash": "9ede03458ff95e8061fd4d42949c84a2"
+  },
+  "src/app/(public)/schools/[id]/page.tsx": {
+    "mtime": 1783017497.2623029,
+    "ast_hash": "86b9c42c77fc491c04ec3bec66b042d4",
+    "semantic_hash": "86b9c42c77fc491c04ec3bec66b042d4"
+  },
+  "src/app/(public)/schools/page.tsx": {
+    "mtime": 1783017600.6131904,
+    "ast_hash": "6c5c3dde3af5fb16de69bffac44c9dfb",
+    "semantic_hash": "6c5c3dde3af5fb16de69bffac44c9dfb"
+  },
+  "src/app/(public)/tutors/[id]/page.tsx": {
+    "mtime": 1783017391.7226458,
+    "ast_hash": "0eb866caa72978c60ddb05af3b867094",
+    "semantic_hash": "0eb866caa72978c60ddb05af3b867094"
+  },
+  "src/app/(public)/tutors/page.tsx": {
+    "mtime": 1783017380.2465572,
+    "ast_hash": "7ce1b2c664926e7f03447143c8c86040",
+    "semantic_hash": "7ce1b2c664926e7f03447143c8c86040"
+  },
+  "src/app/(public)/universities/page.tsx": {
+    "mtime": 1783015908.601181,
+    "ast_hash": "1b8644eac6e902142e700c3f19be42d0",
+    "semantic_hash": "1b8644eac6e902142e700c3f19be42d0"
+  },
+  "src/app/(school-dashboard)/school-dashboard/dashboard/page.tsx": {
+    "mtime": 1783015908.5988662,
+    "ast_hash": "3d77eeb7abec7391b13f9f233d3e5b8b",
+    "semantic_hash": "3d77eeb7abec7391b13f9f233d3e5b8b"
+  },
+  "src/app/(student-dashboard)/student-dashboard/dashboard/page.tsx": {
+    "mtime": 1783015908.6060326,
+    "ast_hash": "46bd1052694a445a8eefb7da2167ae1c",
+    "semantic_hash": "46bd1052694a445a8eefb7da2167ae1c"
+  },
+  "src/app/(tutor-dashboard)/tutor-dashboard/dashboard/page.tsx": {
+    "mtime": 1783017505.595857,
+    "ast_hash": "36e31251ac6ee6cd58bb4f3481496f36",
+    "semantic_hash": "36e31251ac6ee6cd58bb4f3481496f36"
+  },
+  "src/app/layout.tsx": {
+    "mtime": 1783015908.599841,
+    "ast_hash": "38fed344f36428f394887453a57f83d1",
+    "semantic_hash": "38fed344f36428f394887453a57f83d1"
+  },
+  "src/app/page.tsx": {
+    "mtime": 1783017843.5437624,
+    "ast_hash": "92de1f202dfa901705d81d1ec0f6ad9a",
+    "semantic_hash": "92de1f202dfa901705d81d1ec0f6ad9a"
+  },
+  "src/components/shared/BadgeChip.tsx": {
+    "mtime": 1783015908.6108272,
+    "ast_hash": "fa26cf6723e2e19d553e55570f372fd4",
+    "semantic_hash": "fa26cf6723e2e19d553e55570f372fd4"
+  },
+  "src/components/shared/Footer.tsx": {
+    "mtime": 1783017294.837113,
+    "ast_hash": "1c71b0894a1ec5ea625f60eca5868b02",
+    "semantic_hash": "1c71b0894a1ec5ea625f60eca5868b02"
+  },
+  "src/components/shared/HeroSearch.tsx": {
+    "mtime": 1783015908.6103735,
+    "ast_hash": "713070ddb4b260238eb26ac1fe5afdbe",
+    "semantic_hash": "713070ddb4b260238eb26ac1fe5afdbe"
+  },
+  "src/components/shared/Navbar.tsx": {
+    "mtime": 1783016450.090152,
+    "ast_hash": "06881d67134edb9234b235ea63470183",
+    "semantic_hash": "06881d67134edb9234b235ea63470183"
+  },
+  "src/components/shared/StarRating.tsx": {
+    "mtime": 1783015908.610602,
+    "ast_hash": "5b8e90659783d99d28c8c296f0e00c13",
+    "semantic_hash": "5b8e90659783d99d28c8c296f0e00c13"
+  },
+  "src/lib/claude.ts": {
+    "mtime": 1783015908.612152,
+    "ast_hash": "7816325cb0b96b0c6fb5e31d4ae9a54b",
+    "semantic_hash": "7816325cb0b96b0c6fb5e31d4ae9a54b"
+  },
+  "src/lib/paystack.ts": {
+    "mtime": 1783015908.611908,
+    "ast_hash": "529926586d2aad76c997e3a8cf52e4fe",
+    "semantic_hash": "529926586d2aad76c997e3a8cf52e4fe"
+  },
+  "src/lib/supabase/client.ts": {
+    "mtime": 1783015908.6114626,
+    "ast_hash": "0a923aba7c4419c11b5a8da6ba93bf64",
+    "semantic_hash": "0a923aba7c4419c11b5a8da6ba93bf64"
+  },
+  "src/lib/supabase/middleware.ts": {
+    "mtime": 1783015908.6112826,
+    "ast_hash": "e1b3ce51d1028711533fab5f644b7df6",
+    "semantic_hash": "e1b3ce51d1028711533fab5f644b7df6"
+  },
+  "src/lib/supabase/server.ts": {
+    "mtime": 1783015908.6116893,
+    "ast_hash": "b95aa28f3c35a9b8496129c2c7d3f7cc",
+    "semantic_hash": "b95aa28f3c35a9b8496129c2c7d3f7cc"
+  },
+  "src/lib/utils.ts": {
+    "mtime": 1783015908.6110663,
+    "ast_hash": "63e5187e25c0ed0f333bcc6bd1fd0e10",
+    "semantic_hash": "63e5187e25c0ed0f333bcc6bd1fd0e10"
+  },
+  "src/middleware.ts": {
+    "mtime": 1783015908.5976522,
+    "ast_hash": "fff97ffb0ea3e328f559e299e6d2fb8c",
+    "semantic_hash": "fff97ffb0ea3e328f559e299e6d2fb8c"
+  },
+  "src/types/database.ts": {
+    "mtime": 1783015908.5980835,
+    "ast_hash": "95224fc9082a3b65c2fcff2a1d21f112",
+    "semantic_hash": "95224fc9082a3b65c2fcff2a1d21f112"
+  },
+  "src/types/index.ts": {
+    "mtime": 1783015908.5984447,
+    "ast_hash": "e532fdbbd86ec99e15111caff0d4e131",
+    "semantic_hash": "e532fdbbd86ec99e15111caff0d4e131"
+  },
+  "supabase/ALL_MIGRATIONS.sql": {
+    "mtime": 1783001464.1070485,
+    "ast_hash": "d6bab22b416d37790b9880c0f4412235",
+    "semantic_hash": "d6bab22b416d37790b9880c0f4412235"
+  },
+  "supabase/migrations/0001_roles_auth.sql": {
+    "mtime": 1782995401.2084157,
+    "ast_hash": "4c8bd9e84910c6d897452840c1655ea9",
+    "semantic_hash": "4c8bd9e84910c6d897452840c1655ea9"
+  },
+  "supabase/migrations/0002_tutors.sql": {
+    "mtime": 1782995418.007117,
+    "ast_hash": "625b34bac1776872a5aafbbb5475f887",
+    "semantic_hash": "625b34bac1776872a5aafbbb5475f887"
+  },
+  "supabase/migrations/0003_tutor_subjects.sql": {
+    "mtime": 1782996227.377947,
+    "ast_hash": "0b555261d7438e4cac931a3bc1e77056",
+    "semantic_hash": "0b555261d7438e4cac931a3bc1e77056"
+  },
+  "supabase/migrations/0004_tutor_qualifications.sql": {
+    "mtime": 1782995432.7693818,
+    "ast_hash": "33d610ecb0b706051289071ffdc9c61c",
+    "semantic_hash": "33d610ecb0b706051289071ffdc9c61c"
+  },
+  "supabase/migrations/0005_tutor_cambridge_metrics.sql": {
+    "mtime": 1782995439.058444,
+    "ast_hash": "89db88d67819f52a660b8af260e4ec1f",
+    "semantic_hash": "89db88d67819f52a660b8af260e4ec1f"
+  },
+  "supabase/migrations/0006_tutor_portfolio.sql": {
+    "mtime": 1782995445.336527,
+    "ast_hash": "861d257daf7e425a9ffc97ec59e5a3ca",
+    "semantic_hash": "861d257daf7e425a9ffc97ec59e5a3ca"
+  },
+  "supabase/migrations/0007_tutor_badges.sql": {
+    "mtime": 1782995451.3763835,
+    "ast_hash": "070cb98de21c8065f17b04a1e8a65968",
+    "semantic_hash": "070cb98de21c8065f17b04a1e8a65968"
+  },
+  "supabase/migrations/0008_students.sql": {
+    "mtime": 1782995458.2838104,
+    "ast_hash": "d342c686e9c2547da975371080807c91",
+    "semantic_hash": "d342c686e9c2547da975371080807c91"
+  },
+  "supabase/migrations/0009_schools.sql": {
+    "mtime": 1782995471.2576587,
+    "ast_hash": "df2867d2cc03083473bfc24733f81fb0",
+    "semantic_hash": "df2867d2cc03083473bfc24733f81fb0"
+  },
+  "supabase/migrations/0010_universities.sql": {
+    "mtime": 1782995479.2392013,
+    "ast_hash": "285cdd1044d4b2b9796a74286bf70292",
+    "semantic_hash": "285cdd1044d4b2b9796a74286bf70292"
+  },
+  "supabase/migrations/0011_bookings.sql": {
+    "mtime": 1782995491.9260418,
+    "ast_hash": "f0b6e3d6c0c35ddb7814f993e3e56192",
+    "semantic_hash": "f0b6e3d6c0c35ddb7814f993e3e56192"
+  },
+  "supabase/migrations/0012_reviews.sql": {
+    "mtime": 1782995505.3511782,
+    "ast_hash": "276bf7ffe43f5dd305230733357557cf",
+    "semantic_hash": "276bf7ffe43f5dd305230733357557cf"
+  },
+  "supabase/migrations/0013_messages.sql": {
+    "mtime": 1782995515.2847712,
+    "ast_hash": "e2b58b1aaddb6b5e29415f274df7d79d",
+    "semantic_hash": "e2b58b1aaddb6b5e29415f274df7d79d"
+  },
+  "supabase/migrations/0014_payments.sql": {
+    "mtime": 1782995525.1992693,
+    "ast_hash": "9a64c1c08eb15779a1cdddc02e9b8892",
+    "semantic_hash": "9a64c1c08eb15779a1cdddc02e9b8892"
+  },
+  "supabase/migrations/0015_resources.sql": {
+    "mtime": 1782995535.8117845,
+    "ast_hash": "68ada88d52f640007bede2cef3590501",
+    "semantic_hash": "68ada88d52f640007bede2cef3590501"
+  },
+  "supabase/migrations/0016_mock_exams.sql": {
+    "mtime": 1782995545.434572,
+    "ast_hash": "39a7e7541a0b7c17614960952e0d16c3",
+    "semantic_hash": "39a7e7541a0b7c17614960952e0d16c3"
+  },
+  "supabase/migrations/0017_community.sql": {
+    "mtime": 1782995555.394986,
+    "ast_hash": "0efbc69605e90a1ad226fb464ca06b15",
+    "semantic_hash": "0efbc69605e90a1ad226fb464ca06b15"
+  },
+  "supabase/migrations/0018_rls_policies.sql": {
+    "mtime": 1782995567.3724687,
+    "ast_hash": "1552da7c54ad014008f949645477b965",
+    "semantic_hash": "1552da7c54ad014008f949645477b965"
+  },
+  "tailwind.config.ts": {
+    "mtime": 1782995055.8663685,
+    "ast_hash": "09fdf908dd33ad9e4443cd313183a30e",
+    "semantic_hash": "09fdf908dd33ad9e4443cd313183a30e"
+  },
+  "tsconfig.json": {
+    "mtime": 1782995055.8657956,
+    "ast_hash": "3bd7a3770c6b44dbcaab1d2f175db8bd",
+    "semantic_hash": "3bd7a3770c6b44dbcaab1d2f175db8bd"
+  }
+}

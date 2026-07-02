@@ -52,6 +52,6 @@ export function calculatePlatformFee(amountNgn: number, ratePercent = 12): { fee
   return { fee, tutorPayout: amountNgn - fee }
 }
 
-export function generatePaymentReference(prefix = 'IATN'): string {
+export function generatePaymentReference(prefix = 'NXR'): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
 }

@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { Search, SlidersHorizontal, MapPin, Star, Clock, CheckCircle2, Award, X } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { CURRICULA, SUBJECTS, NIGERIAN_STATES, formatNgn } from '@/lib/utils'
+import { CURRICULA, SUBJECTS, NIGERIAN_STATES } from '@/lib/utils'
 import type { Tutor } from '@/types'
 
 const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
   {
-    id: '1', registration_number: 'IATN-2026-000001', full_name: 'Dr. Adaeze Obi',
+    id: '1', registration_number: 'NXR-2026-000001', full_name: 'Dr. Adaeze Obi',
     state: 'Lagos', city: 'Victoria Island', years_experience: 12, teaching_mode: 'both',
     hourly_rate_ngn: 25000, overall_rating: 4.9, review_count: 87, is_verified: true, offers_trial_lesson: true,
     bio: 'Cambridge examiner and A-Level Mathematics specialist with 12 years of experience. My students consistently achieve A* and A grades.',
@@ -24,7 +24,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     ],
   },
   {
-    id: '2', registration_number: 'IATN-2026-000002', full_name: 'Mr. Emeka Chukwu',
+    id: '2', registration_number: 'NXR-2026-000002', full_name: 'Mr. Emeka Chukwu',
     state: 'FCT - Abuja', city: 'Maitama', years_experience: 8, teaching_mode: 'online',
     hourly_rate_ngn: 18000, overall_rating: 4.8, review_count: 62, is_verified: true, offers_trial_lesson: true,
     bio: 'Physics and Chemistry specialist. Cambridge IGCSE expert with proven record of A* students at top Abuja schools.',
@@ -35,7 +35,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     badges: [{ id: '', tutor_id: '', badge: 'verified_tutor', awarded_at: '' }],
   },
   {
-    id: '3', registration_number: 'IATN-2026-000003', full_name: 'Mrs. Fatimah Al-Hassan',
+    id: '3', registration_number: 'NXR-2026-000003', full_name: 'Mrs. Fatimah Al-Hassan',
     state: 'Kano', city: 'Nassarawa GRA', years_experience: 15, teaching_mode: 'physical',
     hourly_rate_ngn: 15000, overall_rating: 5.0, review_count: 134, is_verified: true, offers_trial_lesson: false,
     bio: 'Senior Economics and Business Studies tutor. IB and A-Level expert with 15 years teaching at leading Nigerian international schools.',
@@ -49,7 +49,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     ],
   },
   {
-    id: '4', registration_number: 'IATN-2026-000004', full_name: 'Dr. Blessing Eze',
+    id: '4', registration_number: 'NXR-2026-000004', full_name: 'Dr. Blessing Eze',
     state: 'Rivers', city: 'Port Harcourt', years_experience: 10, teaching_mode: 'both',
     hourly_rate_ngn: 20000, overall_rating: 4.7, review_count: 45, is_verified: true, offers_trial_lesson: true,
     bio: 'Biology and Chemistry A-Level tutor. PhD graduate from University of Lagos. Medical school entrance specialist.',
@@ -63,7 +63,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     ],
   },
   {
-    id: '5', registration_number: 'IATN-2026-000005', full_name: 'Mr. Tunde Adesanya',
+    id: '5', registration_number: 'NXR-2026-000005', full_name: 'Mr. Tunde Adesanya',
     state: 'Oyo', city: 'Ibadan', years_experience: 6, teaching_mode: 'online',
     hourly_rate_ngn: 12000, overall_rating: 4.6, review_count: 28, is_verified: true, offers_trial_lesson: true,
     bio: 'SAT and ACT preparation specialist. Computer Science and Mathematics tutor for US college admissions. 100% of my students improved their SAT scores.',
@@ -74,7 +74,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     badges: [{ id: '', tutor_id: '', badge: 'verified_tutor', awarded_at: '' }],
   },
   {
-    id: '6', registration_number: 'IATN-2026-000006', full_name: 'Mrs. Ngozi Alozie',
+    id: '6', registration_number: 'NXR-2026-000006', full_name: 'Mrs. Ngozi Alozie',
     state: 'Enugu', city: 'Enugu', years_experience: 18, teaching_mode: 'both',
     hourly_rate_ngn: 22000, overall_rating: 4.9, review_count: 201, is_verified: true, offers_trial_lesson: false,
     bio: 'English Language and Literature veteran. Cambridge IGCSE and A-Level examiner. Edexcel specialist with exceptional results track record.',
@@ -89,7 +89,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     ],
   },
   {
-    id: '7', registration_number: 'IATN-2026-000007', full_name: 'Mr. Chidi Okafor',
+    id: '7', registration_number: 'NXR-2026-000007', full_name: 'Mr. Chidi Okafor',
     state: 'Lagos', city: 'Surulere', years_experience: 9, teaching_mode: 'both',
     hourly_rate_ngn: 10000, overall_rating: 4.5, review_count: 73, is_verified: true, offers_trial_lesson: true,
     bio: 'Dedicated JAMB/UTME and NECO tutor helping students gain admission into top Nigerian universities. 90% of my students score 280+ in JAMB.',
@@ -100,7 +100,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     badges: [{ id: '', tutor_id: '', badge: 'verified_tutor', awarded_at: '' }],
   },
   {
-    id: '8', registration_number: 'IATN-2026-000008', full_name: 'Miss Ada Nwachukwu',
+    id: '8', registration_number: 'NXR-2026-000008', full_name: 'Miss Ada Nwachukwu',
     state: 'Delta', city: 'Warri', years_experience: 5, teaching_mode: 'online',
     hourly_rate_ngn: 8000, overall_rating: 4.4, review_count: 19, is_verified: true, offers_trial_lesson: true,
     bio: 'WAEC and NECO specialist helping SS3 students achieve excellent grades. English Language and Literature expert.',
@@ -111,7 +111,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     badges: [{ id: '', tutor_id: '', badge: 'verified_tutor', awarded_at: '' }],
   },
   {
-    id: '9', registration_number: 'IATN-2026-000009', full_name: 'Dr. Seun Bello',
+    id: '9', registration_number: 'NXR-2026-000009', full_name: 'Dr. Seun Bello',
     state: 'Lagos', city: 'Lekki', years_experience: 11, teaching_mode: 'online',
     hourly_rate_ngn: 30000, overall_rating: 4.8, review_count: 56, is_verified: true, offers_trial_lesson: false,
     bio: 'IB Diploma Mathematics and Physics specialist. Former IB examiner. My students consistently achieve 6s and 7s in their IB exams.',
@@ -125,7 +125,7 @@ const SAMPLE_TUTORS: Partial<Tutor & { offers_trial_lesson: boolean }>[] = [
     ],
   },
   {
-    id: '10', registration_number: 'IATN-2026-000010', full_name: 'Mrs. Kehinde Adeyemi',
+    id: '10', registration_number: 'NXR-2026-000010', full_name: 'Mrs. Kehinde Adeyemi',
     state: 'FCT - Abuja', city: 'Wuse II', years_experience: 13, teaching_mode: 'both',
     hourly_rate_ngn: 20000, overall_rating: 4.7, review_count: 91, is_verified: true, offers_trial_lesson: true,
     bio: 'Pearson Edexcel Mathematics and Chemistry specialist. Expert in AS and A2 level content with outstanding student results.',
@@ -166,8 +166,6 @@ export default function TutorsSearchPage() {
   const [selectedCurricula, setSelectedCurricula] = useState<string[]>([])
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
   const [teachingMode, setTeachingMode] = useState('')
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
   const [selectedBadges, setSelectedBadges] = useState<string[]>([])
   const [sortBy, setSortBy] = useState('rating')
 
@@ -175,7 +173,7 @@ export default function TutorsSearchPage() {
     setList(list.includes(value) ? list.filter(v => v !== value) : [...list, value])
   }
 
-  const hasFilters = !!(query || selectedState || selectedCurricula.length || selectedSubjects.length || teachingMode || minPrice || maxPrice || selectedBadges.length)
+  const hasFilters = !!(query || selectedState || selectedCurricula.length || selectedSubjects.length || teachingMode || selectedBadges.length)
 
   const clearFilters = () => {
     setQuery('')
@@ -183,8 +181,6 @@ export default function TutorsSearchPage() {
     setSelectedCurricula([])
     setSelectedSubjects([])
     setTeachingMode('')
-    setMinPrice('')
-    setMaxPrice('')
     setSelectedBadges([])
     setSortBy('rating')
   }
@@ -220,13 +216,6 @@ export default function TutorsSearchPage() {
       results = results.filter(t => t.teaching_mode === mode || (mode === 'both' && t.teaching_mode === 'both'))
     }
 
-    if (minPrice) {
-      results = results.filter(t => (t.hourly_rate_ngn ?? 0) >= Number(minPrice))
-    }
-
-    if (maxPrice) {
-      results = results.filter(t => (t.hourly_rate_ngn ?? 0) <= Number(maxPrice))
-    }
 
     if (selectedBadges.includes('Verified only')) {
       results = results.filter(t => t.is_verified)
@@ -242,21 +231,19 @@ export default function TutorsSearchPage() {
     }
 
     results.sort((a, b) => {
-      if (sortBy === 'price_asc') return (a.hourly_rate_ngn ?? 0) - (b.hourly_rate_ngn ?? 0)
-      if (sortBy === 'price_desc') return (b.hourly_rate_ngn ?? 0) - (a.hourly_rate_ngn ?? 0)
       if (sortBy === 'reviews') return (b.review_count ?? 0) - (a.review_count ?? 0)
       return (b.overall_rating ?? 0) - (a.overall_rating ?? 0)
     })
 
     return results
-  }, [query, selectedCurricula, selectedSubjects, selectedState, teachingMode, minPrice, maxPrice, selectedBadges, sortBy])
+  }, [query, selectedCurricula, selectedSubjects, selectedState, teachingMode, selectedBadges, sortBy])
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Search header */}
-      <div className="iatn-gradient text-white py-12 px-4">
+      <div className="nexora-gradient text-white py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-black mb-2">Find Your Tutor</h1>
           <p className="text-white/70 mb-6">Verified IGCSE, A-Level, IB, WAEC, JAMB and SAT tutors across Nigeria</p>
@@ -286,7 +273,7 @@ export default function TutorsSearchPage() {
             </select>
             <button
               onClick={clearFilters}
-              className="iatn-gradient text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+              className="nexora-gradient text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
             >
               Search
             </button>
@@ -364,25 +351,6 @@ export default function TutorsSearchPage() {
                 ))}
               </FilterSection>
 
-              <FilterSection title="Price (NGN/hr)">
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    placeholder="Min"
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f3460]"
-                  />
-                  <input
-                    type="number"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    placeholder="Max"
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f3460]"
-                  />
-                </div>
-              </FilterSection>
-
               <FilterSection title="Badges">
                 {BADGE_FILTERS.map((b) => (
                   <label key={b} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:text-[#0f3460]">
@@ -416,8 +384,6 @@ export default function TutorsSearchPage() {
                 className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0f3460] bg-white"
               >
                 <option value="rating">Sort: Highest rated</option>
-                <option value="price_asc">Sort: Price: Low to High</option>
-                <option value="price_desc">Sort: Price: High to Low</option>
                 <option value="reviews">Sort: Most reviewed</option>
               </select>
             </div>
@@ -427,7 +393,7 @@ export default function TutorsSearchPage() {
                 <div className="text-5xl mb-4">🔍</div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">No tutors found</h3>
                 <p className="text-slate-600 mb-6">Try adjusting your filters or search terms</p>
-                <button onClick={clearFilters} className="iatn-gradient text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90">
+                <button onClick={clearFilters} className="nexora-gradient text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90">
                   Clear all filters
                 </button>
               </div>
@@ -440,7 +406,7 @@ export default function TutorsSearchPage() {
                     className="block bg-white border border-slate-200 rounded-2xl p-5 hover:border-[#0f3460] hover:shadow-md transition-all group"
                   >
                     <div className="flex gap-4">
-                      <div className="w-16 h-16 rounded-xl iatn-gradient flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
+                      <div className="w-16 h-16 rounded-xl nexora-gradient flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
                         {tutor.full_name?.split(' ').map((n) => n[0]).join('').slice(0, 2)}
                       </div>
 
@@ -455,7 +421,6 @@ export default function TutorsSearchPage() {
                             </div>
                           </div>
                           <div className="text-right flex-shrink-0">
-                            <div className="font-bold text-slate-900">{formatNgn(tutor.hourly_rate_ngn!)}<span className="text-xs font-normal text-slate-500">/hr</span></div>
                             <div className="flex items-center gap-1 mt-0.5 justify-end">
                               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                               <span className="text-sm font-semibold">{tutor.overall_rating?.toFixed(1)}</span>

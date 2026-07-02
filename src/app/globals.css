@@ -11,8 +11,8 @@
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
-  .iatn-gradient { background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #1a1a2e 100%); }
-  .iatn-gradient-purple { background: linear-gradient(135deg, #533483 0%, #0f3460 100%); }
+  .nexora-gradient { background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #1a1a2e 100%); }
+  .nexora-gradient-purple { background: linear-gradient(135deg, #533483 0%, #0f3460 100%); }
   .badge-verified { @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200; }
   .badge-cambridge { @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200; }
   .badge-top { @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200; }

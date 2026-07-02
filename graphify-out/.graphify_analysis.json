@@ -1,0 +1,443 @@
+{
+  "communities": {
+    "0": [
+      "src_app_auth_forgot_password_page",
+      "src_app_auth_forgot_password_page_forgotpasswordpage",
+      "src_app_page",
+      "src_app_page_curricula",
+      "src_app_page_featuredschools",
+      "src_app_page_features",
+      "src_app_page_homepage",
+      "src_app_page_stats",
+      "src_app_page_subjects",
+      "src_app_page_testimonials",
+      "src_app_public_book_id_page",
+      "src_app_public_book_id_page_bookingpage",
+      "src_app_public_book_id_page_durations",
+      "src_app_public_book_id_page_time_slots",
+      "src_app_public_book_id_page_tutor_data",
+      "src_app_public_community_page",
+      "src_app_public_community_page_communitypage",
+      "src_app_public_community_page_curriculum_colors",
+      "src_app_public_community_page_forums",
+      "src_app_public_community_page_trending",
+      "src_app_public_exams_page",
+      "src_app_public_exams_page_exam",
+      "src_app_public_exams_page_exams",
+      "src_app_public_exams_page_examseries",
+      "src_app_public_exams_page_examspage",
+      "src_app_public_schools_id_page",
+      "src_app_public_schools_id_page_curriculum_colors",
+      "src_app_public_schools_id_page_curriculum_labels",
+      "src_app_public_schools_id_page_school_data",
+      "src_app_public_schools_id_page_schoolprofilepage",
+      "src_app_public_universities_page",
+      "src_app_public_universities_page_countries",
+      "src_app_public_universities_page_curriculum_colors",
+      "src_app_public_universities_page_curriculum_labels",
+      "src_app_public_universities_page_type_colors",
+      "src_app_public_universities_page_types",
+      "src_app_public_universities_page_universities",
+      "src_app_public_universities_page_universitiespage",
+      "src_app_public_universities_page_university",
+      "src_components_shared_footer",
+      "src_components_shared_footer_footer",
+      "src_components_shared_footer_footerlinks",
+      "src_components_shared_navbar",
+      "src_components_shared_navbar_navbar",
+      "src_components_shared_navbar_navlinks"
+    ],
+    "1": [
+      "src_app_auth_register_tutor_page",
+      "src_app_auth_register_tutor_page_field",
+      "src_app_auth_register_tutor_page_fielderrors",
+      "src_app_auth_register_tutor_page_initialform",
+      "src_app_auth_register_tutor_page_inputcls",
+      "src_app_auth_register_tutor_page_steps",
+      "src_app_auth_register_tutor_page_tutorregistrationpage",
+      "src_app_auth_register_tutor_page_validatestep",
+      "src_app_public_tutors_id_page",
+      "src_app_public_tutors_id_page_badgelabels",
+      "src_app_public_tutors_id_page_metriccard",
+      "src_app_public_tutors_id_page_reviews",
+      "src_app_public_tutors_id_page_tutor",
+      "src_app_public_tutors_id_page_tutorprofilepage",
+      "src_app_public_tutors_page",
+      "src_app_public_tutors_page_badge_filters",
+      "src_app_public_tutors_page_badgecolors",
+      "src_app_public_tutors_page_badgelabels",
+      "src_app_public_tutors_page_filtersection",
+      "src_app_public_tutors_page_sample_tutors",
+      "src_app_public_tutors_page_tutorssearchpage",
+      "src_components_shared_herosearch",
+      "src_components_shared_herosearch_herosearch",
+      "src_lib_utils",
+      "src_lib_utils_curricula",
+      "src_lib_utils_formatngn",
+      "src_lib_utils_formatrating",
+      "src_lib_utils_getinitials",
+      "src_lib_utils_nigerian_states",
+      "src_lib_utils_qualification_types",
+      "src_lib_utils_slugify",
+      "src_lib_utils_subjects",
+      "src_lib_utils_teaching_tools",
+      "src_lib_utils_timeago",
+      "src_types_index_tutor",
+      "src_types_index_tutorregistrationform"
+    ],
+    "2": [
+      "package_dependencies",
+      "package_dependencies_anthropic_ai_sdk",
+      "package_dependencies_class_variance_authority",
+      "package_dependencies_clsx",
+      "package_dependencies_date_fns",
+      "package_dependencies_hookform_resolvers",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next",
+      "package_dependencies_next_themes",
+      "package_dependencies_radix_ui_react_avatar",
+      "package_dependencies_radix_ui_react_checkbox",
+      "package_dependencies_radix_ui_react_dialog",
+      "package_dependencies_radix_ui_react_dropdown_menu",
+      "package_dependencies_radix_ui_react_label",
+      "package_dependencies_radix_ui_react_progress",
+      "package_dependencies_radix_ui_react_radio_group",
+      "package_dependencies_radix_ui_react_select",
+      "package_dependencies_radix_ui_react_separator",
+      "package_dependencies_radix_ui_react_slot",
+      "package_dependencies_radix_ui_react_switch",
+      "package_dependencies_radix_ui_react_tabs",
+      "package_dependencies_radix_ui_react_toast",
+      "package_dependencies_radix_ui_react_tooltip",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_hook_form",
+      "package_dependencies_resend",
+      "package_dependencies_supabase_ssr",
+      "package_dependencies_supabase_supabase_js",
+      "package_dependencies_tailwind_merge",
+      "package_dependencies_zod",
+      "package_dependencies_zustand"
+    ],
+    "3": [
+      "src_components_shared_badgechip",
+      "src_components_shared_badgechip_badgechip",
+      "src_components_shared_badgechip_badgechipprops",
+      "src_components_shared_badgechip_badgeconfig",
+      "src_components_shared_starrating",
+      "src_components_shared_starrating_starrating",
+      "src_components_shared_starrating_starratingprops",
+      "src_lib_utils_cn",
+      "src_types_index",
+      "src_types_index_badgetype",
+      "src_types_index_booking",
+      "src_types_index_bookingstatus",
+      "src_types_index_curriculumtype",
+      "src_types_index_lessontype",
+      "src_types_index_paymentstatus",
+      "src_types_index_review",
+      "src_types_index_school",
+      "src_types_index_student",
+      "src_types_index_teachingmode",
+      "src_types_index_tutorbadge",
+      "src_types_index_tutorcambridgemetrics",
+      "src_types_index_tutorportfolioitem",
+      "src_types_index_tutorqualification",
+      "src_types_index_tutorsearchfilters",
+      "src_types_index_tutorsubject",
+      "src_types_index_userrole",
+      "src_types_index_verificationstatus"
+    ],
+    "4": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_exclude",
+      "tsconfig_include",
+      "tsconfig_paths"
+    ],
+    "5": [
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_postcss",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_version"
+    ],
+    "6": [
+      "src_app_auth_login_page",
+      "src_app_auth_login_page_loginpage",
+      "src_app_auth_register_parent_page",
+      "src_app_auth_register_parent_page_curricula",
+      "src_app_auth_register_parent_page_parentregisterpage",
+      "src_app_auth_register_school_page",
+      "src_app_auth_register_school_page_curricula_options",
+      "src_app_auth_register_school_page_school_types",
+      "src_app_auth_register_school_page_schoolregisterpage",
+      "src_app_auth_register_student_page",
+      "src_app_auth_register_student_page_curricula",
+      "src_app_auth_register_student_page_studentregisterpage",
+      "src_app_auth_register_student_page_years",
+      "src_lib_supabase_client",
+      "src_lib_supabase_client_createclient"
+    ],
+    "7": [
+      "src_app_public_resources_page",
+      "src_app_public_resources_page_curricula",
+      "src_app_public_resources_page_curriculumkey",
+      "src_app_public_resources_page_resource",
+      "src_app_public_resources_page_resource_types",
+      "src_app_public_resources_page_resources",
+      "src_app_public_resources_page_resourcespage",
+      "src_app_public_resources_page_resourcetype",
+      "src_app_public_resources_page_source_colors",
+      "src_app_public_resources_page_subjects_list",
+      "src_app_public_resources_page_type_icons"
+    ],
+    "8": [
+      "src_lib_supabase_middleware",
+      "src_lib_supabase_middleware_updatesession",
+      "src_lib_supabase_server",
+      "src_lib_supabase_server_createadminclient",
+      "src_lib_supabase_server_createclient",
+      "src_middleware",
+      "src_middleware_config",
+      "src_middleware_middleware",
+      "src_types_database",
+      "src_types_database_database",
+      "src_types_database_json"
+    ],
+    "9": [
+      "src_app_public_schools_page",
+      "src_app_public_schools_page_curricula_filter",
+      "src_app_public_schools_page_curricula_labels",
+      "src_app_public_schools_page_features_filter",
+      "src_app_public_schools_page_filtersection",
+      "src_app_public_schools_page_sample_schools",
+      "src_app_public_schools_page_schoolspage"
+    ],
+    "10": [
+      "src_lib_paystack",
+      "src_lib_paystack_calculateplatformfee",
+      "src_lib_paystack_generatepaymentreference",
+      "src_lib_paystack_initializetransaction",
+      "src_lib_paystack_paystackfetch",
+      "src_lib_paystack_verifytransaction",
+      "src_lib_paystack_verifywebhooksignature"
+    ],
+    "11": [
+      "src_app_school_dashboard_school_dashboard_dashboard_page",
+      "src_app_school_dashboard_school_dashboard_dashboard_page_announcements",
+      "src_app_school_dashboard_school_dashboard_dashboard_page_jobpostings",
+      "src_app_school_dashboard_school_dashboard_dashboard_page_recentapplications",
+      "src_app_school_dashboard_school_dashboard_dashboard_page_schooldashboardpage",
+      "src_app_school_dashboard_school_dashboard_dashboard_page_stats"
+    ],
+    "12": [
+      "src_app_student_dashboard_student_dashboard_dashboard_page",
+      "src_app_student_dashboard_student_dashboard_dashboard_page_recentscores",
+      "src_app_student_dashboard_student_dashboard_dashboard_page_stats",
+      "src_app_student_dashboard_student_dashboard_dashboard_page_studentdashboardpage",
+      "src_app_student_dashboard_student_dashboard_dashboard_page_studyplan",
+      "src_app_student_dashboard_student_dashboard_dashboard_page_upcominglessons"
+    ],
+    "13": [
+      "src_lib_claude",
+      "src_lib_claude_client",
+      "src_lib_claude_generatestudyplan",
+      "src_lib_claude_generatetutorprofilesummary",
+      "src_lib_claude_getaistudyassistantresponse",
+      "src_lib_claude_matchtutors"
+    ],
+    "14": [
+      "src_app_tutor_dashboard_tutor_dashboard_dashboard_page",
+      "src_app_tutor_dashboard_tutor_dashboard_dashboard_page_recentmessages",
+      "src_app_tutor_dashboard_tutor_dashboard_dashboard_page_stats",
+      "src_app_tutor_dashboard_tutor_dashboard_dashboard_page_tutordashboardpage",
+      "src_app_tutor_dashboard_tutor_dashboard_dashboard_page_upcominglessons"
+    ],
+    "15": [
+      "src_app_parent_dashboard_parent_dashboard_dashboard_page",
+      "src_app_parent_dashboard_parent_dashboard_dashboard_page_alerts",
+      "src_app_parent_dashboard_parent_dashboard_dashboard_page_children",
+      "src_app_parent_dashboard_parent_dashboard_dashboard_page_parentdashboardpage"
+    ],
+    "16": [
+      "src_app_auth_register_page",
+      "src_app_auth_register_page_registerpage",
+      "src_app_auth_register_page_roles"
+    ],
+    "17": [
+      "src_app_layout",
+      "src_app_layout_metadata",
+      "src_app_layout_rootlayout"
+    ],
+    "18": [
+      "eslintrc",
+      "eslintrc_extends"
+    ],
+    "19": [
+      "next_config",
+      "next_config_nextconfig"
+    ],
+    "20": [
+      "postcss_config",
+      "postcss_config_config"
+    ],
+    "21": [
+      "tailwind_config",
+      "tailwind_config_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.05757575757575758,
+    "1": 0.07301587301587302,
+    "2": 0.0625,
+    "3": 0.08547008547008547,
+    "4": 0.10526315789473684,
+    "5": 0.1111111111111111,
+    "6": 0.17142857142857143,
+    "7": 0.18181818181818182,
+    "8": 0.2545454545454545,
+    "9": 0.2857142857142857,
+    "10": 0.38095238095238093,
+    "11": 0.3333333333333333,
+    "12": 0.3333333333333333,
+    "13": 0.3333333333333333,
+    "14": 0.4,
+    "15": 0.5,
+    "16": 0.6666666666666666,
+    "17": 0.6666666666666666,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0
+  },
+  "gods": [
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 15
+    },
+    {
+      "id": "src_components_shared_footer_footer",
+      "label": "Footer()",
+      "degree": 12
+    },
+    {
+      "id": "src_lib_utils_nigerian_states",
+      "label": "NIGERIAN_STATES",
+      "degree": 7
+    },
+    {
+      "id": "src_lib_supabase_client_createclient",
+      "label": "createClient()",
+      "degree": 6
+    },
+    {
+      "id": "src_lib_utils_cn",
+      "label": "cn()",
+      "degree": 6
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "src_lib_utils_curricula",
+      "label": "CURRICULA",
+      "degree": 4
+    },
+    {
+      "id": "src_lib_paystack_paystackfetch",
+      "label": "paystackFetch()",
+      "degree": 3
+    },
+    {
+      "id": "src_lib_supabase_middleware_updatesession",
+      "label": "updateSession()",
+      "degree": 3
+    },
+    {
+      "id": "src_lib_utils_subjects",
+      "label": "SUBJECTS",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "BadgeChip()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/shared/BadgeChip.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `BadgeChip()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "StarRating()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/shared/StarRating.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `StarRating()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "BadgeChipProps",
+      "target": "BadgeType",
+      "source_files": [
+        "src/components/shared/BadgeChip.tsx",
+        "src/types/index.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "middleware()",
+      "target": "updateSession()",
+      "source_files": [
+        "src/middleware.ts",
+        "src/lib/supabase/middleware.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

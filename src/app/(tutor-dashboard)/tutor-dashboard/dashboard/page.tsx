@@ -1,9 +1,8 @@
 import Link from 'next/link'
-import { Calendar, DollarSign, Star, Users, TrendingUp, Eye, Award, ArrowRight, BookOpen } from 'lucide-react'
-import { formatNgn } from '@/lib/utils'
+import { Calendar, Star, Users, TrendingUp, Eye, Award, ArrowRight, BookOpen } from 'lucide-react'
 
 const stats = [
-  { label: 'This Month Earnings', value: formatNgn(185000), icon: DollarSign, change: '+12%', color: 'text-emerald-600' },
+  { label: 'Lessons This Month', value: '12', icon: Calendar, change: '+2 vs last month', color: 'text-emerald-600' },
   { label: 'Active Students', value: '23', icon: Users, change: '+3', color: 'text-blue-600' },
   { label: 'Upcoming Lessons', value: '8', icon: Calendar, change: 'This week', color: 'text-purple-600' },
   { label: 'Overall Rating', value: '4.9★', icon: Star, change: '87 reviews', color: 'text-amber-600' },
@@ -30,7 +29,7 @@ export default function TutorDashboardPage() {
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-black text-slate-900">Good morning, Dr. Adaeze 👋</h1>
-            <p className="text-slate-500 mt-1 text-sm">Your IATN registration: <span className="font-mono font-bold text-[#0f3460]">IATN-2026-000001</span></p>
+            <p className="text-slate-500 mt-1 text-sm">Your Nexora registration: <span className="font-mono font-bold text-[#0f3460]">NXR-2026-000001</span></p>
           </div>
           <div className="flex items-center gap-2">
             <span className="badge-verified">✓ Verified Tutor</span>
@@ -75,7 +74,7 @@ export default function TutorDashboardPage() {
             <div className="space-y-3">
               {upcomingLessons.map((l, i) => (
                 <div key={i} className="flex items-center gap-4 p-3.5 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
-                  <div className="w-10 h-10 iatn-gradient rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                  <div className="w-10 h-10 nexora-gradient rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {l.student[0]}
                   </div>
                   <div className="flex-1 min-w-0">

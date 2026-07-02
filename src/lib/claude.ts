@@ -20,7 +20,7 @@ export async function generateTutorProfileSummary(tutor: {
     messages: [
       {
         role: 'user',
-        content: `Write a professional 2-3 sentence tutor profile summary for IATN (International Academic Tutors Nigeria).
+        content: `Write a professional 2-3 sentence tutor profile summary for Nexora Academic.
 
 Tutor details:
 - Name: ${tutor.fullName}
@@ -52,7 +52,7 @@ export async function matchTutors(params: {
     messages: [
       {
         role: 'user',
-        content: `You are an AI tutor-matching engine for IATN Nigeria. Rank these tutors for the student and return a JSON array of tutor IDs ordered best-to-worst fit.
+        content: `You are an AI tutor-matching engine for Nexora Academic Nigeria. Rank these tutors for the student and return a JSON array of tutor IDs ordered best-to-worst fit.
 
 Student needs:
 - Subject: ${params.subject}
@@ -105,7 +105,7 @@ export async function getAIStudyAssistantResponse(messages: Array<{ role: 'user'
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 800,
-    system: `You are an expert ${curriculum} ${subject} tutor on the IATN platform in Nigeria. Help students understand concepts, work through problems, and prepare for Cambridge/international exams. Be encouraging, clear, and educational. Use Nigerian context where appropriate.`,
+    system: `You are an expert ${curriculum} ${subject} tutor on the Nexora Academic platform in Nigeria. Help students understand concepts, work through problems, and prepare for Cambridge/international exams. Be encouraging, clear, and educational. Use Nigerian context where appropriate.`,
     messages,
   })
 

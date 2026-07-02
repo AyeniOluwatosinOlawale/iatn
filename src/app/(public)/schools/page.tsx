@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { Search, MapPin, Star, Users, CheckCircle2, SlidersHorizontal, ChevronRight, Building2, Award, X } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { NIGERIAN_STATES, formatNgn } from '@/lib/utils'
+import { NIGERIAN_STATES } from '@/lib/utils'
 
 const SAMPLE_SCHOOLS = [
   {
-    id: '1', registration_number: 'IATN-SCH-2026-0001', school_name: 'Greensprings School',
+    id: '1', registration_number: 'NXR-SCH-2026-0001', school_name: 'Greensprings School',
     logo_initial: 'GS', state: 'Lagos', city: 'Anthony Village', school_type: 'private',
     curricula: ['igcse', 'a_level'], founded_year: 1999, student_count: 2800,
     fee_range_ngn_min: 2500000, fee_range_ngn_max: 4500000, is_verified: true,
@@ -19,7 +19,7 @@ const SAMPLE_SCHOOLS = [
     tags: ['Cambridge Centre', 'Boarding Available', 'University Guidance'],
   },
   {
-    id: '2', registration_number: 'IATN-SCH-2026-0002', school_name: 'Corona Secondary School',
+    id: '2', registration_number: 'NXR-SCH-2026-0002', school_name: 'Corona Secondary School',
     logo_initial: 'CS', state: 'Lagos', city: 'Lekki', school_type: 'private',
     curricula: ['igcse', 'a_level', 'edexcel'], founded_year: 1989, student_count: 1500,
     fee_range_ngn_min: 3000000, fee_range_ngn_max: 5000000, is_verified: true,
@@ -29,7 +29,7 @@ const SAMPLE_SCHOOLS = [
     tags: ['Cambridge Centre', 'Edexcel Centre', 'Sports Programme'],
   },
   {
-    id: '3', registration_number: 'IATN-SCH-2026-0003', school_name: 'Loyola Jesuit College',
+    id: '3', registration_number: 'NXR-SCH-2026-0003', school_name: 'Loyola Jesuit College',
     logo_initial: 'LJ', state: 'FCT - Abuja', city: 'Abuja', school_type: 'private',
     curricula: ['igcse', 'a_level'], founded_year: 2000, student_count: 1200,
     fee_range_ngn_min: 4000000, fee_range_ngn_max: 6000000, is_verified: true,
@@ -39,7 +39,7 @@ const SAMPLE_SCHOOLS = [
     tags: ['Full Boarding', 'Outstanding Results', 'Cambridge Expert'],
   },
   {
-    id: '4', registration_number: 'IATN-SCH-2026-0004', school_name: 'Atlantic Hall',
+    id: '4', registration_number: 'NXR-SCH-2026-0004', school_name: 'Atlantic Hall',
     logo_initial: 'AH', state: 'Lagos', city: 'Epe', school_type: 'international',
     curricula: ['igcse', 'a_level', 'ib'], founded_year: 1994, student_count: 900,
     fee_range_ngn_min: 5000000, fee_range_ngn_max: 8000000, is_verified: true,
@@ -49,7 +49,7 @@ const SAMPLE_SCHOOLS = [
     tags: ['Cambridge + IB', 'Full Boarding', 'International Campus'],
   },
   {
-    id: '5', registration_number: 'IATN-SCH-2026-0005', school_name: 'Whiteplains British School',
+    id: '5', registration_number: 'NXR-SCH-2026-0005', school_name: 'Whiteplains British School',
     logo_initial: 'WB', state: 'FCT - Abuja', city: 'Abuja', school_type: 'private',
     curricula: ['igcse', 'a_level'], founded_year: 2005, student_count: 800,
     fee_range_ngn_min: 3500000, fee_range_ngn_max: 5500000, is_verified: true,
@@ -59,7 +59,7 @@ const SAMPLE_SCHOOLS = [
     tags: ['Small Class Sizes', 'British Curriculum', 'UK Teachers'],
   },
   {
-    id: '6', registration_number: 'IATN-SCH-2026-0006', school_name: 'Hillcrest School',
+    id: '6', registration_number: 'NXR-SCH-2026-0006', school_name: 'Hillcrest School',
     logo_initial: 'HS', state: 'Plateau', city: 'Jos', school_type: 'international',
     curricula: ['igcse', 'a_level'], founded_year: 1942, student_count: 600,
     fee_range_ngn_min: 2800000, fee_range_ngn_max: 4200000, is_verified: true,
@@ -84,8 +84,6 @@ export default function SchoolsPage() {
   const [selectedState, setSelectedState] = useState('')
   const [selectedCurricula, setSelectedCurricula] = useState<string[]>([])
   const [schoolType, setSchoolType] = useState('')
-  const [minFee, setMinFee] = useState('')
-  const [maxFee, setMaxFee] = useState('')
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [sortBy, setSortBy] = useState('rating')
 
@@ -94,11 +92,11 @@ export default function SchoolsPage() {
   const toggleFeature = (value: string) =>
     setSelectedFeatures(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value])
 
-  const hasFilters = !!(query || selectedState || selectedCurricula.length || schoolType || minFee || maxFee || selectedFeatures.length)
+  const hasFilters = !!(query || selectedState || selectedCurricula.length || schoolType || selectedFeatures.length)
 
   const clearFilters = () => {
     setQuery(''); setSelectedState(''); setSelectedCurricula([]); setSchoolType('')
-    setMinFee(''); setMaxFee(''); setSelectedFeatures([]); setSortBy('rating')
+    setSelectedFeatures([]); setSortBy('rating')
   }
 
   const filteredSchools = useMemo(() => {
@@ -126,14 +124,6 @@ export default function SchoolsPage() {
       results = results.filter(s => s.school_type === schoolType.toLowerCase())
     }
 
-    if (minFee) {
-      results = results.filter(s => s.fee_range_ngn_min >= Number(minFee))
-    }
-
-    if (maxFee) {
-      results = results.filter(s => s.fee_range_ngn_min <= Number(maxFee))
-    }
-
     if (selectedFeatures.includes('Boarding available')) {
       results = results.filter(s => s.has_boarding)
     }
@@ -145,15 +135,13 @@ export default function SchoolsPage() {
     }
 
     results.sort((a, b) => {
-      if (sortBy === 'fee_asc') return a.fee_range_ngn_min - b.fee_range_ngn_min
-      if (sortBy === 'fee_desc') return b.fee_range_ngn_min - a.fee_range_ngn_min
       if (sortBy === 'a_star') return b.a_star_a_rate - a.a_star_a_rate
       if (sortBy === 'reviews') return b.review_count - a.review_count
       return b.overall_rating - a.overall_rating
     })
 
     return results
-  }, [query, selectedCurricula, selectedState, schoolType, minFee, maxFee, selectedFeatures, sortBy])
+  }, [query, selectedCurricula, selectedState, schoolType, selectedFeatures, sortBy])
 
   return (
     <div className="min-h-screen bg-white">
@@ -168,7 +156,7 @@ export default function SchoolsPage() {
             <span className="text-white">Schools</span>
           </div>
           <h1 className="text-3xl font-black mb-2">Find A-Level & IGCSE Schools in Nigeria</h1>
-          <p className="text-white/70 mb-7 max-w-xl">Compare verified Cambridge, Edexcel, and IB schools across all 36 Nigerian states — fees, results, and real parent reviews.</p>
+          <p className="text-white/70 mb-7 max-w-xl">Compare verified Cambridge, Edexcel, and IB schools across all 36 Nigerian states — results and real parent reviews.</p>
 
           <div className="bg-white rounded-xl p-2 flex flex-col sm:flex-row gap-2 max-w-3xl">
             <div className="flex-1 flex items-center gap-3 px-3">
@@ -275,25 +263,6 @@ export default function SchoolsPage() {
                 ))}
               </FilterSection>
 
-              <FilterSection title="Annual fee (NGN)">
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    value={minFee}
-                    onChange={(e) => setMinFee(e.target.value)}
-                    placeholder="Min"
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#533483]"
-                  />
-                  <input
-                    type="number"
-                    value={maxFee}
-                    onChange={(e) => setMaxFee(e.target.value)}
-                    placeholder="Max"
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#533483]"
-                  />
-                </div>
-              </FilterSection>
-
               <FilterSection title="Features">
                 {FEATURES_FILTER.map((f) => (
                   <label key={f} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:text-[#533483]">
@@ -327,8 +296,6 @@ export default function SchoolsPage() {
                 className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#533483] bg-white"
               >
                 <option value="rating">Sort: Highest rated</option>
-                <option value="fee_asc">Sort: Lowest fees</option>
-                <option value="fee_desc">Sort: Highest fees</option>
                 <option value="a_star">Sort: Highest A*/A rate</option>
                 <option value="reviews">Sort: Most reviewed</option>
               </select>
@@ -376,8 +343,6 @@ export default function SchoolsPage() {
                             </div>
                           </div>
                           <div className="text-right flex-shrink-0">
-                            <div className="text-xs text-slate-500">Annual fees from</div>
-                            <div className="font-bold text-slate-900 text-sm">{formatNgn(school.fee_range_ngn_min)}</div>
                             <div className="flex items-center gap-1 mt-0.5 justify-end">
                               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                               <span className="text-sm font-semibold">{school.overall_rating}</span>
@@ -423,7 +388,7 @@ export default function SchoolsPage() {
       <section className="py-16 px-4 bg-slate-50 border-t border-slate-200">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-black text-slate-900 mb-3">Is Your School Listed?</h2>
-          <p className="text-slate-600 mb-6">Join 200+ verified Cambridge and international schools on IATN. Reach thousands of parents actively looking for the right school.</p>
+          <p className="text-slate-600 mb-6">Join 200+ verified Cambridge and international schools on Nexora Academic. Reach thousands of parents actively looking for the right school.</p>
           <Link
             href="/register?role=school"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90 transition-opacity"

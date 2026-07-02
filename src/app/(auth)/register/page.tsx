@@ -8,10 +8,10 @@ const roles = [
     key: 'tutor',
     icon: GraduationCap,
     title: 'I am a Tutor',
-    description: 'Register as a professional IGCSE, A-Level, IB, or SAT tutor. Get your unique IATN number and start earning.',
+    description: 'Register as a professional IGCSE, A-Level, IB, or SAT tutor. Get your unique Nexora number and start earning.',
     href: '/register/tutor',
     color: 'border-[#0f3460] bg-[#f0f4ff]',
-    iconColor: 'iatn-gradient',
+    iconColor: 'nexora-gradient',
     cta: 'Register as Tutor',
   },
   {
@@ -21,7 +21,7 @@ const roles = [
     description: 'Find verified tutors, take mock exams, use AI study tools, and prepare for Cambridge exams.',
     href: '/register/student',
     color: 'border-purple-300 bg-purple-50',
-    iconColor: 'iatn-gradient-purple',
+    iconColor: 'nexora-gradient-purple',
     cta: 'Register as Student',
   },
   {
@@ -51,14 +51,14 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 mb-8">
-        <div className="w-9 h-9 iatn-gradient rounded-xl flex items-center justify-center">
+        <div className="w-9 h-9 nexora-gradient rounded-xl flex items-center justify-center">
           <BookOpen className="w-5 h-5 text-white" />
         </div>
-        <span className="font-black text-slate-900 text-xl tracking-tight">IATN</span>
+        <span className="font-black text-slate-900 text-xl tracking-tight">Nexora</span>
       </Link>
 
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-black text-slate-900">Join IATN</h1>
+        <h1 className="text-3xl font-black text-slate-900">Join Nexora Academic</h1>
         <p className="text-slate-500 mt-2">Nigeria&apos;s international education platform. Who are you?</p>
       </div>
 

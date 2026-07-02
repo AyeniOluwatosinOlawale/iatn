@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, MessageSquare, Shield, ChevronRight } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { CURRICULA, formatNgn } from '@/lib/utils'
+import { CURRICULA } from '@/lib/utils'
 
 // Sample data for a tutor profile page
 const TUTOR = {
   id: '1',
-  registration_number: 'IATN-2026-000001',
+  registration_number: 'NXR-2026-000001',
   full_name: 'Dr. Adaeze Obi',
   photo_url: null,
   email: 'adaeze@example.com',
@@ -96,7 +96,7 @@ export default function TutorProfilePage() {
             {/* Profile header */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6">
               <div className="flex gap-5">
-                <div className="w-20 h-20 rounded-2xl iatn-gradient flex items-center justify-center text-white font-black text-2xl flex-shrink-0">
+                <div className="w-20 h-20 rounded-2xl nexora-gradient flex items-center justify-center text-white font-black text-2xl flex-shrink-0">
                   {tutor.full_name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -241,10 +241,6 @@ export default function TutorProfilePage() {
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="sticky top-20 space-y-4">
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <div className="text-2xl font-black text-slate-900 mb-1">
-                  {formatNgn(tutor.hourly_rate_ngn)}<span className="text-sm font-normal text-slate-500"> / hour</span>
-                </div>
-
                 <div className="space-y-3 my-5 text-sm">
                   <div className="flex justify-between">
                     <span className="text-slate-500">Response time</span>
@@ -268,7 +264,7 @@ export default function TutorProfilePage() {
 
                 <Link
                   href={`/book/${tutor.id}`}
-                  className="block w-full iatn-gradient text-white text-center font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity mb-3"
+                  className="block w-full nexora-gradient text-white text-center font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity mb-3"
                 >
                   <Calendar className="w-4 h-4 inline mr-2" />
                   Book a Lesson
@@ -313,7 +309,7 @@ export default function TutorProfilePage() {
 
 function MetricCard({ value, label, highlight }: { value: string; label: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl p-4 text-center ${highlight ? 'iatn-gradient text-white' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`rounded-xl p-4 text-center ${highlight ? 'nexora-gradient text-white' : 'bg-slate-50 text-slate-900'}`}>
       <div className={`text-2xl font-black ${highlight ? 'text-white' : 'text-[#0f3460]'}`}>{value}</div>
       <div className={`text-xs mt-1 ${highlight ? 'text-white/70' : 'text-slate-500'}`}>{label}</div>
     </div>

@@ -66,7 +66,7 @@ export default function HeroSearch() {
         </select>
         <button
           onClick={handleSearch}
-          className="text-white text-sm font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap iatn-gradient"
+          className="text-white text-sm font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap nexora-gradient"
         >
           {tab === 'tutors' ? 'Search Tutors' : 'Search Schools'}
         </button>

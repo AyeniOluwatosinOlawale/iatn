@@ -38,13 +38,13 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-9 h-9 iatn-gradient rounded-xl flex items-center justify-center">
+            <div className="w-9 h-9 nexora-gradient rounded-xl flex items-center justify-center">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
-            <span className="font-black text-slate-900 text-xl tracking-tight">IATN</span>
+            <span className="font-black text-slate-900 text-xl tracking-tight">Nexora</span>
           </Link>
           <h1 className="text-2xl font-black text-slate-900">Welcome back</h1>
-          <p className="text-slate-500 text-sm mt-1">Sign in to your IATN account</p>
+          <p className="text-slate-500 text-sm mt-1">Sign in to your Nexora account</p>
         </div>
 
         {/* Card */}
@@ -91,7 +91,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full iatn-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full nexora-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Sign in

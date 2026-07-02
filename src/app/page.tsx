@@ -53,8 +53,8 @@ const features = [
   },
   {
     icon: Award,
-    title: 'Unique IATN Number',
-    description: 'Every registered tutor receives a unique IATN-YYYY-NNNNNN professional registration number — your verified digital identity.',
+    title: 'Unique Nexora Number',
+    description: 'Every registered tutor receives a unique NXR-YYYY-NNNNNN professional registration number — your verified digital identity.',
   },
 ]
 
@@ -101,7 +101,7 @@ const testimonials = [
   {
     name: 'Mrs. Adaobi Okonkwo',
     role: 'Parent, Lagos',
-    quote: 'I found my daughter an A-Level Chemistry tutor through IATN. She went from a D to an A* in six months. The verified badge gave me the confidence I needed.',
+    quote: 'I found my daughter an A-Level Chemistry tutor through Nexora Academic. She went from a D to an A* in six months. The verified badge gave me the confidence I needed.',
     rating: 5,
   },
   {
@@ -113,7 +113,7 @@ const testimonials = [
   {
     name: 'Mr. Tunde Adeleke',
     role: 'Cambridge Tutor, Port Harcourt',
-    quote: 'IATN gave me a professional identity. My Cambridge Expert badge and verified pass rate statistics have tripled my student enquiries.',
+    quote: 'Nexora gave me a professional identity. My Cambridge Expert badge and verified pass rate statistics have tripled my student enquiries.',
     rating: 5,
   },
 ]
@@ -124,11 +124,11 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="iatn-gradient text-white pt-20 pb-28 px-4 relative overflow-hidden">
+      <section className="nexora-gradient text-white pt-20 pb-28 px-4 relative overflow-hidden">
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            Nigeria&apos;s #1 International Curriculum Education Platform
+            Nigeria&apos;s #1 Academic Excellence Platform
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6 text-balance">
             Find Nigeria&apos;s Best<br />
@@ -136,7 +136,7 @@ export default function HomePage() {
             <span className="text-purple-200 text-3xl sm:text-4xl lg:text-5xl">&amp; A-Level Schools</span>
           </h1>
           <p className="text-lg sm:text-xl text-white/75 max-w-2xl mx-auto mb-8 text-balance">
-            Verified tutors and top international schools — Cambridge results, reviews, fees and bookings all in one trusted platform.
+            Verified tutors and top international schools — Cambridge results, reviews, and bookings all in one trusted platform.
           </p>
 
           <HeroSearch />
@@ -205,7 +205,7 @@ export default function HomePage() {
                 <Building2 className="w-3.5 h-3.5" /> SCHOOLS
               </div>
               <h2 className="text-3xl font-black text-slate-900 mb-2">Find A-Level Schools in Nigeria</h2>
-              <p className="text-slate-600 max-w-xl">Compare top IGCSE and A-Level schools — A*/A rates, university placements, fees, and verified reviews.</p>
+              <p className="text-slate-600 max-w-xl">Compare top IGCSE and A-Level schools — A*/A rates, university placements, and verified reviews.</p>
             </div>
             <Link href="/schools" className="flex items-center gap-2 text-sm font-bold text-[#533483] hover:text-[#0f3460] transition-colors whitespace-nowrap flex-shrink-0">
               Browse All Schools <ChevronRight className="w-4 h-4" />
@@ -289,17 +289,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why IATN */}
+      {/* Why Nexora */}
       <section className="py-20 px-4 bg-slate-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-black text-slate-900 mb-3">Why Parents & Students Trust IATN</h2>
+            <h2 className="text-3xl font-black text-slate-900 mb-3">Why Parents & Students Trust Nexora Academic</h2>
             <p className="text-slate-600 max-w-xl mx-auto">We built the platform we wished existed when searching for qualified international curriculum tutors in Nigeria.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
               <div key={f.title} className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-[#0f3460] hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl iatn-gradient flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-xl nexora-gradient flex items-center justify-center mb-4">
                   <f.icon className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2">{f.title}</h3>
@@ -334,11 +334,11 @@ export default function HomePage() {
       </section>
 
       {/* Register CTA */}
-      <section className="py-20 px-4 iatn-gradient">
+      <section className="py-20 px-4 nexora-gradient">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl sm:text-4xl font-black mb-4">Are You a Cambridge or International Curriculum Tutor?</h2>
+          <h2 className="text-3xl sm:text-4xl font-black mb-4">Are You a Cambridge, WAEC or IB Tutor?</h2>
           <p className="text-white/75 text-lg mb-8 max-w-2xl mx-auto">
-            Join 2,000+ verified tutors on IATN. Get your unique IATN registration number, showcase your Cambridge results, and start earning.
+            Join 2,000+ verified tutors on Nexora Academic. Get your unique Nexora registration number, showcase your Cambridge results, and start earning.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -355,7 +355,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 text-white/60 text-sm">
-            {['Free registration', 'Unique IATN number', 'Verified badge', 'Instant bookings'].map((item) => (
+            {['Free registration', 'Unique Nexora number', 'Verified badge', 'Instant bookings'].map((item) => (
               <span key={item} className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" /> {item}
               </span>

@@ -47,7 +47,7 @@ const TRENDING = [
   { id: '2', title: 'Complete JAMB 2026 subject combination guide for all courses', curriculum: 'JAMB', replies: 289, views: 14200, pinned: true },
   { id: '3', title: 'WAEC vs NECO — which is better for Nigerian university admissions?', curriculum: 'WAEC', replies: 215, views: 6700, pinned: false },
   { id: '4', title: 'How I scored A* in IGCSE Maths without a tutor', curriculum: 'IGCSE', replies: 178, views: 9100, pinned: false },
-  { id: '5', title: 'Best A-Level tutor on IATN — share your recommendations', curriculum: 'A-Level', replies: 134, views: 4500, pinned: false },
+  { id: '5', title: 'Best A-Level tutor on Nexora — share your recommendations', curriculum: 'A-Level', replies: 134, views: 4500, pinned: false },
 ]
 
 const CURRICULUM_COLORS: Record<string, string> = {
@@ -66,14 +66,14 @@ export default function CommunityPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className="iatn-gradient text-white py-14 px-4">
+      <div className="nexora-gradient text-white py-14 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white">Community</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black mb-3">IATN Community</h1>
+          <h1 className="text-3xl sm:text-4xl font-black mb-3">Nexora Community</h1>
           <p className="text-white/75 max-w-xl mb-6">
             Join thousands of Nigerian students, parents, and tutors. Discuss exams, share resources, celebrate results, and support each other.
           </p>
@@ -192,7 +192,7 @@ export default function CommunityPage() {
                   <div key={user.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-sm">{user.badge}</span>
-                      <div className="w-7 h-7 rounded-full iatn-gradient flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-7 h-7 rounded-full nexora-gradient flex items-center justify-center text-white text-xs font-bold">
                         {user.name[0]}
                       </div>
                       <span className="text-sm font-semibold text-slate-800">{user.name}</span>

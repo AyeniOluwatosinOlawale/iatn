@@ -19,12 +19,11 @@ const footerLinks = {
   'For Tutors': [
     { label: 'Register as Tutor', href: '/register?role=tutor' },
     { label: 'Tutor Dashboard', href: '/tutor-dashboard/dashboard' },
-    { label: 'Pricing Plans', href: '/pricing' },
-    { label: 'Job Board', href: '/jobs' },
+{ label: 'Job Board', href: '/jobs' },
     { label: 'CPD Tracker', href: '/cpd' },
   ],
   'Company': [
-    { label: 'About IATN', href: '/about' },
+    { label: 'About Nexora', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
@@ -44,14 +43,17 @@ export default function Footer() {
               <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-4 h-4 text-white" />
               </div>
-              <span className="font-black text-white text-lg tracking-tight">IATN</span>
+              <div className="leading-none">
+                <div className="font-black text-white text-lg tracking-tight">Nexora Academic</div>
+                <div className="text-[9px] text-white/50 tracking-widest uppercase">Connecting Knowledge, Unlocking Futures</div>
+              </div>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-6">
               Nigeria&apos;s most trusted platform for verified IGCSE, A-Level, IB, and SAT tutors and schools.
             </p>
             <div className="space-y-2">
-              <a href="mailto:hello@iatn.ng" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
-                <Mail className="w-3.5 h-3.5" /> hello@iatn.ng
+              <a href="mailto:hello@nexora.com" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
+                <Mail className="w-3.5 h-3.5" /> hello@nexora.com
               </a>
               <a href="tel:+2348000000000" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
                 <Phone className="w-3.5 h-3.5" /> +234 800 000 0000
@@ -82,7 +84,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-white/40">
-            © {new Date().getFullYear()} IATN — International Academic Tutors Nigeria. All rights reserved.
+            © {new Date().getFullYear()} Nexora Academic — Connecting Knowledge, Unlocking Futures. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <span className="text-xs text-white/30">Curricula covered:</span>

@@ -28,6 +28,7 @@ const footerLinks = {
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
     { label: 'Sitemap', href: '/sitemap' },
+    { label: 'Admin', href: '/nx-admin-7x9k' },
   ],
 }
 
@@ -59,7 +60,7 @@ export default function Footer() {
                 <Phone className="w-3.5 h-3.5" /> +234 800 000 0000
               </a>
               <span className="flex items-center gap-2 text-sm text-white/60">
-                <MapPin className="w-3.5 h-3.5" /> Lagos, Nigeria
+                <MapPin className="w-3.5 h-3.5" /> 8 Bode Ajayi St, Ologuneru, Ibadan
               </span>
             </div>
           </div>

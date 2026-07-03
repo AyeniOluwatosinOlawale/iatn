@@ -24,7 +24,7 @@ function LoginForm() {
     setError('')
 
     const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
     if (authError) {
       setError(authError.message)
@@ -32,7 +32,22 @@ function LoginForm() {
       return
     }
 
-    router.push(redirectTo)
+    // Role-based redirect
+    if (redirectTo !== '/dashboard' && redirectTo !== '/') {
+      router.push(redirectTo)
+      router.refresh()
+      return
+    }
+
+    const role = data.user?.user_metadata?.role ?? 'student'
+    const dashboardMap: Record<string, string> = {
+      tutor:   '/tutor-dashboard/dashboard',
+      school:  '/school-dashboard/dashboard',
+      parent:  '/parent-dashboard/dashboard',
+      student: '/student-dashboard/dashboard',
+      admin:   '/admin/dashboard',
+    }
+    router.push(dashboardMap[role] ?? '/student-dashboard/dashboard')
     router.refresh()
   }
 

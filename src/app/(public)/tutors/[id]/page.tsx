@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, MessageSquare, Shield, ChevronRight } from 'lucide-react'
+import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, MessageSquare, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import { CURRICULA } from '@/lib/utils'
@@ -11,6 +11,7 @@ const TUTOR = {
   full_name: 'Dr. Adaeze Obi',
   photo_url: null,
   email: 'adaeze@example.com',
+  phone: '+234 801 234 5678',
   state: 'Lagos', city: 'Victoria Island',
   current_institution: 'Greenwood International School',
   years_experience: 12,
@@ -276,6 +277,17 @@ export default function TutorProfilePage() {
                   <MessageSquare className="w-4 h-4 inline mr-2" />
                   Send Message
                 </Link>
+
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <a href={`tel:${tutor.phone}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0f3460] transition-colors">
+                    <Phone className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                    {tutor.phone}
+                  </a>
+                  <a href={`mailto:${tutor.email}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0f3460] transition-colors">
+                    <Mail className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                    {tutor.email}
+                  </a>
+                </div>
               </div>
 
               {/* Tools */}

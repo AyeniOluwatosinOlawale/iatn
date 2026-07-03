@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, MessageSquare, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
+import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import SendMessageModal from '@/components/shared/SendMessageModal'
 import { CURRICULA } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
@@ -292,13 +293,12 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
                   <Calendar className="w-4 h-4 inline mr-2" />
                   Book a Lesson
                 </Link>
-                <a
-                  href={`mailto:${t.email}?subject=Lesson Enquiry — ${encodeURIComponent(t.full_name)}&body=Hi ${encodeURIComponent(t.full_name.split(' ')[0])},%0A%0AI found your profile on Nexora Academic and I'd like to enquire about lessons.%0A%0AThank you.`}
-                  className="flex items-center justify-center gap-2 w-full border border-slate-200 text-slate-700 text-center font-semibold py-3 rounded-xl hover:border-[#0f3460] hover:text-[#0f3460] transition-colors text-sm"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  Send Message
-                </a>
+                <SendMessageModal
+                  tutorName={t.full_name}
+                  tutorEmail={t.email}
+                  senderName={user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? ''}
+                  senderEmail={user?.email ?? ''}
+                />
 
                 <div className="pt-3 border-t border-slate-100 space-y-2 mt-3">
                   {t.phone && (

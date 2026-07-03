@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {
   BookOpen, Send, Sparkles, ChevronDown, Copy, Check, RotateCcw,
   PenLine, FileText, Lightbulb, GraduationCap, Menu,
-  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, FileImage, File, FlaskConical
+  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, File, FlaskConical
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -27,8 +27,10 @@ interface Message {
 interface Attachment {
   name: string
   type: 'pdf' | 'image' | 'text'
-  content: string        // extracted text (pdf/text) or base64 data URL (image)
-  previewUrl?: string    // for images
+  content: string        // base64 data URL (single image) or plain text
+  pages?: string[]       // PDF: one base64 JPEG per page (rendered via canvas)
+  pageCount?: number
+  previewUrl?: string
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -69,20 +71,28 @@ const STARTERS: Record<Mode, string[]> = {
   essay:    ['Please review this 25-mark A-Level History essay: [paste essay]', 'Critique this Economics evaluation paragraph — be harsh: [paste paragraph]', 'Review my IB extended essay introduction for structure and argument', 'Analyse this English Literature essay for AO coverage: [paste essay]'],
 }
 
-// ─── PDF Text Extractor ───────────────────────────────────────────────────────
-async function extractPdfText(file: File): Promise<string> {
+// ─── PDF → Page Images (preserves diagrams, graphs, figures) ─────────────────
+async function renderPdfPages(file: File, maxPages = 20): Promise<{ pages: string[]; total: number }> {
   const arrayBuffer = await file.arrayBuffer()
-  // Dynamic import to avoid SSR issues
   const pdfjsLib = await import('pdfjs-dist')
   pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-  let text = ''
-  for (let i = 1; i <= pdf.numPages; i++) {
+  const total = pdf.numPages
+  const limit = Math.min(total, maxPages)
+  const pages: string[] = []
+
+  for (let i = 1; i <= limit; i++) {
     const page = await pdf.getPage(i)
-    const content = await page.getTextContent()
-    text += content.items.map((item) => ('str' in item ? item.str : '')).join(' ') + '\n'
+    const viewport = page.getViewport({ scale: 1.5 })
+    const canvas = document.createElement('canvas')
+    canvas.width = viewport.width
+    canvas.height = viewport.height
+    const ctx = canvas.getContext('2d')!
+    await page.render({ canvasContext: ctx, viewport }).promise
+    pages.push(canvas.toDataURL('image/jpeg', 0.80))
   }
-  return text.trim()
+
+  return { pages, total }
 }
 
 // ─── Message Formatter ────────────────────────────────────────────────────────
@@ -184,13 +194,13 @@ export default function AITutorPage() {
     setAttachLoading(true)
     try {
       if (file.type === 'application/pdf') {
-        const text = await extractPdfText(file)
-        if (!text || text.trim().length < 20) {
-          setVoiceError('This PDF appears to be a scanned image. Try copying the text and pasting it directly.')
-          setTimeout(() => setVoiceError(''), 5000)
+        const { pages, total } = await renderPdfPages(file, 20)
+        if (pages.length === 0) {
+          setVoiceError('Could not render this PDF. Please try a different file.')
+          setTimeout(() => setVoiceError(''), 4000)
           return
         }
-        setAttachment({ name: file.name, type: 'pdf', content: text })
+        setAttachment({ name: file.name, type: 'pdf', content: '', pages, pageCount: total })
         setMode('solve')
       } else {
         setVoiceError('Only PDF past papers are accepted. Please upload a PDF file.')
@@ -199,7 +209,7 @@ export default function AITutorPage() {
       }
     } catch (err) {
       console.error('PDF load error:', err)
-      setVoiceError('Failed to read PDF. Make sure it is a valid text-based PDF (not a scan).')
+      setVoiceError('Failed to render PDF. Please try again or use a different file.')
       setTimeout(() => setVoiceError(''), 5000)
     } finally {
       setAttachLoading(false)
@@ -223,28 +233,27 @@ export default function AITutorPage() {
     // Build content — text + optional image
     let userContent: string | ContentPart[]
 
-    if (attachment?.type === 'image') {
-      const defaultImageText = mode === 'solve'
-        ? 'This is a past paper image. Please read every question carefully and solve them all step by step with full working, mark scheme points, and examiner tips.'
+    if (attachment?.type === 'pdf' && attachment.pages && attachment.pages.length > 0) {
+      // PDF rendered as images — the AI sees every page including all figures and diagrams
+      const defaultText = mode === 'solve'
+        ? `This is a Cambridge A-Level past paper (${attachment.name}). It has ${attachment.pageCount} pages. I am sending you every page as an image so you can see ALL questions, figures, graphs, circuit diagrams, and data tables. Please solve EVERY question in order, showing full step-by-step working, mark scheme points hit, and examiner tips for each.`
         : mode === 'mark'
-        ? 'Please mark this answer image against the mark scheme criteria and give honest feedback.'
+        ? 'These are pages from my submitted answer. Please mark each question against mark scheme criteria and give detailed feedback.'
+        : `Please analyse all pages of this document (${attachment.name}) thoroughly.`
+      userContent = [
+        { type: 'text', text: messageText || defaultText },
+        ...attachment.pages.map(p => ({ type: 'image_url' as const, image_url: { url: p } })),
+      ] as ContentPart[]
+    } else if (attachment?.type === 'image') {
+      const defaultImageText = mode === 'solve'
+        ? 'This is a past paper image. Please read every question, figure, graph and diagram carefully and solve them all step by step with full working, mark scheme points, and examiner tips.'
+        : mode === 'mark'
+        ? 'Please mark this answer against the mark scheme criteria and give honest feedback.'
         : 'Please analyse this image and answer any questions shown.'
       userContent = [
         { type: 'text', text: messageText || defaultImageText },
         { type: 'image_url', image_url: { url: attachment.content } },
       ] as ContentPart[]
-    } else if (attachment?.type === 'pdf' || attachment?.type === 'text') {
-      const defaultPdfText = mode === 'solve'
-        ? 'This is a past paper PDF. Please read every question and solve them all with full step-by-step working, showing all marks awarded and examiner tips for each question.'
-        : mode === 'mark'
-        ? 'This is my submitted answer. Please mark it against the mark scheme criteria and give detailed feedback.'
-        : mode === 'feedback'
-        ? 'This is my written work. Please give me examiner-style feedback as if writing an Examiner\'s Report section on this response.'
-        : mode === 'essay'
-        ? 'This is my essay. Please review it in full — structure, content, analysis, exam technique, and written communication. Be rigorous.'
-        : 'Please analyse this document thoroughly and help me understand it.'
-      const prefix = `[ATTACHED PAST PAPER / DOCUMENT: ${attachment.name}]\n${attachment.content}\n[END DOCUMENT]\n\n`
-      userContent = messageText ? prefix + messageText : prefix + defaultPdfText
     } else {
       userContent = messageText
     }
@@ -579,20 +588,20 @@ export default function AITutorPage() {
                   {attachLoading ? (
                     <div className="flex items-center gap-2 text-sm text-blue-700">
                       <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-                      Reading file...
+                      Rendering PDF pages — this may take a moment…
                     </div>
                   ) : attachment && (
                     <>
-                      {attachment.type === 'image'
-                        ? <FileImage className="w-4 h-4 text-blue-600 shrink-0" />
-                        : <File className="w-4 h-4 text-blue-600 shrink-0" />
-                      }
+                      <File className="w-4 h-4 text-blue-600 shrink-0" />
                       <span className="text-sm text-blue-800 font-medium truncate">{attachment.name}</span>
-                      {attachment.type === 'image' && attachment.previewUrl && (
-                        <img src={attachment.previewUrl} alt="" className="h-8 w-8 object-cover rounded border border-blue-200" />
-                      )}
-                      {attachment.type === 'pdf' && (
-                        <span className="text-xs text-blue-500 ml-1">({Math.round(attachment.content.length / 100) / 10}k chars extracted)</span>
+                      {attachment.pages && (
+                        <span className="text-xs text-blue-500 ml-1 shrink-0">
+                          {attachment.pages.length} page{attachment.pages.length !== 1 ? 's' : ''} rendered
+                          {attachment.pageCount && attachment.pageCount > attachment.pages.length
+                            ? ` (of ${attachment.pageCount})`
+                            : ''}
+                          {' '}· AI can see all figures &amp; diagrams
+                        </span>
                       )}
                       <button onClick={() => setAttachment(null)} className="ml-auto text-blue-400 hover:text-blue-700 shrink-0">
                         <X className="w-4 h-4" />

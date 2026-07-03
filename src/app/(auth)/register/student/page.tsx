@@ -30,6 +30,7 @@ export default function StudentRegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!form.year_group || !form.curriculum) { setError('Please select your year group and curriculum.'); return }
     setLoading(true)
     setError('')
 
@@ -146,7 +147,7 @@ export default function StudentRegisterPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone number</label>
-                <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)}
+                <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} required
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                   placeholder="+234 800 000 0000" />
               </div>
@@ -163,7 +164,7 @@ export default function StudentRegisterPage() {
               </div>
               <button
                 onClick={() => {
-                  if (!form.full_name || !form.email || !form.password) { setError('Please fill in all required fields.'); return }
+                  if (!form.full_name || !form.email || !form.phone || !form.password) { setError('Please fill in all required fields.'); return }
                   if (form.password.length < 8) { setError('Password must be at least 8 characters.'); return }
                   setError(''); setStep(2)
                 }}

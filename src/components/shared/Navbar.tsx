@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, BookOpen, ChevronDown } from 'lucide-react'
+import { Menu, X, BookOpen, ChevronDown, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
@@ -32,6 +32,7 @@ const navLinks = [
   { label: 'Exams', href: '/exams' },
   { label: 'Resources', href: '/resources' },
   { label: 'Community', href: '/community' },
+  { label: 'AI Tutor', href: '/ai-tutor', highlight: true },
 ]
 
 export default function Navbar() {
@@ -102,6 +103,15 @@ export default function Navbar() {
                       </div>
                     )}
                   </>
+                ) : (link as { highlight?: boolean }).highlight ? (
+                  <Link
+                    href={link.href}
+                    onClick={() => setActiveDropdown(null)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-[#0f3460] rounded-lg hover:opacity-90 transition-opacity"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    {link.label}
+                  </Link>
                 ) : (
                   <Link
                     href={link.href}

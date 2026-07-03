@@ -4,10 +4,10 @@ import { NextRequest } from 'next/server'
 const MODEL_ROUTER: Record<string, { model: string; maxTokens: number; vision: boolean }> = {
   concept:  { model: 'meta-llama/llama-3.1-70b-instruct', maxTokens: 2048, vision: false },
   practice: { model: 'openai/gpt-4o-mini',                maxTokens: 2048, vision: false },
-  mark:     { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 2048, vision: true  },
-  feedback: { model: 'openai/gpt-4o',                      maxTokens: 2048, vision: true  },
-  essay:    { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 3000, vision: false },
-  solve:    { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 3000, vision: true  },
+  mark:     { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 4096, vision: true  },
+  feedback: { model: 'openai/gpt-4o',                      maxTokens: 4096, vision: true  },
+  essay:    { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 8000, vision: false },
+  solve:    { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 8000, vision: true  },
 }
 
 // ─── System Prompts ───────────────────────────────────────────────────────────
@@ -70,38 +70,29 @@ Evaluate on:
 
 For each criterion: give a mark/grade, quote specific sentences, suggest improved versions. End with a mark band placement and Top 3 action points.`,
 
-  solve: `You are an expert {curriculum} {subject} tutor solving past paper questions step by step. The student will paste or upload a question — your job is to produce a complete, fully worked solution that teaches as it solves.
+  solve: `You are an expert {curriculum} {subject} examiner producing fully worked solutions to past paper questions.
 
-**Your response structure for every question:**
+**CRITICAL RULES:**
+1. If a full paper is uploaded, solve ALL questions in ONE response — never stop partway through
+2. If you are running out of space, write shorter answers but NEVER leave a question unattempted
+3. When a student says "continue", immediately continue from exactly where you stopped
+4. You CAN see graphs, circuit diagrams, figures, tables, and images — read them carefully
 
-## Question Analysis
-- State the command word and what it demands
-- Identify the topic area and mark allocation
-- Note any key information given in the question
+**Format for each question/part:**
 
-## Step-by-Step Solution
-Work through the problem methodically. For every step:
-- Show ALL working — never skip steps
-- Explain WHY you are doing each step, not just what
-- Use correct {curriculum} notation, units, and terminology
-- For calculations: show substitution, working, and units at each stage
-- For written questions: structure each paragraph with its mark-winning point
+## Q[number](part) — [topic] [X marks]
+**Answer:** [direct answer or working]
+- Show all substitution and working for calculations, with units at every stage
+- For written answers: one sentence per mark point, using precise examiner vocabulary
+✓ Mark 1 — [awarded because...]
+✓ Mark 2 — [awarded because...]
+**Common mistake:** [what loses marks on this type]
 
-## Mark Scheme Points Hit
-List each mark point explicitly:
-✓ Mark 1 — [what was awarded and why]
-✓ Mark 2 — [what was awarded and why]
-(continue for all marks)
+**Keep answers concise but complete.** A 1-mark question needs one sharp sentence. A 2-mark calculation needs working + answer. A 6-mark evaluate needs 3 developed points. Do not over-explain 1-mark definitions.
 
-## Common Mistakes to Avoid
-- List 2–3 errors students typically make on this type of question
-- Explain exactly why each mistake loses marks
+For figures and diagrams: describe what you see, identify the key values/relationships, then use them in your working.
 
-## Examiner Tips
-- What examiners specifically look for in top-mark answers to this question type
-- Any syllabus-specific details that must be included
-
-If the student uploads an image or PDF of a past paper, read every question carefully and solve them all unless they specify a particular question. Always reference the {curriculum} specification.`,
+Always use {curriculum} notation, units, and terminology throughout.`,
 }
 
 function buildSystemPrompt(mode: string, curriculum: string, subject: string): string {

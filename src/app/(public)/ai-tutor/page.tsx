@@ -506,7 +506,7 @@ export default function AITutorPage() {
               </div>
             )}
 
-            {messages.map((msg) => (
+            {messages.map((msg, msgIdx) => (
               <div key={msg.id} className={`max-w-3xl mx-auto w-full ${msg.role === 'user' ? 'flex justify-end' : ''}`}>
                 {msg.role === 'user' ? (
                   <div className="max-w-lg">
@@ -556,10 +556,21 @@ export default function AITutorPage() {
                         )}
                       </div>
                       {msg.content && (
-                        <button onClick={() => handleCopy(msg.id, msg.content)}
-                          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 mt-1.5 px-1">
-                          {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" />Copied</> : <><Copy className="w-3 h-3" />Copy</>}
-                        </button>
+                        <div className="flex items-center gap-3 mt-1.5">
+                          <button onClick={() => handleCopy(msg.id, msg.content)}
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 px-1">
+                            {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" />Copied</> : <><Copy className="w-3 h-3" />Copy</>}
+                          </button>
+                          {/* Continue button — shown on last assistant message when not streaming */}
+                          {!isStreaming && msgIdx === messages.length - 1 && msg.role === 'assistant' && (
+                            <button
+                              onClick={() => sendMessage('Continue from exactly where you stopped. Do not repeat anything already written.')}
+                              className="flex items-center gap-1 text-xs font-medium text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2.5 py-1 rounded-full transition-colors"
+                            >
+                              <ChevronRight className="w-3 h-3" /> Continue
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -573,10 +584,10 @@ export default function AITutorPage() {
           <div className="border-t border-gray-200 bg-white px-4 py-4">
             <div className="max-w-3xl mx-auto">
               {/* Mode pills */}
-              <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
+              <div className="flex flex-wrap gap-2 mb-3">
                 {MODES.map(m => (
                   <button key={m.key} onClick={() => setMode(m.key)}
-                    className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0 ${mode === m.key ? 'bg-[#0f3460] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                    className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors ${mode === m.key ? 'bg-[#0f3460] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
                     <m.icon className="w-3 h-3" />{m.label}
                   </button>
                 ))}

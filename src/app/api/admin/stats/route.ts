@@ -22,6 +22,8 @@ export async function GET() {
       .map(u => ({
         email: u.email ?? 'unknown',
         role: u.user_metadata?.role ?? 'unknown',
+        full_name: u.user_metadata?.full_name ?? '',
+        phone: u.user_metadata?.phone ?? '',
         created_at: u.created_at,
       }))
 

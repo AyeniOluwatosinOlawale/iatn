@@ -9,7 +9,7 @@ interface Stats {
   tutors: number
   parents: number
   schools: number
-  recent: { email: string; role: string; created_at: string }[]
+  recent: { email: string; role: string; full_name: string; phone: string; created_at: string }[]
 }
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_DASHBOARD_PASSWORD || 'nexora-admin-2026'
@@ -154,8 +154,10 @@ export default function AdminDashboard() {
                 {stats?.recent && stats.recent.length > 0 ? stats.recent.map((u, i) => (
                   <div key={i} className="px-6 py-3 flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-slate-800">{u.email}</p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-sm font-medium text-slate-800">{u.full_name || u.email}</p>
+                      <p className="text-xs text-slate-500">{u.email}</p>
+                      {u.phone && <p className="text-xs text-slate-400">{u.phone}</p>}
+                      <p className="text-xs text-slate-300 mt-0.5">
                         {new Date(u.created_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}
                       </p>
                     </div>

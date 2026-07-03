@@ -57,6 +57,7 @@ export default function SchoolRegisterPage() {
         data: {
           full_name: form.contact_name,
           role: 'school',
+          phone: form.contact_phone,
           school_name: form.school_name,
           school_type: form.school_type,
           state: form.state,

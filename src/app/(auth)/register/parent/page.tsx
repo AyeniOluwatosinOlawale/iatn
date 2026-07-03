@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { BookOpen, Eye, EyeOff, Loader2, CheckCircle, Plus, X } from 'lucide-react'
+import { BookOpen, Eye, EyeOff, Loader2, CheckCircle, Plus, X, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { NIGERIAN_STATES } from '@/lib/utils'
 
@@ -37,35 +37,38 @@ export default function ParentRegisterPage() {
     setLoading(true)
     setError('')
 
-    const supabase = createClient()
+    try {
+      const supabase = createClient()
 
-    const { error: authError } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-      options: {
-        data: {
-          full_name: form.full_name,
-          role: 'parent',
-          phone: form.phone,
-          state: form.state,
-          children_count: children.length,
+      const { error: authError } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+        options: {
+          data: {
+            full_name: form.full_name,
+            role: 'parent',
+            phone: form.phone,
+            state: form.state,
+            children_count: children.length,
+          },
         },
-      },
-    })
+      })
 
-    if (authError) {
-      setError(authError.message)
+      if (authError) throw new Error(`Account creation failed: ${authError.message}`)
+
+      fetch('/api/admin/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, full_name: form.full_name, role: 'parent' }),
+      }).catch(() => {})
+
+      setDone(true)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : (typeof err === 'string' ? err : `Error: ${JSON.stringify(err)}`)
+      setError(msg || 'Something went wrong. Please try again.')
+    } finally {
       setLoading(false)
-      return
     }
-
-    fetch('/api/admin/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, full_name: form.full_name, role: 'parent' }),
-    }).catch(() => {})
-
-    setDone(true)
   }
 
   if (done) {
@@ -113,7 +116,10 @@ export default function ParentRegisterPage() {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">{error}</div>
+            <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
           )}
 
           {step === 1 && (

@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { BookOpen, Eye, EyeOff, Loader2, CheckCircle, Building2 } from 'lucide-react'
+import { BookOpen, Eye, EyeOff, Loader2, CheckCircle, Building2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { NIGERIAN_STATES } from '@/lib/utils'
+import { NIGERIAN_STATES, NIGERIAN_STATE_CITIES } from '@/lib/utils'
 
 const CURRICULA_OPTIONS = ['Cambridge IGCSE', 'Cambridge A-Level', 'Edexcel IGCSE', 'Edexcel A-Level', 'IB Diploma', 'JAMB / UTME', 'WAEC / WASSCE', 'NECO', 'SAT', 'OxfordAQA']
 const SCHOOL_TYPES = ['Private', 'Government', 'International', 'Faith-based', 'Montessori']
@@ -48,39 +48,42 @@ export default function SchoolRegisterPage() {
     setLoading(true)
     setError('')
 
-    const supabase = createClient()
+    try {
+      const supabase = createClient()
 
-    const { error: authError } = await supabase.auth.signUp({
-      email: form.contact_email,
-      password: form.password,
-      options: {
-        data: {
-          full_name: form.contact_name,
-          role: 'school',
-          phone: form.contact_phone,
-          school_name: form.school_name,
-          school_type: form.school_type,
-          state: form.state,
-          city: form.city,
-          curricula: form.curricula,
-          website: form.website,
+      const { error: authError } = await supabase.auth.signUp({
+        email: form.contact_email,
+        password: form.password,
+        options: {
+          data: {
+            full_name: form.contact_name,
+            role: 'school',
+            phone: form.contact_phone,
+            school_name: form.school_name,
+            school_type: form.school_type,
+            state: form.state,
+            city: form.city,
+            curricula: form.curricula,
+            website: form.website,
+          },
         },
-      },
-    })
+      })
 
-    if (authError) {
-      setError(authError.message)
+      if (authError) throw new Error(`Account creation failed: ${authError.message}`)
+
+      fetch('/api/admin/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.contact_email, full_name: form.contact_name, role: 'school' }),
+      }).catch(() => {})
+
+      setDone(true)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : (typeof err === 'string' ? err : `Error: ${JSON.stringify(err)}`)
+      setError(msg || 'Something went wrong. Please try again.')
+    } finally {
       setLoading(false)
-      return
     }
-
-    fetch('/api/admin/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.contact_email, full_name: form.contact_name, role: 'school' }),
-    }).catch(() => {})
-
-    setDone(true)
   }
 
   if (done) {
@@ -148,7 +151,10 @@ export default function SchoolRegisterPage() {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">{error}</div>
+            <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
           )}
 
           {/* Step 1 — Account */}
@@ -224,7 +230,7 @@ export default function SchoolRegisterPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">State</label>
-                  <select value={form.state} onChange={e => set('state', e.target.value)} required
+                  <select value={form.state} onChange={e => { set('state', e.target.value); set('city', '') }} required
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white">
                     <option value="">Select state</option>
                     {NIGERIAN_STATES.map(s => <option key={s}>{s}</option>)}
@@ -232,9 +238,11 @@ export default function SchoolRegisterPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">City / LGA</label>
-                  <input value={form.city} onChange={e => set('city', e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    placeholder="e.g. Lekki" />
+                  <select value={form.city} onChange={e => set('city', e.target.value)} disabled={!form.state}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white disabled:bg-slate-50 disabled:text-slate-400">
+                    <option value="">{form.state ? 'Select city' : 'Select state first'}</option>
+                    {(NIGERIAN_STATE_CITIES[form.state] ?? []).map(c => <option key={c}>{c}</option>)}
+                  </select>
                 </div>
               </div>
               <div>

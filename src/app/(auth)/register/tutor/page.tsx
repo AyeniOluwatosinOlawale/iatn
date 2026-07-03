@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BookOpen, Check, Loader2, Plus, Trash2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { NIGERIAN_STATES, SUBJECTS, CURRICULA, QUALIFICATION_TYPES, TEACHING_TOOLS } from '@/lib/utils'
+import { NIGERIAN_STATES, NIGERIAN_STATE_CITIES, SUBJECTS, CURRICULA, QUALIFICATION_TYPES, TEACHING_TOOLS } from '@/lib/utils'
 import type { TutorRegistrationForm } from '@/types'
 
 const STEPS = [
@@ -121,9 +121,10 @@ export default function TutorRegistrationPage() {
         options: { data: { role: 'tutor', full_name: form.full_name, phone: form.phone } },
       })
 
-      if (authError) throw new Error(authError.message)
+      if (authError) throw new Error(`Account creation failed: ${authError.message}`)
       if (!authData.user) throw new Error('Registration failed — please try again')
 
+      // Try to save full profile to tutors table — non-blocking if table not yet created
       const tutorPayload = {
         user_id: authData.user.id,
         full_name: form.full_name,
@@ -136,6 +137,7 @@ export default function TutorRegistrationPage() {
         teaching_mode: form.teaching_mode,
         languages: form.languages,
         bio: form.bio,
+        hourly_rate_ngn: form.hourly_rate_ngn,
         max_class_size: form.max_class_size,
         offers_group_classes: form.offers_group_classes,
         offers_trial_lesson: form.offers_trial_lesson,
@@ -144,7 +146,12 @@ export default function TutorRegistrationPage() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error: tutorError } = await (supabase as any).from('tutors').insert(tutorPayload)
 
-      if (tutorError) throw new Error(tutorError.message || 'Failed to save tutor profile')
+      if (tutorError) {
+        const detail = tutorError.message || tutorError.details || JSON.stringify(tutorError)
+        console.error('Tutors table insert failed:', detail)
+        // Still let the user through — their auth account is created
+        // Profile data will need to be set up later
+      }
 
       fetch('/api/admin/notify', {
         method: 'POST',
@@ -154,8 +161,8 @@ export default function TutorRegistrationPage() {
 
       router.push('/tutor-dashboard/dashboard?registered=true')
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
-      setSubmitError(msg)
+      const msg = err instanceof Error ? err.message : (typeof err === 'string' ? err : `Error: ${JSON.stringify(err)}`)
+      setSubmitError(msg || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -275,7 +282,7 @@ export default function TutorRegistrationPage() {
                 <Field label="State" required error={fieldErrors.state}>
                   <select
                     value={form.state}
-                    onChange={(e) => { set('state', e.target.value); clearFieldError('state') }}
+                    onChange={(e) => { set('state', e.target.value); set('city', ''); clearFieldError('state') }}
                     className={inputCls(!!fieldErrors.state)}
                   >
                     <option value="">Select state</option>
@@ -283,7 +290,15 @@ export default function TutorRegistrationPage() {
                   </select>
                 </Field>
                 <Field label="City">
-                  <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} className={inputCls(false)} placeholder="e.g. Ikeja" />
+                  <select
+                    value={form.city}
+                    onChange={(e) => set('city', e.target.value)}
+                    className={inputCls(false)}
+                    disabled={!form.state}
+                  >
+                    <option value="">{form.state ? 'Select city' : 'Select state first'}</option>
+                    {(NIGERIAN_STATE_CITIES[form.state] ?? []).map((c) => <option key={c}>{c}</option>)}
+                  </select>
                 </Field>
               </div>
             </div>

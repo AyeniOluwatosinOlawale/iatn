@@ -74,7 +74,7 @@ async function extractPdfText(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer()
   // Dynamic import to avoid SSR issues
   const pdfjsLib = await import('pdfjs-dist')
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
   let text = ''
   for (let i = 1; i <= pdf.numPages; i++) {
@@ -185,6 +185,11 @@ export default function AITutorPage() {
     try {
       if (file.type === 'application/pdf') {
         const text = await extractPdfText(file)
+        if (!text || text.trim().length < 20) {
+          setVoiceError('This PDF appears to be a scanned image. Try copying the text and pasting it directly.')
+          setTimeout(() => setVoiceError(''), 5000)
+          return
+        }
         setAttachment({ name: file.name, type: 'pdf', content: text })
         setMode('solve')
       } else {
@@ -192,9 +197,10 @@ export default function AITutorPage() {
         setTimeout(() => setVoiceError(''), 3000)
         return
       }
-    } catch {
-      setVoiceError('Failed to read file. Please try again.')
-      setTimeout(() => setVoiceError(''), 3000)
+    } catch (err) {
+      console.error('PDF load error:', err)
+      setVoiceError('Failed to read PDF. Make sure it is a valid text-based PDF (not a scan).')
+      setTimeout(() => setVoiceError(''), 5000)
     } finally {
       setAttachLoading(false)
     }

@@ -17,6 +17,14 @@ interface Message {
   role: Role
   content: string
   mode?: Mode
+  modelUsed?: string
+}
+
+const MODEL_LABELS: Record<string, string> = {
+  'google/gemini-flash-1.5':            'Gemini Flash 1.5',
+  'meta-llama/llama-3.3-70b-instruct':  'Llama 3.3 70B',
+  'anthropic/claude-sonnet-4-6':        'Claude Sonnet 4.6',
+  'openai/gpt-4o':                      'GPT-4o',
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -182,6 +190,11 @@ export default function AITutorPage() {
       })
 
       if (!res.ok) throw new Error('API error')
+
+      const modelUsed = res.headers.get('X-Model-Used') || ''
+      if (modelUsed) {
+        setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, modelUsed } : m))
+      }
 
       const reader = res.body!.getReader()
       const decoder = new TextDecoder()
@@ -464,12 +477,19 @@ export default function AITutorPage() {
                         )}
                       </div>
                       {msg.content && (
-                        <button
-                          onClick={() => handleCopy(msg.id, msg.content)}
-                          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 mt-1.5 px-1"
-                        >
-                          {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
-                        </button>
+                        <div className="flex items-center gap-3 mt-1.5 px-1">
+                          <button
+                            onClick={() => handleCopy(msg.id, msg.content)}
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
+                          >
+                            {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
+                          </button>
+                          {msg.modelUsed && (
+                            <span className="text-xs text-gray-300">
+                              via {MODEL_LABELS[msg.modelUsed] ?? msg.modelUsed}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>

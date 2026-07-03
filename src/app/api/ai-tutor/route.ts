@@ -1,8 +1,25 @@
-import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+// ─── Model Router ─────────────────────────────────────────────────────────────
+// Each mode is mapped to the best-fit model for that task.
+// OpenRouter lets us swap models instantly without changing SDK or endpoints.
+//
+// Routing rationale:
+//   concept   → gemini-flash-1.5    Fast, cheap, excellent at structured explanations
+//   practice  → llama-3.3-70b       Creative question generation, free tier available
+//   mark      → claude-sonnet-4-6   Precise mark-scheme reasoning requires strong model
+//   feedback  → gpt-4o              Nuanced examiner-style prose, top-tier reasoning
+//   essay     → claude-sonnet-4-6   Long-context analysis + structured critique
+//
+const MODEL_ROUTER: Record<string, { model: string; label: string; maxTokens: number }> = {
+  concept:  { model: 'google/gemini-flash-1.5',              label: 'Gemini Flash 1.5',   maxTokens: 2048 },
+  practice: { model: 'meta-llama/llama-3.3-70b-instruct',   label: 'Llama 3.3 70B',      maxTokens: 2048 },
+  mark:     { model: 'anthropic/claude-sonnet-4-6',          label: 'Claude Sonnet 4.6',  maxTokens: 2048 },
+  feedback: { model: 'openai/gpt-4o',                        label: 'GPT-4o',             maxTokens: 2048 },
+  essay:    { model: 'anthropic/claude-sonnet-4-6',          label: 'Claude Sonnet 4.6',  maxTokens: 3000 },
+}
 
+// ─── System Prompts ───────────────────────────────────────────────────────────
 const SYSTEM_PROMPTS: Record<string, string> = {
   concept: `You are an expert examiner and senior teacher specialising in {curriculum} {subject}. Your role is to explain concepts with exceptional clarity, exactly as an experienced examiner would want students to understand them.
 
@@ -84,6 +101,7 @@ function buildSystemPrompt(mode: string, curriculum: string, subject: string): s
     .replace(/\{subject\}/g, subject || 'your subject')
 }
 
+// ─── Route Handler ────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
     const { messages, mode, curriculum, subject } = await req.json()
@@ -92,40 +110,81 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Invalid messages' }), { status: 400 })
     }
 
+    const apiKey = process.env.OPENROUTER_API_KEY
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: 'OPENROUTER_API_KEY not configured' }), { status: 500 })
+    }
+
+    const { model, maxTokens } = MODEL_ROUTER[mode] ?? MODEL_ROUTER.concept
     const systemPrompt = buildSystemPrompt(mode, curriculum, subject)
 
+    const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://nexora-academic.vercel.app',
+        'X-Title': 'Nexora Academic AI Tutor',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: maxTokens,
+        stream: true,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map((m: { role: string; content: string }) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        ],
+      }),
+    })
+
+    if (!openRouterRes.ok) {
+      const err = await openRouterRes.text()
+      return new Response(JSON.stringify({ error: `OpenRouter error: ${err}` }), { status: 502 })
+    }
+
+    // Pipe the SSE stream from OpenRouter → client, extracting text deltas
     const encoder = new TextEncoder()
+    const reader = openRouterRes.body!.getReader()
+    const decoder = new TextDecoder()
 
     const readable = new ReadableStream({
       async start(controller) {
+        let buffer = ''
         try {
-          const stream = anthropic.messages.stream({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 2048,
-            system: systemPrompt,
-            messages: messages.map((m: { role: string; content: string }) => ({
-              role: m.role as 'user' | 'assistant',
-              content: m.content,
-            })),
-          })
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
 
-          for await (const event of stream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
-              controller.enqueue(
-                encoder.encode(`data: ${JSON.stringify({ text: event.delta.text })}\n\n`)
-              )
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
+            buffer = lines.pop() ?? ''
+
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue
+              const data = line.slice(6).trim()
+              if (data === '[DONE]') {
+                controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+                controller.close()
+                return
+              }
+              try {
+                const parsed = JSON.parse(data)
+                const text = parsed.choices?.[0]?.delta?.content
+                if (text) {
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
+                }
+              } catch {
+                // skip malformed lines
+              }
             }
           }
-
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
           controller.close()
-        } catch (err) {
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ error: 'AI error occurred' })}\n\n`)
-          )
+        } catch {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`))
           controller.close()
         }
       },
@@ -136,6 +195,8 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
+        // Send the model used back so the UI can display it
+        'X-Model-Used': model,
       },
     })
   } catch {

@@ -141,7 +141,7 @@ const EXAMS: Exam[] = [
     tips: [
       'Use English Language is compulsory for all candidates + choose 3 relevant subjects',
       'Target 250+ for competitive courses (Medicine, Law); 220+ for Engineering; 200 minimum for most',
-      'Practise on the official JAMB CBT platform: jamb.gov.ng/ExamCBT',
+      'Practise CBT questions using JAMB past questions apps — the official JAMB CBT portal is at jamb.gov.ng (check for the latest practice link each year)',
       'Post-UTME screening is separate — check each university\'s website after UTME results',
       'JAMB change-of-course and change-of-institution portals open after results — use them if needed',
     ],

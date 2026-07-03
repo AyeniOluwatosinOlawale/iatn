@@ -352,12 +352,12 @@ export default function SchoolProfilePage({ params }: { params: { id: string } }
                 <MapPin className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
                 <span className="text-slate-700">{school.address}</span>
               </div>
-              <a href={`tel:${school.phone}`} className="flex items-center gap-3 text-slate-700 hover:text-[#533483] transition-colors">
-                <Phone className="w-4 h-4 text-slate-400" />
+              <a href={`tel:${school.phone}`} className="flex items-center gap-3 text-[#533483] font-medium hover:underline transition-colors">
+                <Phone className="w-4 h-4 flex-shrink-0" />
                 {school.phone}
               </a>
-              <a href={`mailto:${school.email}`} className="flex items-center gap-3 text-slate-700 hover:text-[#533483] transition-colors">
-                <Mail className="w-4 h-4 text-slate-400" />
+              <a href={`mailto:${school.email}`} className="flex items-center gap-3 text-[#533483] font-medium hover:underline transition-colors">
+                <Mail className="w-4 h-4 flex-shrink-0" />
                 {school.email}
               </a>
               <div className="flex items-center gap-3 text-slate-700">

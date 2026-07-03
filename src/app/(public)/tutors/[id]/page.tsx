@@ -279,12 +279,12 @@ export default function TutorProfilePage() {
                 </a>
 
                 <div className="pt-3 border-t border-slate-100 space-y-2">
-                  <a href={`tel:${tutor.phone}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0f3460] transition-colors">
-                    <Phone className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <a href={`tel:${tutor.phone}`} className="flex items-center gap-2 text-sm text-[#0f3460] font-medium hover:underline transition-colors">
+                    <Phone className="w-4 h-4 flex-shrink-0" />
                     {tutor.phone}
                   </a>
-                  <a href={`mailto:${tutor.email}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0f3460] transition-colors">
-                    <Mail className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <a href={`mailto:${tutor.email}`} className="flex items-center gap-2 text-sm text-[#0f3460] font-medium hover:underline transition-colors">
+                    <Mail className="w-4 h-4 flex-shrink-0" />
                     {tutor.email}
                   </a>
                 </div>

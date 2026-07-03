@@ -630,10 +630,6 @@ export default function AITutorPage() {
                 </button>
               </div>
 
-              <p className="text-center text-xs text-gray-400 mt-3">
-                Nexora AI can make mistakes. Always verify with your syllabus and teacher. ·{' '}
-                <Link href="/about" className="hover:text-gray-600">About</Link>
-              </p>
             </div>
           </div>
         </main>

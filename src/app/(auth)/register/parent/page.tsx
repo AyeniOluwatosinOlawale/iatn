@@ -59,6 +59,12 @@ export default function ParentRegisterPage() {
       return
     }
 
+    fetch('/api/admin/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.email, full_name: form.full_name, role: 'parent' }),
+    }).catch(() => {})
+
     setDone(true)
   }
 

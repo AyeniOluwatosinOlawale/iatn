@@ -73,6 +73,12 @@ export default function SchoolRegisterPage() {
       return
     }
 
+    fetch('/api/admin/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.contact_email, full_name: form.contact_name, role: 'school' }),
+    }).catch(() => {})
+
     setDone(true)
   }
 

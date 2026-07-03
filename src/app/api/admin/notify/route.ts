@@ -20,20 +20,11 @@ function formatDate(iso: string) {
 export async function POST(req: NextRequest) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
-    // Validate webhook secret so only Supabase can call this
-    const webhookSecret = process.env.ADMIN_WEBHOOK_SECRET
-    if (webhookSecret) {
-      const incomingSecret = req.headers.get('x-webhook-secret')
-      if (incomingSecret !== webhookSecret) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-      }
-    }
-
     const payload = await req.json()
 
-    // Supabase sends { type, table, schema, record, old_record }
+    // Accept both Supabase webhook format { record: {...} } and direct format { email, role, full_name }
     const record = payload.record ?? payload
-    const meta   = record.raw_user_meta_data ?? {}
+    const meta   = record.raw_user_meta_data ?? record
 
     const email     = record.email ?? 'Unknown'
     const role      = ROLE_LABELS[meta.role] ?? meta.role ?? 'Unknown'

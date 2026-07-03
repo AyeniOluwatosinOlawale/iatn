@@ -146,6 +146,12 @@ export default function TutorRegistrationPage() {
 
       if (tutorError) throw new Error(tutorError.message || 'Failed to save tutor profile')
 
+      fetch('/api/admin/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, full_name: form.full_name, role: 'tutor' }),
+      }).catch(() => {})
+
       router.push('/tutor-dashboard/dashboard?registered=true')
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.'

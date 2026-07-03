@@ -8,7 +8,6 @@ import {
   Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, File, FlaskConical,
   Lock, Loader2, Eye, EyeOff, AlertCircle,
 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Role = 'user' | 'assistant'
@@ -131,21 +130,19 @@ function AITutorGate({ onSuccess }: { onSuccess: () => void }) {
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
 
-  const ALLOWED_ROLES = ['tutor', 'student', 'parent', 'school']
-
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
     try {
-      const supabase = createClient()
-      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
-      if (authError) throw new Error(authError.message)
-      const role = data.user?.user_metadata?.role ?? ''
-      if (!ALLOWED_ROLES.includes(role)) {
-        await supabase.auth.signOut()
-        throw new Error('AI Tutor is only available to registered students, tutors, parents, and schools.')
-      }
+      // Verify credentials AND role against the database via server API
+      const res = await fetch('/api/auth/check-ai-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Access denied.')
       onSuccess()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.')
@@ -243,13 +240,8 @@ export default function AITutorPage() {
   const subjectList  = SUBJECTS[curriculum] || SUBJECTS['Cambridge A-Level']
 
   useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const role = session?.user?.user_metadata?.role ?? ''
-      const allowed = ['tutor', 'student', 'parent', 'school'].includes(role)
-      setAuthed(!!session && allowed)
-      setAuthChecked(true)
-    })
+    // Always require explicit login for AI Tutor — no session bypass
+    setAuthChecked(true)
   }, [])
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
   BookOpen, Send, Sparkles, ChevronDown, Copy, Check, RotateCcw,
-  PenLine, FileText, Lightbulb, MessageSquare, GraduationCap, Menu, X,
+  PenLine, FileText, Lightbulb, GraduationCap, Menu,
   Zap, Target, BarChart3, ChevronRight
 } from 'lucide-react'
 

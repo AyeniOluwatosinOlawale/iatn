@@ -270,13 +270,13 @@ export default function TutorProfilePage() {
                   <Calendar className="w-4 h-4 inline mr-2" />
                   Book a Lesson
                 </Link>
-                <Link
-                  href={`/messages?tutor=${tutor.id}`}
-                  className="block w-full border border-slate-200 text-slate-700 text-center font-semibold py-3 rounded-xl hover:border-[#0f3460] hover:text-[#0f3460] transition-colors text-sm"
+                <a
+                  href={`mailto:${tutor.email}?subject=Lesson Enquiry — ${encodeURIComponent(tutor.full_name)}&body=Hi ${encodeURIComponent(tutor.full_name)},%0A%0AI found your profile on Nexora Academic and I'd like to enquire about lessons.%0A%0APlease let me know your availability.%0A%0AThank you.`}
+                  className="flex items-center justify-center gap-2 w-full border border-slate-200 text-slate-700 text-center font-semibold py-3 rounded-xl hover:border-[#0f3460] hover:text-[#0f3460] transition-colors text-sm"
                 >
-                  <MessageSquare className="w-4 h-4 inline mr-2" />
+                  <MessageSquare className="w-4 h-4" />
                   Send Message
-                </Link>
+                </a>
 
                 <div className="pt-3 border-t border-slate-100 space-y-2">
                   <a href={`tel:${tutor.phone}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0f3460] transition-colors">

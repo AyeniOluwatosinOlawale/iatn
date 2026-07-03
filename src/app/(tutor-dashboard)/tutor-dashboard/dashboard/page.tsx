@@ -24,31 +24,36 @@ export default async function TutorDashboardPage({
   const meta = user.user_metadata ?? {}
   const firstName = (meta.full_name ?? meta.name ?? 'Tutor').split(' ')[0]
 
-  // Fetch tutor profile
+  type TutorRow = { id: string; registration_number: string | null; is_verified: boolean; verification_status: string; overall_rating: number; review_count: number; total_teaching_hours: number }
+  type BookingRow = { id: string; subject: string; curriculum: string; start_time: string; end_time: string; lesson_type: string; status: string }
+
   const { data: tutor } = await supabase
     .from('tutors')
-    .select('registration_number, is_verified, verification_status, overall_rating, review_count, total_teaching_hours')
+    .select('id, registration_number, is_verified, verification_status, overall_rating, review_count, total_teaching_hours')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle() as { data: TutorRow | null; error: unknown }
 
-  // Fetch upcoming bookings
-  const { data: bookings } = await supabase
-    .from('bookings')
-    .select('id, subject, curriculum, start_time, end_time, lesson_type, status')
-    .eq('tutor_id', tutor ? (await supabase.from('tutors').select('id').eq('user_id', user.id).maybeSingle()).data?.id : '')
-    .gte('start_time', new Date().toISOString())
-    .in('status', ['confirmed', 'pending'])
-    .order('start_time', { ascending: true })
-    .limit(3)
+  let bookings: BookingRow[] = []
+  if (tutor?.id) {
+    const { data } = await supabase
+      .from('bookings')
+      .select('id, subject, curriculum, start_time, end_time, lesson_type, status')
+      .eq('tutor_id', tutor.id)
+      .gte('start_time', new Date().toISOString())
+      .in('status', ['confirmed', 'pending'])
+      .order('start_time', { ascending: true })
+      .limit(3) as { data: BookingRow[] | null; error: unknown }
+    bookings = data ?? []
+  }
 
   const params = await searchParams
   const justRegistered = params.registered === 'true'
 
-  const isVerified = tutor?.is_verified ?? false
-  const verificationStatus = tutor?.verification_status ?? 'pending'
-  const registrationNumber = tutor?.registration_number ?? null
-  const rating = tutor?.overall_rating ?? 0
-  const reviewCount = tutor?.review_count ?? 0
+  const isVerified: boolean = tutor?.is_verified ?? false
+  const verificationStatus: string = tutor?.verification_status ?? 'pending'
+  const registrationNumber: string | null = tutor?.registration_number ?? null
+  const rating: number = tutor?.overall_rating ?? 0
+  const reviewCount: number = tutor?.review_count ?? 0
 
   return (
     <div className="min-h-screen bg-slate-50">

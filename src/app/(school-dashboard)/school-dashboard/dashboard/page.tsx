@@ -26,17 +26,18 @@ export default async function SchoolDashboardPage({
   const params = await searchParams
   const justRegistered = params.registered === 'true'
 
-  // Fetch school profile
+  type SchoolRow = { registration_number: string | null; is_verified: boolean; verification_status: string; overall_rating: number; review_count: number }
+
   const { data: school } = await supabase
     .from('schools')
     .select('registration_number, is_verified, verification_status, overall_rating, review_count')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle() as { data: SchoolRow | null; error: unknown }
 
-  const isVerified = school?.is_verified ?? false
-  const registrationNumber = school?.registration_number ?? null
-  const rating = school?.overall_rating ?? 0
-  const reviewCount = school?.review_count ?? 0
+  const isVerified: boolean = school?.is_verified ?? false
+  const registrationNumber: string | null = school?.registration_number ?? null
+  const rating: number = school?.overall_rating ?? 0
+  const reviewCount: number = school?.review_count ?? 0
 
   return (
     <div className="min-h-screen bg-slate-50">

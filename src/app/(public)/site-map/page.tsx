@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BookOpen, Users, School, GraduationCap, FileText, Brain, Briefcase, MessageSquare, BookMarked, Shield, MapPin, Mail, Phone } from 'lucide-react'
+import { BookOpen, Users, School, GraduationCap, FileText, Brain, Briefcase, MessageSquare, BookMarked, Shield, MapPin, Mail } from 'lucide-react'
 
 const SECTIONS = [
   {

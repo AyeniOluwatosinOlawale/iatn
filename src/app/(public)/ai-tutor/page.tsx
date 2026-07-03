@@ -513,6 +513,7 @@ export default function AITutorPage() {
                     {/* Image preview in message */}
                     {Array.isArray(msg.content) && msg.content.find(p => p.type === 'image_url') && (
                       <div className="mb-2 flex justify-end">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={(msg.content.find(p => p.type === 'image_url') as { type: 'image_url'; image_url: { url: string } })?.image_url?.url}
                           alt="attachment"

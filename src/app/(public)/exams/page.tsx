@@ -134,7 +134,7 @@ const EXAMS: Exam[] = [
     grading: 'Score out of 400 (each subject 0–100)',
     recognized_by: ['All Nigerian Federal Universities', 'Nigerian State Universities', 'Polytechnics', 'Colleges of Education', 'Private Universities (most)'],
     timetable_url: 'https://www.jamb.gov.ng/',
-    registration_url: 'https://www.jamb.gov.ng/Registration/',
+    registration_url: 'https://www.jamb.gov.ng/',
     typical_registration: 'Registration opens January – February each year. Check jamb.gov.ng for exact dates. Register early — slots fill quickly at CBT centres.',
     typical_results: 'Scores released within 2–4 weeks of your exam date. Post-UTME screening by individual universities follows in May–July.',
     typical_gap: '2–4 weeks from exam to score release',

@@ -1,13 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { BookOpen, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { BookOpen, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo') || '/dashboard'
+  const fromAiTutor = redirectTo === '/ai-tutor'
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPw, setShowPw] = useState(false)
@@ -28,7 +32,7 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/dashboard')
+    router.push(redirectTo)
     router.refresh()
   }
 
@@ -46,6 +50,17 @@ export default function LoginPage() {
           <h1 className="text-2xl font-black text-slate-900">Welcome back</h1>
           <p className="text-slate-500 text-sm mt-1">Sign in to your Nexora account</p>
         </div>
+
+        {/* AI Tutor gate banner */}
+        {fromAiTutor && (
+          <div className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-2xl px-4 py-3 flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-purple-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-purple-900">Sign in to use AI Tutor</p>
+              <p className="text-xs text-purple-600 mt-0.5">You need a Nexora account to access the AI Examination Intelligence Platform.</p>
+            </div>
+          </div>
+        )}
 
         {/* Card */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
@@ -107,5 +122,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }

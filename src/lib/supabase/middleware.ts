@@ -34,11 +34,17 @@ export async function updateSession(request: NextRequest) {
     '/parent-dashboard',
     '/school-dashboard',
     '/admin',
+    '/ai-tutor',
+    '/api/ai-tutor',
   ]
 
   const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))
 
   if (isProtected && !user) {
+    // API routes return 401 JSON; pages redirect to login
+    if (request.nextUrl.pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     url.searchParams.set('redirectTo', request.nextUrl.pathname)

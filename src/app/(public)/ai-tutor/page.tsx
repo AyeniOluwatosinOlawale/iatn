@@ -80,7 +80,7 @@ async function extractPdfText(file: File): Promise<string> {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i)
     const content = await page.getTextContent()
-    text += content.items.map((item: { str?: string }) => item.str ?? '').join(' ') + '\n'
+    text += content.items.map((item) => ('str' in item ? item.str : '')).join(' ') + '\n'
   }
   return text.trim()
 }
@@ -130,7 +130,8 @@ export default function AITutorPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef    = useRef<HTMLTextAreaElement>(null)
   const fileInputRef   = useRef<HTMLInputElement>(null)
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null)
 
   const currentMode  = MODES.find(m => m.key === mode)!
   const subjectList  = SUBJECTS[curriculum] || SUBJECTS['Cambridge A-Level']
@@ -146,7 +147,8 @@ export default function AITutorPage() {
       return
     }
 
-    const SpeechRecognition = window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     if (!SpeechRecognition) {
       setVoiceError('Voice recognition not supported in this browser. Try Chrome.')
       setTimeout(() => setVoiceError(''), 3000)
@@ -158,8 +160,10 @@ export default function AITutorPage() {
     recognition.continuous = true
     recognition.interimResults = true
 
-    recognition.onresult = (e: SpeechRecognitionEvent) => {
-      const transcript = Array.from(e.results).map(r => r[0].transcript).join('')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onresult = (e: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join('')
       setInput(transcript)
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto'

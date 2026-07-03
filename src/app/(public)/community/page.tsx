@@ -1,68 +1,45 @@
 import Link from 'next/link'
-import { MessageSquare, Users, TrendingUp, ChevronRight, Heart, Eye, Pin, Star } from 'lucide-react'
+import { ChevronRight, Heart, Star, PenSquare } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import { createClient } from '@/lib/supabase/server'
+import CommunityClient, { type PostRow } from './CommunityClient'
 
-const FORUMS = [
-  {
-    id: '1', name: 'IGCSE & O-Level Discussion', icon: '📘', color: 'bg-blue-50 border-blue-200',
-    description: 'Discuss IGCSE subjects, share past paper strategies, and get help from fellow students and tutors.',
-    posts: 1842, members: 6400, curriculum: 'IGCSE',
-    latest: { title: 'Best resources for IGCSE Chemistry Paper 6?', author: 'Chidi_Lagos', time: '2h ago', replies: 14 },
-  },
-  {
-    id: '2', name: 'Cambridge A-Level Hub', icon: '🎓', color: 'bg-indigo-50 border-indigo-200',
-    description: 'A-Level subject help, university predictions, and exam strategies for Cambridge AS & A2.',
-    posts: 2310, members: 8900, curriculum: 'A-Level',
-    latest: { title: 'A-Level Maths Further Pure 3 — anyone struggling with complex numbers?', author: 'MathsGeek_Abuja', time: '45min ago', replies: 27 },
-  },
-  {
-    id: '3', name: 'JAMB Preparation Corner', icon: '🏛️', color: 'bg-teal-50 border-teal-200',
-    description: 'Share JAMB past questions, discuss UTME strategies, and celebrate admissions success.',
-    posts: 5120, members: 18000, curriculum: 'JAMB',
-    latest: { title: 'JAMB 2026 registration — everything you need to know', author: 'ExamPro_NG', time: '1h ago', replies: 89 },
-  },
-  {
-    id: '4', name: 'WAEC & NECO Students', icon: '📚', color: 'bg-orange-50 border-orange-200',
-    description: 'WAEC and NECO exam prep, question discussions, and grade achievement stories.',
-    posts: 3760, members: 12400, curriculum: 'WAEC/NECO',
-    latest: { title: 'WAEC 2026 timetable is out — download link inside', author: 'SS3_Ready', time: '3h ago', replies: 156 },
-  },
-  {
-    id: '5', name: 'IB Diploma Students', icon: '🌍', color: 'bg-purple-50 border-purple-200',
-    description: 'IB Internal Assessments, Extended Essay tips, TOK discussions, and CAS ideas.',
-    posts: 980, members: 2100, curriculum: 'IB',
-    latest: { title: 'My EE topic got approved — tips for IB History HL EE', author: 'IBStudent_PHC', time: '5h ago', replies: 19 },
-  },
-  {
-    id: '6', name: 'SAT & US University Admissions', icon: '🇺🇸', color: 'bg-rose-50 border-rose-200',
-    description: 'SAT prep strategies, US college application help, Common App, and scholarship discussions.',
-    posts: 1240, members: 3800, curriculum: 'SAT',
-    latest: { title: 'Got into UCLA on scholarship — here\'s my full application story', author: 'NigerianInAmerica', time: '1d ago', replies: 203 },
-  },
-]
-
-const TRENDING = [
-  { id: '1', title: 'CAIE outstanding learner award — how to qualify', curriculum: 'A-Level', replies: 341, views: 8920, pinned: true },
-  { id: '2', title: 'Complete JAMB 2026 subject combination guide for all courses', curriculum: 'JAMB', replies: 289, views: 14200, pinned: true },
-  { id: '3', title: 'WAEC vs NECO — which is better for Nigerian university admissions?', curriculum: 'WAEC', replies: 215, views: 6700, pinned: false },
-  { id: '4', title: 'How I scored A* in IGCSE Maths without a tutor', curriculum: 'IGCSE', replies: 178, views: 9100, pinned: false },
-  { id: '5', title: 'Best A-Level tutor on Nexora — share your recommendations', curriculum: 'A-Level', replies: 134, views: 4500, pinned: false },
-]
-
-const CURRICULUM_COLORS: Record<string, string> = {
-  'A-Level': 'bg-indigo-100 text-indigo-700',
-  'IGCSE': 'bg-blue-100 text-blue-700',
-  'JAMB': 'bg-teal-100 text-teal-700',
-  'WAEC': 'bg-orange-100 text-orange-700',
-  'NECO': 'bg-lime-100 text-lime-700',
-  'IB': 'bg-purple-100 text-purple-700',
-  'SAT': 'bg-rose-100 text-rose-700',
+type ContributorRow = {
+  author_name: string
+  post_count: number
 }
 
-export default function CommunityPage() {
+const BADGES = ['🏆', '🥈', '🥉', '⭐', '⭐']
+
+export const dynamic = 'force-dynamic'
+
+export default async function CommunityPage() {
+  const supabase = await createClient()
+
+  const { data: postsData } = (await supabase
+    .from('community_posts')
+    .select('id, author_name, title, body, subject, curriculum, reply_count, created_at')
+    .eq('is_published', true)
+    .order('created_at', { ascending: false })
+    .limit(50)) as { data: PostRow[] | null; error: unknown }
+
+  const posts: PostRow[] = postsData ?? []
+
+  // Aggregate top contributors client-side from posts data (avoids needing an RPC)
+  const contributorMap: Record<string, number> = {}
+  for (const p of posts) {
+    if (p.author_name) {
+      contributorMap[p.author_name] = (contributorMap[p.author_name] ?? 0) + 1
+    }
+  }
+  const contributors: ContributorRow[] = Object.entries(contributorMap)
+    .map(([author_name, post_count]) => ({ author_name, post_count }))
+    .sort((a, b) => b.post_count - a.post_count)
+    .slice(0, 5)
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
 
       {/* Hero */}
@@ -78,132 +55,75 @@ export default function CommunityPage() {
             Join thousands of Nigerian students, parents, and tutors. Discuss exams, share resources, celebrate results, and support each other.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link href="/register" className="bg-white text-[#0f3460] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-colors inline-flex items-center gap-2">
-              <Users className="w-4 h-4" /> Join the Community
-            </Link>
-            <Link href="/login" className="bg-white/10 border border-white/30 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors">
-              Sign In to Post
+            <Link
+              href="/community/new"
+              className="bg-white text-[#0f3460] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-colors inline-flex items-center gap-2"
+            >
+              <PenSquare className="w-4 h-4" /> Start a Discussion
             </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="bg-[#0f3460] py-8 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-          {[
-            { value: '52,000+', label: 'Community Members' },
-            { value: '15,000+', label: 'Forum Posts' },
-            { value: '6', label: 'Subject Forums' },
-            { value: '24/7', label: 'Active Discussions' },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="text-2xl font-black text-white">{s.value}</div>
-              <div className="text-xs text-white/60 mt-1">{s.label}</div>
-            </div>
-          ))}
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* Forums list */}
-          <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-xl font-black text-slate-900 mb-5">Discussion Forums</h2>
-
-            {FORUMS.map((forum) => (
-              <Link key={forum.id} href="/login" className={`block border rounded-2xl p-5 hover:shadow-md transition-all group ${forum.color}`}>
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl flex-shrink-0">{forum.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <h3 className="font-black text-slate-900 group-hover:text-[#0f3460] transition-colors">{forum.name}</h3>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${CURRICULUM_COLORS[forum.curriculum] ?? 'bg-slate-100 text-slate-700'}`}>
-                        {forum.curriculum}
-                      </span>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-3">{forum.description}</p>
-
-                    {/* Latest post */}
-                    <div className="bg-white/70 rounded-xl p-3 mb-3">
-                      <div className="text-xs text-slate-500 mb-0.5">Latest post</div>
-                      <div className="text-sm font-semibold text-slate-800 truncate">{forum.latest.title}</div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                        <span>by {forum.latest.author}</span>
-                        <span>·</span>
-                        <span>{forum.latest.time}</span>
-                        <span>·</span>
-                        <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" />{forum.latest.replies} replies</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-xs text-slate-500">
-                      <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" />{forum.posts.toLocaleString()} posts</span>
-                      <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{forum.members.toLocaleString()} members</span>
-                    </div>
-                  </div>
-                </div>
+          {/* Main posts area */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-black text-slate-900">Recent Discussions</h2>
+              <Link
+                href="/community/new"
+                className="nexora-gradient text-white font-semibold text-sm px-4 py-2 rounded-xl hover:opacity-90 transition-opacity inline-flex items-center gap-1.5"
+              >
+                <PenSquare className="w-3.5 h-3.5" /> New Post
               </Link>
-            ))}
+            </div>
+
+            {posts.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+                <p className="text-slate-500 font-semibold mb-3">No discussions yet — be the first!</p>
+                <Link
+                  href="/community/new"
+                  className="inline-block nexora-gradient text-white font-bold px-6 py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                  Start the first discussion
+                </Link>
+              </div>
+            ) : (
+              <CommunityClient posts={posts} />
+            )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Trending */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-[#0f3460]" />
-                <h3 className="font-black text-slate-900">Trending Discussions</h3>
-              </div>
-              <div className="space-y-3">
-                {TRENDING.map((post) => (
-                  <Link key={post.id} href="/login" className="block group">
-                    <div className="flex items-start gap-2">
-                      {post.pinned && <Pin className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-800 group-hover:text-[#0f3460] transition-colors leading-snug line-clamp-2">{post.title}</p>
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                          <span className={`font-bold px-1.5 py-0.5 rounded ${CURRICULUM_COLORS[post.curriculum] ?? 'bg-slate-100 text-slate-600'}`}>{post.curriculum}</span>
-                          <span className="flex items-center gap-0.5"><Eye className="w-3 h-3" />{post.views.toLocaleString()}</span>
-                          <span className="flex items-center gap-0.5"><MessageSquare className="w-3 h-3" />{post.replies}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Leaderboard */}
+            {/* Top Contributors */}
             <div className="bg-white border border-slate-200 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Star className="w-5 h-5 text-amber-400" />
                 <h3 className="font-black text-slate-900">Top Contributors</h3>
               </div>
-              <div className="space-y-3">
-                {[
-                  { name: 'ExamPro_NG', posts: 412, badge: '🏆' },
-                  { name: 'MathsGeek_Abuja', posts: 287, badge: '🥈' },
-                  { name: 'IBStudent_PHC', posts: 234, badge: '🥉' },
-                  { name: 'SS3_Ready', posts: 198, badge: '⭐' },
-                  { name: 'NigerianInAmerica', posts: 176, badge: '⭐' },
-                ].map((user) => (
-                  <div key={user.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">{user.badge}</span>
-                      <div className="w-7 h-7 rounded-full nexora-gradient flex items-center justify-center text-white text-xs font-bold">
-                        {user.name[0]}
+              {contributors.length === 0 ? (
+                <p className="text-sm text-slate-500">No contributors yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {contributors.map((user, i) => (
+                    <div key={user.author_name} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{BADGES[i] ?? '⭐'}</span>
+                        <div className="w-7 h-7 rounded-full nexora-gradient flex items-center justify-center text-white text-xs font-bold">
+                          {user.author_name[0]?.toUpperCase() ?? '?'}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-800">{user.author_name}</span>
                       </div>
-                      <span className="text-sm font-semibold text-slate-800">{user.name}</span>
+                      <span className="text-xs text-slate-500">{user.post_count} posts</span>
                     </div>
-                    <span className="text-xs text-slate-500">{user.posts} posts</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Community rules */}
+            {/* Community Rules */}
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
               <h3 className="font-black text-slate-900 mb-3 flex items-center gap-2">
                 <Heart className="w-4 h-4 text-amber-500" /> Community Rules

@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 // ─── Model Router ─────────────────────────────────────────────────────────────
 const MODEL_ROUTER: Record<string, { model: string; maxTokens: number; vision: boolean }> = {
   concept:  { model: 'meta-llama/llama-3.1-70b-instruct', maxTokens: 2048, vision: false },
-  practice: { model: 'meta-llama/llama-3.3-70b-instruct:free', maxTokens: 2048, vision: false },
+  practice: { model: 'openai/gpt-4o-mini',                    maxTokens: 2048, vision: false },
   mark:     { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 2048, vision: true  },
   feedback: { model: 'openai/gpt-4o',                      maxTokens: 2048, vision: true  },
   essay:    { model: 'anthropic/claude-sonnet-4.5',        maxTokens: 3000, vision: false },

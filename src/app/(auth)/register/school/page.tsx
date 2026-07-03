@@ -64,8 +64,12 @@ export default function SchoolRegisterPage() {
             school_type: form.school_type,
             state: form.state,
             city: form.city,
-            curricula: form.curricula,
+            address: form.address,
             website: form.website,
+            founded_year: form.founded_year,
+            student_count: form.student_count,
+            curricula: form.curricula,
+            about: form.about,
           },
         },
       })

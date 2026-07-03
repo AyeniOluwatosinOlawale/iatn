@@ -186,17 +186,11 @@ export default function AITutorPage() {
       if (file.type === 'application/pdf') {
         const text = await extractPdfText(file)
         setAttachment({ name: file.name, type: 'pdf', content: text })
-      } else if (file.type.startsWith('image/')) {
-        const dataUrl = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(reader.result as string)
-          reader.onerror = reject
-          reader.readAsDataURL(file)
-        })
-        setAttachment({ name: file.name, type: 'image', content: dataUrl, previewUrl: dataUrl })
+        setMode('solve')
       } else {
-        const text = await file.text()
-        setAttachment({ name: file.name, type: 'text', content: text })
+        setVoiceError('Only PDF past papers are accepted. Please upload a PDF file.')
+        setTimeout(() => setVoiceError(''), 3000)
+        return
       }
     } catch {
       setVoiceError('Failed to read file. Please try again.')
@@ -224,13 +218,27 @@ export default function AITutorPage() {
     let userContent: string | ContentPart[]
 
     if (attachment?.type === 'image') {
+      const defaultImageText = mode === 'solve'
+        ? 'This is a past paper image. Please read every question carefully and solve them all step by step with full working, mark scheme points, and examiner tips.'
+        : mode === 'mark'
+        ? 'Please mark this answer image against the mark scheme criteria and give honest feedback.'
+        : 'Please analyse this image and answer any questions shown.'
       userContent = [
-        { type: 'text', text: messageText || 'Please analyse this image and answer any questions shown.' },
+        { type: 'text', text: messageText || defaultImageText },
         { type: 'image_url', image_url: { url: attachment.content } },
       ] as ContentPart[]
     } else if (attachment?.type === 'pdf' || attachment?.type === 'text') {
-      const prefix = `[ATTACHED DOCUMENT: ${attachment.name}]\n${attachment.content}\n[END DOCUMENT]\n\n`
-      userContent = messageText ? prefix + messageText : prefix + 'Please analyse this document and help me understand it.'
+      const defaultPdfText = mode === 'solve'
+        ? 'This is a past paper PDF. Please read every question and solve them all with full step-by-step working, showing all marks awarded and examiner tips for each question.'
+        : mode === 'mark'
+        ? 'This is my submitted answer. Please mark it against the mark scheme criteria and give detailed feedback.'
+        : mode === 'feedback'
+        ? 'This is my written work. Please give me examiner-style feedback as if writing an Examiner\'s Report section on this response.'
+        : mode === 'essay'
+        ? 'This is my essay. Please review it in full — structure, content, analysis, exam technique, and written communication. Be rigorous.'
+        : 'Please analyse this document thoroughly and help me understand it.'
+      const prefix = `[ATTACHED PAST PAPER / DOCUMENT: ${attachment.name}]\n${attachment.content}\n[END DOCUMENT]\n\n`
+      userContent = messageText ? prefix + messageText : prefix + defaultPdfText
     } else {
       userContent = messageText
     }
@@ -456,7 +464,7 @@ export default function AITutorPage() {
                   <p className="text-xs text-gray-400 mt-3 flex items-center justify-center gap-3">
                     <span className="flex items-center gap-1"><Mic className="w-3 h-3" /> Voice input supported</span>
                     <span>·</span>
-                    <span className="flex items-center gap-1"><Paperclip className="w-3 h-3" /> PDF & image upload</span>
+                    <span className="flex items-center gap-1"><Paperclip className="w-3 h-3" /> Past paper PDF upload</span>
                   </p>
                 </div>
 
@@ -599,10 +607,10 @@ export default function AITutorPage() {
                 <button onClick={() => fileInputRef.current?.click()}
                   disabled={attachLoading}
                   className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-[#0f3460] transition-colors shrink-0"
-                  title="Attach PDF or image">
+                  title="Attach past paper PDF">
                   <Paperclip className="w-4 h-4" />
                 </button>
-                <input ref={fileInputRef} type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" className="hidden" onChange={onFileChange} />
+                <input ref={fileInputRef} type="file" accept=".pdf" className="hidden" onChange={onFileChange} />
 
                 {/* Textarea */}
                 <div className="flex-1 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 focus-within:border-[#0f3460] focus-within:ring-2 focus-within:ring-[#0f3460]/20 transition-all">

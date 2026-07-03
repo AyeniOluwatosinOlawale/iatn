@@ -188,7 +188,7 @@ const RESOURCES: Resource[] = [
   {
     id: '22', title: 'JAMB / UTME Past Questions (All Subjects 2000–2024)', type: 'Past Papers',
     curriculum: 'JAMB', subject: 'All Subjects', source: 'JAMB Official Portal',
-    source_url: 'https://www.jamb.gov.ng/ExamCBT/',
+    source_url: 'https://www.jamb.gov.ng/',
     description: 'Official JAMB CBT Practice portal. Free access to UTME past questions for English, Mathematics, Physics, Chemistry, Biology, Economics, and more.',
     is_official: true, is_free: true, badge: 'bg-teal-100 text-teal-800', icon: BookMarked,
   },

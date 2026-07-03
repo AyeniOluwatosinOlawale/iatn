@@ -25,7 +25,6 @@ const navLinks = [
     href: '/schools',
     children: [
       { label: 'Find Schools', href: '/schools' },
-      { label: 'Compare Schools', href: '/schools/compare' },
     ],
   },
   { label: 'Universities', href: '/universities' },

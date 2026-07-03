@@ -124,6 +124,13 @@ export default function TutorRegistrationPage() {
       if (authError) throw new Error(`Account creation failed: ${authError.message}`)
       if (!authData.user) throw new Error('Registration failed — please try again')
 
+      // Create profile row (trigger was removed; handled here instead)
+      fetch('/api/profiles/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: authData.user.id, role: 'tutor' }),
+      }).catch(() => {})
+
       // Try to save full profile to tutors table — non-blocking if table not yet created
       const tutorPayload = {
         user_id: authData.user.id,

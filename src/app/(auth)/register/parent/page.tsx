@@ -40,7 +40,7 @@ export default function ParentRegisterPage() {
     try {
       const supabase = createClient()
 
-      const { error: authError } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
         options: {
@@ -55,6 +55,14 @@ export default function ParentRegisterPage() {
       })
 
       if (authError) throw new Error(`Account creation failed: ${authError.message}`)
+
+      if (authData.user) {
+        fetch('/api/profiles/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: authData.user.id, role: 'parent' }),
+        }).catch(() => {})
+      }
 
       fetch('/api/admin/notify', {
         method: 'POST',

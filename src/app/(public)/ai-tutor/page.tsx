@@ -131,14 +131,21 @@ function AITutorGate({ onSuccess }: { onSuccess: () => void }) {
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
 
+  const ALLOWED_ROLES = ['tutor', 'student', 'parent', 'school']
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
     try {
       const supabase = createClient()
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
       if (authError) throw new Error(authError.message)
+      const role = data.user?.user_metadata?.role ?? ''
+      if (!ALLOWED_ROLES.includes(role)) {
+        await supabase.auth.signOut()
+        throw new Error('AI Tutor is only available to registered students, tutors, parents, and schools.')
+      }
       onSuccess()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.')
@@ -238,7 +245,9 @@ export default function AITutorPage() {
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setAuthed(!!session)
+      const role = session?.user?.user_metadata?.role ?? ''
+      const allowed = ['tutor', 'student', 'parent', 'school'].includes(role)
+      setAuthed(!!session && allowed)
       setAuthChecked(true)
     })
   }, [])

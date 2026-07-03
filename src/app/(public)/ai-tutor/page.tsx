@@ -5,8 +5,10 @@ import Link from 'next/link'
 import {
   BookOpen, Send, Sparkles, ChevronDown, Copy, Check, RotateCcw,
   PenLine, FileText, Lightbulb, GraduationCap, Menu,
-  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, File, FlaskConical
+  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, File, FlaskConical,
+  Lock, Loader2,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Role = 'user' | 'assistant'
@@ -123,6 +125,8 @@ function inlineFmt(text: string): React.ReactNode {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function AITutorPage() {
+  const [authChecked,  setAuthChecked]  = useState(false)
+  const [authed,       setAuthed]       = useState(false)
   const [messages,     setMessages]     = useState<Message[]>([])
   const [input,        setInput]        = useState('')
   const [mode,         setMode]         = useState<Mode>('concept')
@@ -146,8 +150,54 @@ export default function AITutorPage() {
   const currentMode  = MODES.find(m => m.key === mode)!
   const subjectList  = SUBJECTS[curriculum] || SUBJECTS['Cambridge A-Level']
 
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAuthed(!!session)
+      setAuthChecked(true)
+    })
+  }, [])
+
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
   useEffect(() => { if (!subjectList.includes(subject)) setSubject(subjectList[0]) }, [curriculum, subjectList, subject])
+
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="w-8 h-8 text-[#0f3460] animate-spin" />
+      </div>
+    )
+  }
+
+  if (!authed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 max-w-sm w-full text-center">
+          <div className="w-14 h-14 bg-[#0f3460]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7 text-[#0f3460]" />
+          </div>
+          <h2 className="text-xl font-black text-slate-900 mb-2">Sign in required</h2>
+          <p className="text-slate-500 text-sm mb-6">
+            The AI Tutor is available to registered students, tutors, parents, and schools. Create a free account to get started.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/login?redirectTo=/ai-tutor"
+              className="nexora-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity text-sm block"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className="border border-slate-200 text-slate-700 font-semibold py-3 rounded-xl hover:bg-slate-50 transition-colors text-sm block"
+            >
+              Create Free Account
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // ── Voice Recording ──────────────────────────────────────────────────────
   const toggleVoice = useCallback(() => {

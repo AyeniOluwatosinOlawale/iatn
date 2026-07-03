@@ -5,12 +5,12 @@ import Link from 'next/link'
 import {
   BookOpen, Send, Sparkles, ChevronDown, Copy, Check, RotateCcw,
   PenLine, FileText, Lightbulb, GraduationCap, Menu,
-  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, FileImage, File
+  Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, FileImage, File, FlaskConical
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Role = 'user' | 'assistant'
-type Mode = 'concept' | 'mark' | 'practice' | 'feedback' | 'essay'
+type Mode = 'concept' | 'mark' | 'practice' | 'feedback' | 'essay' | 'solve'
 
 type ContentPart =
   | { type: 'text'; text: string }
@@ -33,6 +33,7 @@ interface Attachment {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const MODES: { key: Mode; label: string; icon: React.ElementType; desc: string; color: string }[] = [
+  { key: 'solve',    label: 'Solve Past Paper',   icon: FlaskConical, desc: 'Full step-by-step worked solutions',         color: 'text-orange-600 bg-orange-50' },
   { key: 'concept',  label: 'Concept Tutor',     icon: Lightbulb,   desc: 'Explain any topic with exam depth',          color: 'text-amber-600 bg-amber-50' },
   { key: 'mark',     label: 'Mark My Answer',     icon: PenLine,     desc: 'Submit an answer — get marks + feedback',    color: 'text-green-600 bg-green-50' },
   { key: 'practice', label: 'Exam Practice',      icon: Target,      desc: 'Generate exam-style questions + schemes',    color: 'text-blue-600 bg-blue-50' },
@@ -60,6 +61,7 @@ const SUBJECTS: Record<string, string[]> = {
 }
 
 const STARTERS: Record<Mode, string[]> = {
+  solve:    ['Solve this IGCSE Physics question step by step: [paste question]', 'Work through this A-Level Mathematics past paper question with full working: [paste question]', 'I have attached a past paper PDF — please solve all the questions', 'Explain how to solve this Economics 25-mark question: [paste question]'],
   concept:  ['Explain the difference between osmosis and diffusion for IGCSE Biology', 'What is the mark scheme for a 6-mark "evaluate" question in A-Level Economics?', 'Walk me through how to solve quadratic inequalities step by step', 'Explain the significance of the 1905 Revolution for A-Level History'],
   mark:     ['Here is my answer to a 4-mark question — please mark it: [paste your answer]', 'I answered a 6-mark Economics question. Give me an honest mark out of 6.', 'Mark this Chemistry equation question: [paste your working]', 'Please evaluate my response to this past paper question: [paste answer]'],
   practice: ['Give me a 6-mark A-Level Biology question on cell division with a mark scheme', 'Generate three IGCSE Physics data-based questions on electricity', 'Create a 20-mark Economics essay question with mark bands', 'Give me 5 multiple-choice questions on organic chemistry with answers'],

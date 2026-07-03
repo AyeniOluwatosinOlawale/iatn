@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  async rewrites() {
+    return [
+      { source: '/sitemap', destination: '/site-map' },
+    ]
+  },
+}
 
-export default nextConfig;
+export default nextConfig

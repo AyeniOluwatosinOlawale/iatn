@@ -477,19 +477,12 @@ export default function AITutorPage() {
                         )}
                       </div>
                       {msg.content && (
-                        <div className="flex items-center gap-3 mt-1.5 px-1">
-                          <button
-                            onClick={() => handleCopy(msg.id, msg.content)}
-                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
-                          >
-                            {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
-                          </button>
-                          {msg.modelUsed && (
-                            <span className="text-xs text-gray-300">
-                              via {MODEL_LABELS[msg.modelUsed] ?? msg.modelUsed}
-                            </span>
-                          )}
-                        </div>
+                        <button
+                          onClick={() => handleCopy(msg.id, msg.content)}
+                          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 mt-1.5 px-1"
+                        >
+                          {copiedId === msg.id ? <><Check className="w-3 h-3 text-green-500" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
+                        </button>
                       )}
                     </div>
                   </div>

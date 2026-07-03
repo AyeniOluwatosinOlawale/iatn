@@ -6,7 +6,7 @@ import {
   BookOpen, Send, Sparkles, ChevronDown, Copy, Check, RotateCcw,
   PenLine, FileText, Lightbulb, GraduationCap, Menu,
   Zap, Target, BarChart3, ChevronRight, Mic, MicOff, Paperclip, X, File, FlaskConical,
-  Lock, Loader2,
+  Lock, Loader2, Eye, EyeOff, AlertCircle,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -121,6 +121,91 @@ function inlineFmt(text: string): React.ReactNode {
     if (p.startsWith('`')  && p.endsWith('`'))  return <code key={i} className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono text-[#0f3460]">{p.slice(1,-1)}</code>
     return p
   })
+}
+
+// ─── Auth Gate ────────────────────────────────────────────────────────────────
+function AITutorGate({ onSuccess }: { onSuccess: () => void }) {
+  const [email,    setEmail]    = useState('')
+  const [password, setPassword] = useState('')
+  const [showPw,   setShowPw]   = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState('')
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const supabase = createClient()
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      if (authError) throw new Error(authError.message)
+      onSuccess()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-sm w-full">
+        <div className="text-center mb-6">
+          <div className="w-14 h-14 nexora-gradient rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7 text-white" />
+          </div>
+          <h2 className="text-xl font-black text-slate-900">Sign in to use AI Tutor</h2>
+          <p className="text-slate-500 text-sm mt-1">Available to registered students, tutors, parents and schools.</p>
+        </div>
+
+        {error && (
+          <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2.5 rounded-xl mb-4">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+            <input
+              type="email" value={email} onChange={e => setEmail(e.target.value)} required
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+            <div className="relative">
+              <input
+                type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
+                className="w-full px-4 py-3 pr-11 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                placeholder="Your password"
+              />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+          <button
+            type="submit" disabled={loading}
+            className="w-full nexora-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading ? 'Signing in...' : 'Sign In & Open AI Tutor'}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-slate-500 mt-5">
+          No account?{' '}
+          <Link href="/register" className="font-semibold text-[#0f3460] hover:underline">Create one free</Link>
+        </p>
+        <p className="text-center text-sm text-slate-500 mt-1">
+          <Link href="/login?redirectTo=/ai-tutor" className="text-slate-400 hover:text-slate-600 text-xs">Forgot password?</Link>
+        </p>
+      </div>
+    </div>
+  )
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -377,33 +462,7 @@ export default function AITutorPage() {
   }
 
   if (!authed) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 max-w-sm w-full text-center">
-          <div className="w-14 h-14 bg-[#0f3460]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-7 h-7 text-[#0f3460]" />
-          </div>
-          <h2 className="text-xl font-black text-slate-900 mb-2">Sign in required</h2>
-          <p className="text-slate-500 text-sm mb-6">
-            The AI Tutor is available to registered students, tutors, parents, and schools. Create a free account to get started.
-          </p>
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/login?redirectTo=/ai-tutor"
-              className="nexora-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity text-sm block"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="border border-slate-200 text-slate-700 font-semibold py-3 rounded-xl hover:bg-slate-50 transition-colors text-sm block"
-            >
-              Create Free Account
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
+    return <AITutorGate onSuccess={() => setAuthed(true)} />
   }
 
   return (

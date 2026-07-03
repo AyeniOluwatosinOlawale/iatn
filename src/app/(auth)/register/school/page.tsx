@@ -45,6 +45,7 @@ export default function SchoolRegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (form.curricula.length === 0) { setError('Please select at least one curriculum your school offers.'); return }
     setLoading(true)
     setError('')
 
@@ -182,7 +183,7 @@ export default function SchoolRegisterPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone number</label>
-                <input type="tel" value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)}
+                <input type="tel" value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)} required
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="+234 800 000 0000" />
               </div>
@@ -199,7 +200,7 @@ export default function SchoolRegisterPage() {
               </div>
               <button
                 onClick={() => {
-                  if (!form.contact_name || !form.contact_email || !form.password) { setError('Please fill in all required fields.'); return }
+                  if (!form.contact_name || !form.contact_email || !form.password || !form.contact_phone) { setError('Please fill in all required fields.'); return }
                   if (form.password.length < 8) { setError('Password must be at least 8 characters.'); return }
                   setError(''); setStep(2)
                 }}
@@ -230,7 +231,7 @@ export default function SchoolRegisterPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">Founded year</label>
-                  <input type="number" value={form.founded_year} onChange={e => set('founded_year', e.target.value)}
+                  <input type="number" value={form.founded_year} onChange={e => set('founded_year', e.target.value)} required
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                     placeholder="e.g. 1998" min="1800" max="2025" />
                 </div>
@@ -246,7 +247,7 @@ export default function SchoolRegisterPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">City / LGA</label>
-                  <select value={form.city} onChange={e => set('city', e.target.value)} disabled={!form.state}
+                  <select value={form.city} onChange={e => set('city', e.target.value)} disabled={!form.state} required
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white disabled:bg-slate-50 disabled:text-slate-400">
                     <option value="">{form.state ? 'Select city' : 'Select state first'}</option>
                     {(NIGERIAN_STATE_CITIES[form.state] ?? []).map(c => <option key={c}>{c}</option>)}
@@ -255,7 +256,7 @@ export default function SchoolRegisterPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">School address</label>
-                <input value={form.address} onChange={e => set('address', e.target.value)}
+                <input value={form.address} onChange={e => set('address', e.target.value)} required
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="Full street address" />
               </div>
@@ -267,7 +268,7 @@ export default function SchoolRegisterPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Number of students <span className="font-normal text-slate-400">(approx.)</span></label>
-                <input type="number" value={form.student_count} onChange={e => set('student_count', e.target.value)}
+                <input type="number" value={form.student_count} onChange={e => set('student_count', e.target.value)} required
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="e.g. 850" min="1" />
               </div>
@@ -276,7 +277,10 @@ export default function SchoolRegisterPage() {
                   className="flex-1 border border-slate-200 text-slate-700 font-semibold py-3 rounded-xl hover:bg-slate-50 transition-colors">Back</button>
                 <button type="button"
                   onClick={() => {
-                    if (!form.school_name || !form.school_type || !form.state) { setError('Please fill in school name, type and state.'); return }
+                    if (!form.school_name || !form.school_type || !form.state || !form.city) { setError('Please fill in school name, type, state and city.'); return }
+                    if (!form.address) { setError('Please enter the school address.'); return }
+                    if (!form.founded_year) { setError('Please enter the year the school was founded.'); return }
+                    if (!form.student_count) { setError('Please enter the approximate number of students.'); return }
                     setError(''); setStep(3)
                   }}
                   className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl transition-colors">Continue</button>
@@ -288,7 +292,7 @@ export default function SchoolRegisterPage() {
           {step === 3 && (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Curricula offered <span className="text-slate-400 font-normal">(select all that apply)</span></label>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Curricula offered <span className="text-slate-400 font-normal">(select at least one)</span></label>
                 <div className="flex flex-wrap gap-2">
                   {CURRICULA_OPTIONS.map(c => (
                     <button

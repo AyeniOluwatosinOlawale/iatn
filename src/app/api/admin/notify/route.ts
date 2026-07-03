@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+export const dynamic = 'force-dynamic'
 
 // Role labels for readable emails
 const ROLE_LABELS: Record<string, string> = {
@@ -19,6 +19,7 @@ function formatDate(iso: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY)
     // Validate webhook secret so only Supabase can call this
     const webhookSecret = process.env.ADMIN_WEBHOOK_SECRET
     if (webhookSecret) {

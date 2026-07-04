@@ -1,92 +1,40 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 
-interface DualVideoHeroProps {
-  leftVideo: string
-  rightVideo: string
-  overlay?: string
-  children: React.ReactNode
-  minHeight?: string
-  contentClassName?: string
-}
+export default function DualVideoHero({ src1, src2 }: { src1: string; src2: string }) {
+  const [active, setActive] = useState(0)
+  const ref0 = useRef<HTMLVideoElement>(null)
+  const ref1 = useRef<HTMLVideoElement>(null)
 
-export default function DualVideoHero({
-  leftVideo,
-  rightVideo,
-  overlay = 'rgba(15,52,96,0.72)',
-  children,
-  minHeight = '420px',
-  contentClassName = 'py-14 px-4',
-}: DualVideoHeroProps) {
-  const leftRef = useRef<HTMLVideoElement>(null)
-  const rightRef = useRef<HTMLVideoElement>(null)
+  const handleEnded0 = useCallback(() => {
+    ref1.current?.play()
+    setActive(1)
+  }, [])
 
-  useEffect(() => {
-    const play = (v: HTMLVideoElement | null) => {
-      if (!v) return
-      v.muted = true
-      v.play().catch(() => {})
-    }
-    play(leftRef.current)
-    play(rightRef.current)
+  const handleEnded1 = useCallback(() => {
+    ref0.current?.play()
+    setActive(0)
   }, [])
 
   return (
-    <div style={{ position: 'relative', minHeight, overflow: 'hidden', color: 'white' }}>
-      {/* Left video panel */}
+    <>
       <video
-        ref={leftRef}
-        src={leftVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '50%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-      {/* Right video panel */}
+        ref={ref0}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${active === 0 ? 'opacity-100' : 'opacity-0'}`}
+        muted playsInline autoPlay preload="auto" aria-hidden="true"
+        onEnded={handleEnded0}
+      >
+        <source src={src1} type="video/mp4" />
+      </video>
       <video
-        ref={rightRef}
-        src={rightVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          width: '50%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-
-      {/* Unified dark overlay — ties both panels into one cohesive background */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: overlay,
-          zIndex: 1,
-        }}
-      />
-
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 2 }} className={contentClassName}>
-        {children}
-      </div>
-    </div>
+        ref={ref1}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${active === 1 ? 'opacity-100' : 'opacity-0'}`}
+        muted playsInline preload="auto" aria-hidden="true"
+        onEnded={handleEnded1}
+      >
+        <source src={src2} type="video/mp4" />
+      </video>
+    </>
   )
 }

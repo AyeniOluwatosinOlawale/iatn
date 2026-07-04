@@ -1,77 +1,175 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { MessageSquare, Users, TrendingUp, ChevronRight, Heart, Eye, Pin, Star } from 'lucide-react'
+import { ChevronRight, Heart, Star, PenSquare, Lock, Loader2, Eye, EyeOff, AlertCircle, MessageSquare, Clock } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import DualVideoHero from '@/components/shared/DualVideoHero'
 
-const FORUMS = [
-  {
-    id: '1', name: 'IGCSE & O-Level Discussion', icon: '📘', color: 'bg-blue-50 border-blue-200',
-    description: 'Discuss IGCSE subjects, share past paper strategies, and get help from fellow students and tutors.',
-    posts: 1842, members: 6400, curriculum: 'IGCSE',
-    latest: { title: 'Best resources for IGCSE Chemistry Paper 6?', author: 'Chidi_Lagos', time: '2h ago', replies: 14 },
-  },
-  {
-    id: '2', name: 'Cambridge A-Level Hub', icon: '🎓', color: 'bg-indigo-50 border-indigo-200',
-    description: 'A-Level subject help, university predictions, and exam strategies for Cambridge AS & A2.',
-    posts: 2310, members: 8900, curriculum: 'A-Level',
-    latest: { title: 'A-Level Maths Further Pure 3 — anyone struggling with complex numbers?', author: 'MathsGeek_Abuja', time: '45min ago', replies: 27 },
-  },
-  {
-    id: '3', name: 'JAMB Preparation Corner', icon: '🏛️', color: 'bg-teal-50 border-teal-200',
-    description: 'Share JAMB past questions, discuss UTME strategies, and celebrate admissions success.',
-    posts: 5120, members: 18000, curriculum: 'JAMB',
-    latest: { title: 'JAMB 2026 registration — everything you need to know', author: 'ExamPro_NG', time: '1h ago', replies: 89 },
-  },
-  {
-    id: '4', name: 'WAEC & NECO Students', icon: '📚', color: 'bg-orange-50 border-orange-200',
-    description: 'WAEC and NECO exam prep, question discussions, and grade achievement stories.',
-    posts: 3760, members: 12400, curriculum: 'WAEC/NECO',
-    latest: { title: 'WAEC 2026 timetable is out — download link inside', author: 'SS3_Ready', time: '3h ago', replies: 156 },
-  },
-  {
-    id: '5', name: 'IB Diploma Students', icon: '🌍', color: 'bg-purple-50 border-purple-200',
-    description: 'IB Internal Assessments, Extended Essay tips, TOK discussions, and CAS ideas.',
-    posts: 980, members: 2100, curriculum: 'IB',
-    latest: { title: 'My EE topic got approved — tips for IB History HL EE', author: 'IBStudent_PHC', time: '5h ago', replies: 19 },
-  },
-  {
-    id: '6', name: 'SAT & US University Admissions', icon: '🇺🇸', color: 'bg-rose-50 border-rose-200',
-    description: 'SAT prep strategies, US college application help, Common App, and scholarship discussions.',
-    posts: 1240, members: 3800, curriculum: 'SAT',
-    latest: { title: 'Got into UCLA on scholarship — here\'s my full application story', author: 'NigerianInAmerica', time: '1d ago', replies: 203 },
-  },
-]
-
-const TRENDING = [
-  { id: '1', title: 'CAIE outstanding learner award — how to qualify', curriculum: 'A-Level', replies: 341, views: 8920, pinned: true },
-  { id: '2', title: 'Complete JAMB 2026 subject combination guide for all courses', curriculum: 'JAMB', replies: 289, views: 14200, pinned: true },
-  { id: '3', title: 'WAEC vs NECO — which is better for Nigerian university admissions?', curriculum: 'WAEC', replies: 215, views: 6700, pinned: false },
-  { id: '4', title: 'How I scored A* in IGCSE Maths without a tutor', curriculum: 'IGCSE', replies: 178, views: 9100, pinned: false },
-  { id: '5', title: 'Best A-Level tutor on Nexora — share your recommendations', curriculum: 'A-Level', replies: 134, views: 4500, pinned: false },
-]
-
-const CURRICULUM_COLORS: Record<string, string> = {
-  'A-Level': 'bg-indigo-100 text-indigo-700',
-  'IGCSE': 'bg-blue-100 text-blue-700',
-  'JAMB': 'bg-teal-100 text-teal-700',
-  'WAEC': 'bg-orange-100 text-orange-700',
-  'NECO': 'bg-lime-100 text-lime-700',
-  'IB': 'bg-purple-100 text-purple-700',
-  'SAT': 'bg-rose-100 text-rose-700',
+// ─── Types ─────────────────────────────────────────────────────────────────
+type PostRow = {
+  id: string
+  author_name: string | null
+  title: string
+  body: string
+  subject: string | null
+  curriculum: string | null
+  reply_count: number
+  created_at: string
 }
 
-export default function CommunityPage() {
+// ─── Helpers ───────────────────────────────────────────────────────────────
+const CURRICULUM_COLORS: Record<string, string> = {
+  igcse: 'bg-blue-100 text-blue-700',
+  a_level: 'bg-indigo-100 text-indigo-700',
+  edexcel: 'bg-emerald-100 text-emerald-700',
+  ib: 'bg-purple-100 text-purple-700',
+  jamb: 'bg-teal-100 text-teal-700',
+  neco: 'bg-orange-100 text-orange-700',
+  sat: 'bg-rose-100 text-rose-700',
+  oxfordaqa: 'bg-amber-100 text-amber-700',
+}
+
+const CURRICULUM_LABELS: Record<string, string> = {
+  igcse: 'IGCSE', a_level: 'A-Level', edexcel: 'Edexcel',
+  ib: 'IB', jamb: 'JAMB', neco: 'WAEC/NECO', sat: 'SAT', oxfordaqa: 'OxfordAQA',
+}
+
+const FILTERS = ['All', 'IGCSE', 'A-Level', 'JAMB', 'WAEC/NECO', 'IB', 'SAT']
+
+function timeAgo(ts: string) {
+  const diff = Math.floor((Date.now() - new Date(ts).getTime()) / 1000)
+  if (diff < 60) return 'just now'
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
+  return `${Math.floor(diff / 86400)}d ago`
+}
+
+const BADGES = ['🏆', '🥈', '🥉', '⭐', '⭐']
+
+// ─── Auth Gate ──────────────────────────────────────────────────────────────
+function CommunityGate({ onSuccess }: { onSuccess: () => void }) {
+  const [email,    setEmail]    = useState('')
+  const [password, setPassword] = useState('')
+  const [showPw,   setShowPw]   = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState('')
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/auth/check-ai-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Access denied.')
+      onSuccess()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-sm w-full">
+        <div className="text-center mb-6">
+          <div className="w-14 h-14 nexora-gradient rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7 text-white" />
+          </div>
+          <h2 className="text-xl font-black text-slate-900">Sign in to join Community</h2>
+          <p className="text-slate-500 text-sm mt-1">Available to registered students, tutors, parents and schools.</p>
+        </div>
+
+        {error && (
+          <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2.5 rounded-xl mb-4">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+            <input
+              type="email" value={email} onChange={e => setEmail(e.target.value)} required
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+            <div className="relative">
+              <input
+                type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
+                className="w-full px-4 py-3 pr-11 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                placeholder="Your password"
+              />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+          <button
+            type="submit" disabled={loading}
+            className="w-full nexora-gradient text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading ? 'Verifying...' : 'Sign In & Enter Community'}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-slate-500 mt-5">
+          No account?{' '}
+          <Link href="/register" className="font-semibold text-[#0f3460] hover:underline">Create one free</Link>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// ─── Community Content ──────────────────────────────────────────────────────
+function CommunityContent() {
+  const [posts,      setPosts]      = useState<PostRow[]>([])
+  const [loading,    setLoading]    = useState(true)
+  const [filter,     setFilter]     = useState('All')
+
+  useEffect(() => {
+    fetch('/api/community/posts')
+      .then(r => r.json())
+      .then(d => { setPosts(d.posts ?? []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
+
+  const filtered = filter === 'All' ? posts : posts.filter(p => {
+    const label = CURRICULUM_LABELS[p.curriculum ?? ''] ?? ''
+    return label === filter || (filter === 'WAEC/NECO' && (label === 'WAEC/NECO'))
+  })
+
+  const contributorMap: Record<string, number> = {}
+  for (const p of posts) {
+    if (p.author_name) contributorMap[p.author_name] = (contributorMap[p.author_name] ?? 0) + 1
+  }
+  const contributors = Object.entries(contributorMap)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+
+  return (
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
 
       {/* Hero */}
-      <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/3255777/3255777-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/5212703/5212703-hd_1920_1080_25fps.mp4"
-      >
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden nexora-gradient text-white py-14 px-4">
+        <DualVideoHero src1="/videos/hero-community2.mp4" src2="/videos/hero-community.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -79,147 +177,116 @@ export default function CommunityPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-black mb-3">Nexora Community</h1>
           <p className="text-white/75 max-w-xl mb-6">
-            Join thousands of Nigerian students, parents, and tutors. Discuss exams, share resources, celebrate results, and support each other.
+            Join Nigerian students, parents, and tutors. Discuss exams, share resources, celebrate results, and support each other.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link href="/register" className="bg-white text-[#0f3460] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-colors inline-flex items-center gap-2">
-              <Users className="w-4 h-4" /> Join the Community
-            </Link>
-            <Link href="/login" className="bg-white/10 border border-white/30 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors">
-              Sign In to Post
-            </Link>
-          </div>
-        </div>
-      </DualVideoHero>
-
-      {/* Stats */}
-      <div className="bg-[#0f3460] py-8 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-          {[
-            { value: '52,000+', label: 'Community Members' },
-            { value: '15,000+', label: 'Forum Posts' },
-            { value: '6', label: 'Subject Forums' },
-            { value: '24/7', label: 'Active Discussions' },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="text-2xl font-black text-white">{s.value}</div>
-              <div className="text-xs text-white/60 mt-1">{s.label}</div>
-            </div>
-          ))}
+          <Link
+            href="/community/new"
+            className="bg-white text-[#0f3460] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-colors inline-flex items-center gap-2"
+          >
+            <PenSquare className="w-4 h-4" /> Start a Discussion
+          </Link>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* Forums list */}
-          <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-xl font-black text-slate-900 mb-5">Discussion Forums</h2>
-
-            {FORUMS.map((forum) => (
-              <Link key={forum.id} href="/login" className={`block border rounded-2xl p-5 hover:shadow-md transition-all group ${forum.color}`}>
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl flex-shrink-0">{forum.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <h3 className="font-black text-slate-900 group-hover:text-[#0f3460] transition-colors">{forum.name}</h3>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${CURRICULUM_COLORS[forum.curriculum] ?? 'bg-slate-100 text-slate-700'}`}>
-                        {forum.curriculum}
-                      </span>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-3">{forum.description}</p>
-
-                    {/* Latest post */}
-                    <div className="bg-white/70 rounded-xl p-3 mb-3">
-                      <div className="text-xs text-slate-500 mb-0.5">Latest post</div>
-                      <div className="text-sm font-semibold text-slate-800 truncate">{forum.latest.title}</div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                        <span>by {forum.latest.author}</span>
-                        <span>·</span>
-                        <span>{forum.latest.time}</span>
-                        <span>·</span>
-                        <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" />{forum.latest.replies} replies</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-xs text-slate-500">
-                      <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" />{forum.posts.toLocaleString()} posts</span>
-                      <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{forum.members.toLocaleString()} members</span>
-                    </div>
-                  </div>
-                </div>
+          {/* Posts feed */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-black text-slate-900">Recent Discussions</h2>
+              <Link
+                href="/community/new"
+                className="nexora-gradient text-white font-semibold text-sm px-4 py-2 rounded-xl hover:opacity-90 inline-flex items-center gap-1.5"
+              >
+                <PenSquare className="w-3.5 h-3.5" /> New Post
               </Link>
-            ))}
-          </div>
+            </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Trending */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-[#0f3460]" />
-                <h3 className="font-black text-slate-900">Trending Discussions</h3>
+            {/* Filter pills */}
+            <div className="flex flex-wrap gap-2 mb-5">
+              {FILTERS.map(f => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${filter === f ? 'nexora-gradient text-white border-transparent' : 'border-slate-200 text-slate-600 hover:border-[#0f3460]'}`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+
+            {loading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="w-8 h-8 text-[#0f3460] animate-spin" />
               </div>
-              <div className="space-y-3">
-                {TRENDING.map((post) => (
-                  <Link key={post.id} href="/login" className="block group">
-                    <div className="flex items-start gap-2">
-                      {post.pinned && <Pin className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-800 group-hover:text-[#0f3460] transition-colors leading-snug line-clamp-2">{post.title}</p>
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                          <span className={`font-bold px-1.5 py-0.5 rounded ${CURRICULUM_COLORS[post.curriculum] ?? 'bg-slate-100 text-slate-600'}`}>{post.curriculum}</span>
-                          <span className="flex items-center gap-0.5"><Eye className="w-3 h-3" />{post.views.toLocaleString()}</span>
-                          <span className="flex items-center gap-0.5"><MessageSquare className="w-3 h-3" />{post.replies}</span>
-                        </div>
-                      </div>
+            ) : filtered.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+                <MessageSquare className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <p className="text-slate-500 font-semibold mb-3">
+                  {posts.length === 0 ? 'No discussions yet — be the first!' : 'No posts in this category yet.'}
+                </p>
+                <Link href="/community/new" className="inline-block nexora-gradient text-white font-bold px-6 py-2.5 rounded-xl hover:opacity-90">
+                  Start the first discussion
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filtered.map(post => (
+                  <Link key={post.id} href={`/community/${post.id}`} className="block bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#0f3460] hover:shadow-md transition-all group">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-bold text-slate-900 group-hover:text-[#0f3460] transition-colors leading-snug">{post.title}</h3>
+                      {post.curriculum && (
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${CURRICULUM_COLORS[post.curriculum] ?? 'bg-slate-100 text-slate-600'}`}>
+                          {CURRICULUM_LABELS[post.curriculum] ?? post.curriculum}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-slate-500 leading-relaxed mb-3 line-clamp-2">{post.body.slice(0, 120)}{post.body.length > 120 ? '…' : ''}</p>
+                    <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <span className="font-medium text-slate-600">{post.author_name ?? 'Anonymous'}</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgo(post.created_at)}</span>
+                      <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" />{post.reply_count} {post.reply_count === 1 ? 'reply' : 'replies'}</span>
                     </div>
                   </Link>
                 ))}
               </div>
-            </div>
+            )}
+          </div>
 
-            {/* Leaderboard */}
+          {/* Sidebar */}
+          <div className="space-y-6">
             <div className="bg-white border border-slate-200 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Star className="w-5 h-5 text-amber-400" />
                 <h3 className="font-black text-slate-900">Top Contributors</h3>
               </div>
-              <div className="space-y-3">
-                {[
-                  { name: 'ExamPro_NG', posts: 412, badge: '🏆' },
-                  { name: 'MathsGeek_Abuja', posts: 287, badge: '🥈' },
-                  { name: 'IBStudent_PHC', posts: 234, badge: '🥉' },
-                  { name: 'SS3_Ready', posts: 198, badge: '⭐' },
-                  { name: 'NigerianInAmerica', posts: 176, badge: '⭐' },
-                ].map((user) => (
-                  <div key={user.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">{user.badge}</span>
-                      <div className="w-7 h-7 rounded-full nexora-gradient flex items-center justify-center text-white text-xs font-bold">
-                        {user.name[0]}
+              {contributors.length === 0 ? (
+                <p className="text-sm text-slate-500">No contributors yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {contributors.map((u, i) => (
+                    <div key={u.name} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{BADGES[i] ?? '⭐'}</span>
+                        <div className="w-7 h-7 rounded-full nexora-gradient flex items-center justify-center text-white text-xs font-bold">
+                          {u.name[0]?.toUpperCase()}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-800">{u.name}</span>
                       </div>
-                      <span className="text-sm font-semibold text-slate-800">{user.name}</span>
+                      <span className="text-xs text-slate-500">{u.count} posts</span>
                     </div>
-                    <span className="text-xs text-slate-500">{user.posts} posts</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Community rules */}
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
               <h3 className="font-black text-slate-900 mb-3 flex items-center gap-2">
                 <Heart className="w-4 h-4 text-amber-500" /> Community Rules
               </h3>
               <ul className="space-y-1.5 text-xs text-slate-700">
-                {[
-                  'Be respectful and supportive',
-                  'No spamming or self-promotion',
-                  'Share verified exam information only',
-                  'Help others — you were a student once too',
-                  'Report inappropriate content',
-                ].map((rule) => (
+                {['Be respectful and supportive', 'No spamming or self-promotion', 'Share verified exam information only', 'Help others — you were a student once too', 'Report inappropriate content'].map(rule => (
                   <li key={rule} className="flex items-start gap-1.5">
                     <span className="text-amber-500 mt-0.5">•</span> {rule}
                   </li>
@@ -233,4 +300,30 @@ export default function CommunityPage() {
       <Footer />
     </div>
   )
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────
+export default function CommunityPage() {
+  const [authed, setAuthed] = useState(false)
+  const [checking, setChecking] = useState(true)
+  useEffect(() => {
+    if (sessionStorage.getItem('nx-admin-session') === 'true') {
+      setAuthed(true)
+      setChecking(false)
+      return
+    }
+    fetch('/api/auth/session-check')
+      .then(r => r.json())
+      .then(d => { if (d.ok) setAuthed(true) })
+      .finally(() => setChecking(false))
+  }, [])
+
+  if (checking) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <Loader2 className="w-8 h-8 text-[#0f3460] animate-spin" />
+    </div>
+  )
+
+  if (!authed) return <CommunityGate onSuccess={() => setAuthed(true)} />
+  return <CommunityContent />
 }

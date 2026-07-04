@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 import {
   BookOpen, Download, FileText, ChevronRight, Search, Star,
   ExternalLink, Upload, Filter, X, Globe, Award, Play,
@@ -10,7 +11,6 @@ import {
 } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import DualVideoHero from '@/components/shared/DualVideoHero'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -345,11 +345,10 @@ export default function ResourcesPage() {
       <Navbar />
 
       {/* Hero */}
-      <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/4116598/4116598-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/7988010/7988010-hd_1920_1080_25fps.mp4"
-      >
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden nexora-gradient text-white py-14 px-4">
+        <DualVideoHero src1="/videos/hero-resources2.mp4" src2="/videos/hero-resources.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -389,7 +388,7 @@ export default function ResourcesPage() {
             </button>
           </div>
         </div>
-      </DualVideoHero>
+      </div>
 
       {/* Stats */}
       <div className="bg-[#0f3460] py-8 px-4">

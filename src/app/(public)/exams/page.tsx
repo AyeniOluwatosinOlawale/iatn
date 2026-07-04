@@ -332,11 +332,10 @@ export default function ExamsPage() {
       <Navbar />
 
       {/* Hero */}
-      <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/3196588/3196588-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/8850285/8850285-hd_1920_1080_25fps.mp4"
-      >
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden nexora-gradient text-white py-14 px-4">
+        <DualVideoHero src1="/videos/hero-exams2.mp4" src2="/videos/hero-exams.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -362,7 +361,7 @@ export default function ExamsPage() {
             ))}
           </div>
         </div>
-      </DualVideoHero>
+      </div>
 
       {/* Exam cards */}
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { GraduationCap, MapPin, Star, ChevronRight, BookOpen, ExternalLink, Search, Filter, X, CheckCircle } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
@@ -712,21 +712,49 @@ const TYPE_COLORS: Record<string, string> = {
 const COUNTRIES = ['All', 'Nigeria', 'United Kingdom', 'United States', 'Canada', 'Australia', 'Ireland']
 const TYPES = ['All', 'Federal', 'Private', 'International']
 
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  )
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+  return dp[m][n]
+}
+
+function fuzzyMatch(target: string, query: string): boolean {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const t = target.toLowerCase()
+  return words.every(w => {
+    if (t.includes(w)) return true
+    if (w.length >= 4) return t.split(/[\s(),/-]+/).some(tw => levenshtein(w, tw) <= 1)
+    return false
+  })
+}
+
 export default function UniversitiesPage() {
   const [query, setQuery] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('All')
   const [selectedType, setSelectedType] = useState('All')
   const [selectedCurriculum, setSelectedCurriculum] = useState('All')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const resultsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (query) {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [query])
 
   const filtered = useMemo(() => {
-    const q = query.toLowerCase()
     return UNIVERSITIES.filter(u => {
-      if (q && !u.name.toLowerCase().includes(q) &&
-        !u.location.toLowerCase().includes(q) &&
-        !u.country.toLowerCase().includes(q) &&
-        !u.notable_programmes.some(p => p.toLowerCase().includes(q)) &&
-        !u.about.toLowerCase().includes(q)) return false
+      if (query) {
+        const allText = `${u.name} ${u.location} ${u.country} ${u.notable_programmes.join(' ')} ${u.about}`
+        if (!fuzzyMatch(allText, query)) return false
+      }
       if (selectedCountry !== 'All' && u.country !== selectedCountry) return false
       if (selectedType !== 'All' && u.type !== selectedType) return false
       if (selectedCurriculum !== 'All' && !u.accepts.includes(selectedCurriculum)) return false
@@ -747,34 +775,52 @@ export default function UniversitiesPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      {/* Hero */}
-      <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/5878524/5878524-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/6238297/6238297-hd_1920_1080_25fps.mp4"
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">Universities</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black mb-3">University Guide</h1>
-          <p className="text-white/75 max-w-xl mb-6">
-            Official entry requirements for Nigerian and international universities — A-Level grades, JAMB cutoffs, IGCSE requirements, and direct links to each admissions page.
-          </p>
-          <div className="bg-white rounded-xl p-2 flex gap-2 max-w-xl">
-            <div className="flex-1 flex items-center gap-3 px-3">
-              <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
-              <input
-                type="text" value={query} onChange={e => setQuery(e.target.value)}
-                placeholder="Search any university, city, or programme..."
-                className="flex-1 text-sm text-slate-800 outline-none placeholder:text-slate-400 bg-transparent"
-              />
-              {query && <button onClick={() => setQuery('')}><X className="w-4 h-4 text-slate-400 hover:text-slate-600" /></button>}
+      {/* Hero — Video Background */}
+      <div className="relative min-h-[560px] flex items-center nexora-gradient overflow-hidden">
+
+        {/* Background video */}
+        <DualVideoHero src1="/videos/hero-universities2.mp4" src2="/videos/hero-universities.mp4" />
+
+        {/* Dark overlay — keeps text readable */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }}
+          aria-hidden="true"
+        />
+
+        {/* Content */}
+        <div className="relative z-10 w-full px-4 py-16 sm:py-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span className="text-white">Universities</span>
             </div>
+            <h1 className="text-3xl sm:text-4xl font-black mb-3 text-white">University Guide</h1>
+            <p className="text-white/80 max-w-xl mb-6">
+              Official entry requirements for Nigerian and international universities — A-Level grades, JAMB cutoffs, IGCSE requirements, and direct links to each admissions page.
+            </p>
+            <div className="bg-white rounded-xl p-2 flex gap-2 max-w-xl shadow-lg">
+              <div className="flex-1 flex items-center gap-3 px-3">
+                <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <input
+                  type="text" value={query} onChange={e => setQuery(e.target.value)}
+                  placeholder="Search any university, city, or programme..."
+                  className="flex-1 text-sm text-slate-800 outline-none placeholder:text-slate-400 bg-transparent"
+                />
+                {query && <button onClick={() => setQuery('')}><X className="w-4 h-4 text-slate-400 hover:text-slate-600" /></button>}
+              </div>
+            </div>
+            {query && (
+              <p className="text-white/70 text-sm mt-3">
+                {filtered.length === 0
+                  ? `No results for "${query}"`
+                  : `${filtered.length} result${filtered.length !== 1 ? 's' : ''} for "${query}" — scroll down to see`}
+              </p>
+            )}
           </div>
         </div>
-      </DualVideoHero>
+      </div>
 
       {/* Stats */}
       <div className="bg-[#0f3460] py-8 px-4">
@@ -822,7 +868,7 @@ export default function UniversitiesPage() {
       </div>
 
       {/* List */}
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-4">
+      <div ref={resultsRef} className="max-w-6xl mx-auto px-4 py-10 space-y-4">
         {filtered.length === 0 && (
           <div className="text-center py-20">
             <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />

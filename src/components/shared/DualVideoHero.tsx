@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface DualVideoHeroProps {
   leftVideo: string
@@ -19,77 +19,61 @@ export default function DualVideoHero({
   minHeight = '420px',
   contentClassName = 'py-14 px-4',
 }: DualVideoHeroProps) {
-  const aRef = useRef<HTMLVideoElement>(null)
-  const bRef = useRef<HTMLVideoElement>(null)
-  const [active, setActive] = useState<'a' | 'b'>('a')
+  const leftRef = useRef<HTMLVideoElement>(null)
+  const rightRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    const a = aRef.current
-    const b = bRef.current
-    if (!a || !b) return
-
-    a.muted = true
-    b.muted = true
-
-    function onAEnd() {
-      b.currentTime = 0
-      b.play().catch(() => {})
-      setActive('b')
+    const play = (v: HTMLVideoElement | null) => {
+      if (!v) return
+      v.muted = true
+      v.play().catch(() => {})
     }
-    function onBEnd() {
-      a.currentTime = 0
-      a.play().catch(() => {})
-      setActive('a')
-    }
-
-    a.addEventListener('ended', onAEnd)
-    b.addEventListener('ended', onBEnd)
-    a.play().catch(() => {})
-
-    return () => {
-      a.removeEventListener('ended', onAEnd)
-      b.removeEventListener('ended', onBEnd)
-    }
+    play(leftRef.current)
+    play(rightRef.current)
   }, [])
 
   return (
     <div style={{ position: 'relative', minHeight, overflow: 'hidden', color: 'white' }}>
-      {/* Video A */}
+      {/* Left video panel */}
       <video
-        ref={aRef}
+        ref={leftRef}
         src={leftVideo}
+        autoPlay
         muted
+        loop
         playsInline
         preload="auto"
         style={{
           position: 'absolute',
-          inset: 0,
-          width: '100%',
+          top: 0,
+          left: 0,
+          width: '50%',
           height: '100%',
           objectFit: 'cover',
-          opacity: active === 'a' ? 1 : 0,
-          transition: 'opacity 1.2s ease',
+          display: 'block',
         }}
       />
-      {/* Video B — hidden until A ends */}
+      {/* Right video panel */}
       <video
-        ref={bRef}
+        ref={rightRef}
         src={rightVideo}
+        autoPlay
         muted
+        loop
         playsInline
         preload="auto"
         style={{
           position: 'absolute',
-          inset: 0,
-          width: '100%',
+          top: 0,
+          left: '50%',
+          width: '50%',
           height: '100%',
           objectFit: 'cover',
-          opacity: active === 'b' ? 1 : 0,
-          transition: 'opacity 1.2s ease',
+          display: 'block',
         }}
       />
 
-      {/* Overlay */}
+      {/* Unified dark overlay — ties both panels into one cohesive background */}
       <div
         style={{
           position: 'absolute',

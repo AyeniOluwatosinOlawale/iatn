@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, MapPin, Star, Users, CheckCircle2, SlidersHorizontal, ChevronRight, Building2, Award, X } from 'lucide-react'
 import { NIGERIAN_STATES } from '@/lib/utils'
 import DualVideoHero from '@/components/shared/DualVideoHero'
@@ -252,8 +253,7 @@ export default function SchoolsClient({ schools }: { schools: SchoolRow[] }) {
                   >
                     <div className="flex gap-4">
                       {school.logo_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={school.logo_url} alt={school.school_name} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                        <Image src={school.logo_url} alt={school.school_name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
                       ) : (
                         <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 text-white font-bold text-lg" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
                           {getInitials(school.school_name)}

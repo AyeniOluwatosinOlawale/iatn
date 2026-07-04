@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, SlidersHorizontal, MapPin, Star, Clock, CheckCircle2, Award, X } from 'lucide-react'
 import { CURRICULA, SUBJECTS, NIGERIAN_STATES } from '@/lib/utils'
 import DualVideoHero from '@/components/shared/DualVideoHero'
@@ -206,8 +207,7 @@ export default function TutorsClient({ tutors }: { tutors: any[] }) {
                     className="block bg-white border border-slate-200 rounded-2xl p-5 hover:border-[#0f3460] hover:shadow-md transition-all group">
                     <div className="flex gap-4">
                       {tutor.photo_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={tutor.photo_url} alt={tutor.full_name} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                        <Image src={tutor.photo_url} alt={tutor.full_name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
                       ) : (
                         <div className="w-16 h-16 rounded-xl nexora-gradient flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
                           {tutor.full_name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}

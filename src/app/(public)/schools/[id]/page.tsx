@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { MapPin, Star, Users, BookOpen, CheckCircle2, Award, ArrowLeft, Phone, Mail, Globe, Calendar, Building2, GraduationCap, ChevronRight } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
@@ -80,8 +81,7 @@ export default async function SchoolProfilePage({ params }: { params: Promise<{ 
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {school.logo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={school.logo_url} alt={school.school_name} className="w-24 h-24 rounded-2xl object-cover flex-shrink-0" />
+              <Image src={school.logo_url} alt={school.school_name} width={96} height={96} className="w-24 h-24 rounded-2xl object-cover flex-shrink-0" />
             ) : (
               <div className="w-24 h-24 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl font-black text-white" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
                 {initials}
@@ -213,8 +213,7 @@ export default async function SchoolProfilePage({ params }: { params: Promise<{ 
           {/* CTA card */}
           <div className="bg-white rounded-2xl border-2 border-[#533483] p-6 text-center sticky top-24">
             {school.logo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={school.logo_url} alt={school.school_name} className="w-16 h-16 rounded-2xl object-cover mx-auto mb-4" />
+              <Image src={school.logo_url} alt={school.school_name} width={64} height={64} className="w-16 h-16 rounded-2xl object-cover mx-auto mb-4" />
             ) : (
               <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-black text-white mx-auto mb-4" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
                 {initials}

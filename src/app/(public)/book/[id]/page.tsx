@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound, redirect } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
@@ -55,8 +56,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
               <div className="flex items-center gap-4 mb-5">
                 {tutor.photo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={tutor.photo_url} alt={tutor.full_name} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                  <Image src={tutor.photo_url} alt={tutor.full_name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
                 ) : (
                   <div className="w-16 h-16 rounded-xl nexora-gradient flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                     {initials}

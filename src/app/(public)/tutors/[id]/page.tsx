@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
@@ -92,8 +93,7 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
             <div className="bg-white rounded-2xl border border-slate-200 p-6">
               <div className="flex gap-5">
                 {t.photo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={t.photo_url} alt={t.full_name} className="w-20 h-20 rounded-2xl object-cover flex-shrink-0" />
+                  <Image src={t.photo_url} alt={t.full_name} width={80} height={80} className="w-20 h-20 rounded-2xl object-cover flex-shrink-0" />
                 ) : (
                   <div className="w-20 h-20 rounded-2xl nexora-gradient flex items-center justify-center text-white font-black text-2xl flex-shrink-0">
                     {t.full_name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}

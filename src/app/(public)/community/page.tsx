@@ -68,8 +68,8 @@ export default function CommunityPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-        rightVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+        leftVideo="/videos/v3.mp4"
+        rightVideo="/videos/v4.mp4"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">

@@ -151,13 +151,23 @@ export default function TutorRegistrationPage() {
         tools: form.tools,
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: tutorError } = await (supabase as any).from('tutors').insert(tutorPayload)
+      const { data: tutorRow, error: tutorError } = await (supabase as any).from('tutors').insert(tutorPayload).select('id').single()
 
       if (tutorError) {
         const detail = tutorError.message || tutorError.details || JSON.stringify(tutorError)
         console.error('Tutors table insert failed:', detail)
-        // Still let the user through — their auth account is created
-        // Profile data will need to be set up later
+      }
+
+      // Save subjects to tutor_subjects table
+      if (tutorRow?.id && form.subjects.length > 0) {
+        const subjectRows = form.subjects.map((s: { subject: string; curriculum: string; proficiency: string }) => ({
+          tutor_id: tutorRow.id,
+          subject: s.subject,
+          curriculum: s.curriculum,
+          proficiency_level: s.proficiency,
+        }))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('tutor_subjects').insert(subjectRows)
       }
 
       fetch('/api/admin/notify', {

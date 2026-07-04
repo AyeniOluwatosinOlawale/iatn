@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Search, SlidersHorizontal, MapPin, Star, Clock, CheckCircle2, Award, X } from 'lucide-react'
 import { CURRICULA, SUBJECTS, NIGERIAN_STATES } from '@/lib/utils'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 const badgeColors: Record<string, string> = {
   verified_tutor:        'badge-verified',
@@ -84,8 +85,10 @@ export default function TutorsClient({ tutors }: { tutors: any[] }) {
   return (
     <>
       {/* Search header */}
-      <div className="nexora-gradient text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden nexora-gradient text-white py-12 px-4">
+        <DualVideoHero src1="/videos/hero-tutors2.mp4" src2="/videos/hero-tutors.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <h1 className="text-3xl font-black mb-2">Find Your Tutor</h1>
           <p className="text-white/70 mb-6">Verified IGCSE, A-Level, IB, WAEC, JAMB and SAT tutors across Nigeria</p>
           <div className="bg-white rounded-xl p-2 flex flex-col sm:flex-row gap-2 max-w-3xl">
@@ -261,9 +264,6 @@ export default function TutorsClient({ tutors }: { tutors: any[] }) {
                             <span className="flex items-center gap-1">
                               <Award className="w-3.5 h-3.5 text-amber-500" /> Trial lesson available
                             </span>
-                          )}
-                          {tutor.hourly_rate_ngn > 0 && (
-                            <span className="font-semibold text-[#0f3460]">₦{Number(tutor.hourly_rate_ngn).toLocaleString()}/hr</span>
                           )}
                         </div>
                       </div>

@@ -240,8 +240,16 @@ export default function AITutorPage() {
   const subjectList  = SUBJECTS[curriculum] || SUBJECTS['Cambridge A-Level']
 
   useEffect(() => {
-    // Always require explicit login for AI Tutor — no session bypass
-    setAuthChecked(true)
+    // Admin session (hardcoded-password admin dashboard sets this flag)
+    if (sessionStorage.getItem('nx-admin-session') === 'true') {
+      setAuthed(true)
+      setAuthChecked(true)
+      return
+    }
+    fetch('/api/auth/session-check')
+      .then(r => r.json())
+      .then(d => { if (d.ok) setAuthed(true) })
+      .finally(() => setAuthChecked(true))
   }, [])
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])

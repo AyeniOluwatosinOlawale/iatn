@@ -256,12 +256,6 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="sticky top-20 space-y-4">
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                {t.hourly_rate_ngn && (
-                  <div className="text-center mb-4">
-                    <span className="text-2xl font-black text-[#0f3460]">₦{Number(t.hourly_rate_ngn).toLocaleString()}</span>
-                    <span className="text-slate-500 text-sm"> / hour</span>
-                  </div>
-                )}
                 <div className="space-y-3 mb-5 text-sm">
                   {t.response_time_hours && (
                     <div className="flex justify-between">

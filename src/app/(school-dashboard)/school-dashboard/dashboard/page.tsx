@@ -81,7 +81,7 @@ export default async function SchoolDashboardPage({
             <div>
               <div className="text-sm font-bold text-amber-800">Profile under review</div>
               <div className="text-xs text-amber-700 mt-0.5">
-                Our team is verifying your school. You will receive your Nexora School Registration Number within 2–3 business days.
+                Our team is reviewing your school profile. You will receive an email once verified. This usually takes 24–48 hours.
               </div>
             </div>
           </div>

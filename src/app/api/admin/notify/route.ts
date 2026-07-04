@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
     }
 
     const welcomeMessages: Record<string, string> = {
-      Tutor:   'Your tutor profile is under review. Once verified, you\'ll receive your official Nexora registration number and start appearing in search results.',
-      School:  'Your school profile is under review. Our team will issue your Nexora School Registration Number within 2–3 business days.',
+      Tutor:   'Your tutor profile is under review. You will receive an email once verified — this usually takes 24–48 hours. Once approved, you\'ll appear in search results.',
+      School:  'Your school profile is under review. You will receive an email once verified — this usually takes 24–48 hours. Once approved, your school will be listed in our directory.',
       Student: 'You can now search for tutors, book lessons, and access study resources. Verify your email to unlock your full dashboard.',
       Parent:  'You can now search for tutors and schools for your child, and monitor their learning progress. Verify your email to get started.',
     }

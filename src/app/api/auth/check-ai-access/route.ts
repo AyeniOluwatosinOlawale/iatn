@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
-const ALLOWED_ROLES = ['student', 'tutor', 'parent', 'school']
+const ALLOWED_ROLES = ['student', 'tutor', 'parent', 'school', 'admin']
 
 export async function POST(req: NextRequest) {
   try {

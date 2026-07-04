@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Search, MapPin, Star, Users, CheckCircle2, SlidersHorizontal, ChevronRight, Building2, Award, X } from 'lucide-react'
 import { NIGERIAN_STATES } from '@/lib/utils'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 export interface SchoolRow {
   id: string
@@ -104,8 +105,10 @@ export default function SchoolsClient({ schools }: { schools: SchoolRow[] }) {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <div className="text-white py-14 px-4" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden text-white py-14 px-4" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
+        <DualVideoHero src1="/videos/hero-schools2.mp4" src2="/videos/hero-schools.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(83,52,131,0.80) 0%, rgba(15,52,96,0.80) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />

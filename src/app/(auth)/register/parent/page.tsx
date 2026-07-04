@@ -54,7 +54,13 @@ export default function ParentRegisterPage() {
         },
       })
 
-      if (authError) throw new Error(`Account creation failed: ${authError.message}`)
+      if (authError) {
+        const msg = authError.message.toLowerCase()
+        if (msg.includes('already registered') || msg.includes('already exists') || msg.includes('email already')) {
+          throw new Error('An account with this email already exists. Please sign in instead.')
+        }
+        throw new Error(`Account creation failed: ${authError.message}`)
+      }
 
       if (authData.user) {
         fetch('/api/profiles/create', {
@@ -126,7 +132,12 @@ export default function ParentRegisterPage() {
           {error && (
             <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-              <span>{error}</span>
+              <span>
+                {error}
+                {error.includes('already exists') && (
+                  <> <Link href="/login" className="font-semibold underline">Sign in here.</Link></>
+                )}
+              </span>
             </div>
           )}
 

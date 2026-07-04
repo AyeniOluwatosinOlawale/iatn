@@ -305,6 +305,24 @@ function CommunityContent() {
 // ─── Page ───────────────────────────────────────────────────────────────────
 export default function CommunityPage() {
   const [authed, setAuthed] = useState(false)
+  const [checking, setChecking] = useState(true)
+  useEffect(() => {
+    if (sessionStorage.getItem('nx-admin-session') === 'true') {
+      setAuthed(true)
+      setChecking(false)
+      return
+    }
+    fetch('/api/auth/session-check')
+      .then(r => r.json())
+      .then(d => { if (d.ok) setAuthed(true) })
+      .finally(() => setChecking(false))
+  }, [])
+
+  if (checking) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <Loader2 className="w-8 h-8 text-[#0f3460] animate-spin" />
+    </div>
+  )
 
   if (!authed) return <CommunityGate onSuccess={() => setAuthed(true)} />
   return <CommunityContent />

@@ -17,7 +17,7 @@ export async function GET() {
 
     const { data: tutors, error } = await supabase
       .from('tutors')
-      .select('id, full_name, email, phone, city, state, bio, years_experience, teaching_mode, current_institution, is_verified, verification_status, registration_number, created_at')
+      .select('id, user_id, full_name, email, phone, city, state, bio, years_experience, teaching_mode, current_institution, is_verified, verification_status, registration_number, created_at')
       .order('created_at', { ascending: false })
 
     if (error) throw error

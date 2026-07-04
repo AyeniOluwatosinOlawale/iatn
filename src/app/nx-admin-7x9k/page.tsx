@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Users, GraduationCap, School, BookOpen, TrendingUp, RefreshCw, LogOut, Shield, Eye, CheckCircle2, Clock, ChevronDown, ChevronUp, MapPin, Phone, Mail } from 'lucide-react'
+import { Users, GraduationCap, School, BookOpen, TrendingUp, RefreshCw, LogOut, Shield, Eye, CheckCircle2, Clock, ChevronDown, ChevronUp, MapPin, Phone, Mail, Trash2, AlertTriangle, X } from 'lucide-react'
 
 interface Stats {
   total: number; students: number; tutors: number; parents: number; schools: number
   recent: { email: string; role: string; full_name: string; phone: string; created_at: string }[]
 }
 interface TutorRow {
-  id: string; full_name: string; email: string; phone: string | null
+  id: string; user_id: string; full_name: string; email: string; phone: string | null
   city: string | null; state: string | null; bio: string | null
   years_experience: number | null; teaching_mode: string | null
   current_institution: string | null; is_verified: boolean
@@ -17,13 +17,21 @@ interface TutorRow {
   qualifications: { qualification_type: string; institution: string; field_of_study: string; year_obtained: number }[]
 }
 interface SchoolRow {
-  id: string; school_name: string; email: string; phone: string | null
+  id: string; user_id: string; school_name: string; email: string; phone: string | null
   city: string | null; state: string | null; address: string | null
   school_type: string | null; curricula: string[] | null
   founded_year: number | null; student_count: number | null
   about: string | null; website: string | null
   is_verified: boolean; verification_status: string
   registration_number: string | null; created_at: string
+}
+interface StudentRow {
+  id: string; user_id: string; full_name: string; email: string; phone: string | null
+  state: string | null; city: string | null; current_school: string | null
+  year_group: string | null; created_at: string
+}
+interface ParentRow {
+  id: string; email: string; full_name: string; phone: string; created_at: string
 }
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_DASHBOARD_PASSWORD || 'nexora-admin-2026'
@@ -45,6 +53,47 @@ function VerifyBtn({ verified, loading, onClick }: { verified: boolean; loading:
   )
 }
 
+function DeleteBtn({ onClick }: { onClick: () => void }) {
+  return (
+    <button onClick={onClick}
+      className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-all">
+      <Trash2 className="w-3 h-3" /> Delete
+    </button>
+  )
+}
+
+function ConfirmModal({ name, onConfirm, onCancel, loading }: {
+  name: string; onConfirm: () => void; onCancel: () => void; loading: boolean
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="w-5 h-5 text-red-600" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-900 text-base">Delete Account</h3>
+            <p className="text-sm text-slate-500 mt-1">
+              Permanently delete <span className="font-semibold text-slate-800">{name}</span>? This cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onCancel} disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
+            <X className="w-3.5 h-3.5" /> Cancel
+          </button>
+          <button onClick={onConfirm} disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
+            {loading ? '…' : <><Trash2 className="w-3.5 h-3.5" /> Delete</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminDashboard() {
   const [authed, setAuthed]         = useState(false)
   const [pw, setPw]                 = useState('')
@@ -52,23 +101,31 @@ export default function AdminDashboard() {
   const [stats, setStats]           = useState<Stats | null>(null)
   const [tutors, setTutors]         = useState<TutorRow[]>([])
   const [schools, setSchools]       = useState<SchoolRow[]>([])
+  const [students, setStudents]     = useState<StudentRow[]>([])
+  const [parents, setParents]       = useState<ParentRow[]>([])
   const [loading, setLoading]       = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
-  const [tab, setTab]               = useState<'overview' | 'tutors' | 'schools'>('overview')
+  const [tab, setTab]               = useState<'overview' | 'tutors' | 'schools' | 'students' | 'parents'>('overview')
   const [verifyLoading, setVerifyLoading] = useState<string | null>(null)
   const [expanded, setExpanded]     = useState<string | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<{ userId: string; name: string } | null>(null)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
     try {
-      const [statsRes, tutorsRes, schoolsRes] = await Promise.all([
+      const [statsRes, tutorsRes, schoolsRes, studentsRes, parentsRes] = await Promise.all([
         fetch('/api/admin/stats'),
         fetch('/api/admin/tutors'),
         fetch('/api/admin/schools'),
+        fetch('/api/admin/students'),
+        fetch('/api/admin/parents'),
       ])
-      if (statsRes.ok)   setStats(await statsRes.json())
-      if (tutorsRes.ok)  setTutors((await tutorsRes.json()).tutors ?? [])
-      if (schoolsRes.ok) setSchools((await schoolsRes.json()).schools ?? [])
+      if (statsRes.ok)    setStats(await statsRes.json())
+      if (tutorsRes.ok)   setTutors((await tutorsRes.json()).tutors ?? [])
+      if (schoolsRes.ok)  setSchools((await schoolsRes.json()).schools ?? [])
+      if (studentsRes.ok) setStudents((await studentsRes.json()).students ?? [])
+      if (parentsRes.ok)  setParents((await parentsRes.json()).parents ?? [])
       setLastRefresh(new Date())
     } finally {
       setLoading(false)
@@ -106,6 +163,25 @@ export default function AdminDashboard() {
     setVerifyLoading(null)
   }
 
+  async function handleDelete() {
+    if (!deleteTarget) return
+    setDeleteLoading(true)
+    try {
+      await fetch('/api/admin/delete', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: deleteTarget.userId }),
+      })
+      const uid = deleteTarget.userId
+      setTutors(prev => prev.filter(x => x.user_id !== uid))
+      setSchools(prev => prev.filter(x => x.user_id !== uid))
+      setStudents(prev => prev.filter(x => x.user_id !== uid))
+      setParents(prev => prev.filter(x => x.id !== uid))
+      setDeleteTarget(null)
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
   if (!authed) return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
@@ -136,13 +212,24 @@ export default function AdminDashboard() {
   const pendingSchools = schools.filter(s => !s.is_verified).length
 
   const TABS = [
-    { key: 'overview', label: 'Overview' },
-    { key: 'tutors',   label: `Tutors${pendingTutors  > 0 ? ` (${pendingTutors} pending)`  : ''}` },
-    { key: 'schools',  label: `Schools${pendingSchools > 0 ? ` (${pendingSchools} pending)` : ''}` },
+    { key: 'overview',  label: 'Overview' },
+    { key: 'tutors',    label: `Tutors${pendingTutors  > 0 ? ` (${pendingTutors} pending)`  : ''}` },
+    { key: 'schools',   label: `Schools${pendingSchools > 0 ? ` (${pendingSchools} pending)` : ''}` },
+    { key: 'students',  label: `Students (${students.length})` },
+    { key: 'parents',   label: `Parents (${parents.length})` },
   ] as const
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {deleteTarget && (
+        <ConfirmModal
+          name={deleteTarget.name}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+          loading={deleteLoading}
+        />
+      )}
+
       <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Shield className="w-5 h-5 text-indigo-400" />
@@ -161,11 +248,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-slate-200 px-6">
-        <div className="max-w-6xl mx-auto flex">
+      <div className="bg-white border-b border-slate-200 px-6 overflow-x-auto">
+        <div className="max-w-6xl mx-auto flex min-w-max">
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`px-5 py-3.5 text-sm font-semibold border-b-2 transition-colors ${tab === t.key ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
+              className={`px-5 py-3.5 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${tab === t.key ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
               {t.label}
             </button>
           ))}
@@ -177,9 +264,9 @@ export default function AdminDashboard() {
           <div className="text-center py-20 text-slate-400">Loading…</div>
         ) : tab === 'overview' ? (
           <>
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white mb-6 flex items-center justify-between">
+            <div className="bg-[#0f3460] rounded-2xl p-6 text-white mb-6 flex items-center justify-between">
               <div>
-                <p className="text-indigo-200 text-sm font-medium">Total Registered Users</p>
+                <p className="text-slate-300 text-sm font-medium">Total Registered Users</p>
                 <p className="text-5xl font-black mt-1">{stats?.total ?? 0}</p>
               </div>
               <TrendingUp className="w-12 h-12 text-white/20" />
@@ -238,7 +325,6 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl border border-slate-200 px-6 py-12 text-center text-slate-400 text-sm">No tutors registered yet.</div>
             ) : tutors.map(t => (
               <div key={t.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                {/* Summary row */}
                 <div className="px-6 py-4 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -254,6 +340,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <VerifyBtn verified={t.is_verified} loading={verifyLoading === t.id} onClick={() => verifyTutor(t)} />
+                    <DeleteBtn onClick={() => setDeleteTarget({ userId: t.user_id, name: t.full_name })} />
                     <button onClick={() => setExpanded(expanded === t.id ? null : t.id)}
                       className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors">
                       {expanded === t.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -261,7 +348,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Expanded details */}
                 {expanded === t.id && (
                   <div className="border-t border-slate-100 px-6 py-5 bg-slate-50 space-y-4">
                     {t.bio && (
@@ -286,11 +372,11 @@ export default function AdminDashboard() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-400 italic">No subjects on file — tutor registered before subjects were required.</p>
+                        <p className="text-xs text-slate-400 italic">No subjects on file.</p>
                       )}
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Qualifications & Expertise</p>
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Qualifications</p>
                       {t.qualifications.length > 0 ? (
                         <div className="space-y-1.5">
                           {t.qualifications.map((q, i) => (
@@ -311,8 +397,7 @@ export default function AdminDashboard() {
               </div>
             ))}
           </div>
-        ) : (
-          /* Schools tab */
+        ) : tab === 'schools' ? (
           <div className="space-y-3">
             {schools.length === 0 ? (
               <div className="bg-white rounded-2xl border border-slate-200 px-6 py-12 text-center text-slate-400 text-sm">No schools registered yet.</div>
@@ -333,6 +418,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <VerifyBtn verified={s.is_verified} loading={verifyLoading === s.id} onClick={() => verifySchool(s)} />
+                    <DeleteBtn onClick={() => setDeleteTarget({ userId: s.user_id, name: s.school_name })} />
                     <button onClick={() => setExpanded(expanded === s.id ? null : s.id)}
                       className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors">
                       {expanded === s.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -370,6 +456,48 @@ export default function AdminDashboard() {
                     )}
                   </div>
                 )}
+              </div>
+            ))}
+          </div>
+        ) : tab === 'students' ? (
+          <div className="space-y-3">
+            {students.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200 px-6 py-12 text-center text-slate-400 text-sm">No students registered yet.</div>
+            ) : students.map(s => (
+              <div key={s.id} className="bg-white rounded-2xl border border-slate-200 px-6 py-4 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-slate-900">{s.full_name || '—'}</p>
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                    <span className="flex items-center gap-1 text-xs text-slate-500"><Mail className="w-3 h-3" />{s.email}</span>
+                    {s.phone && <span className="flex items-center gap-1 text-xs text-slate-500"><Phone className="w-3 h-3" />{s.phone}</span>}
+                    {(s.city || s.state) && <span className="flex items-center gap-1 text-xs text-slate-500"><MapPin className="w-3 h-3" />{[s.city, s.state].filter(Boolean).join(', ')}</span>}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                    {s.current_school && <span className="text-xs text-slate-500">{s.current_school}</span>}
+                    {s.year_group && <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full">{s.year_group}</span>}
+                  </div>
+                  <p className="text-xs text-slate-300 mt-1">Joined {new Date(s.created_at).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</p>
+                </div>
+                <DeleteBtn onClick={() => setDeleteTarget({ userId: s.user_id, name: s.full_name || s.email })} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Parents tab */
+          <div className="space-y-3">
+            {parents.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200 px-6 py-12 text-center text-slate-400 text-sm">No parents registered yet.</div>
+            ) : parents.map(p => (
+              <div key={p.id} className="bg-white rounded-2xl border border-slate-200 px-6 py-4 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-slate-900">{p.full_name || '—'}</p>
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                    <span className="flex items-center gap-1 text-xs text-slate-500"><Mail className="w-3 h-3" />{p.email}</span>
+                    {p.phone && <span className="flex items-center gap-1 text-xs text-slate-500"><Phone className="w-3 h-3" />{p.phone}</span>}
+                  </div>
+                  <p className="text-xs text-slate-300 mt-1">Joined {new Date(p.created_at).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</p>
+                </div>
+                <DeleteBtn onClick={() => setDeleteTarget({ userId: p.id, name: p.full_name || p.email })} />
               </div>
             ))}
           </div>

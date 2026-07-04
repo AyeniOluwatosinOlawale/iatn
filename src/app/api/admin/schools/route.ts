@@ -16,7 +16,7 @@ export async function GET() {
     const supabase = serviceClient()
     const { data, error } = await supabase
       .from('schools')
-      .select('id, school_name, email, phone, city, state, address, school_type, curricula, founded_year, student_count, about, website, is_verified, verification_status, registration_number, created_at')
+      .select('id, user_id, school_name, email, phone, city, state, address, school_type, curricula, founded_year, student_count, about, website, is_verified, verification_status, registration_number, created_at')
       .order('created_at', { ascending: false })
 
     if (error) throw error

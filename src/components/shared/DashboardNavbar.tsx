@@ -24,17 +24,20 @@ const DASHBOARD_LINKS: Record<string, NavItem[]> = {
     { label: 'Bookings',      href: '/tutor-dashboard/bookings',           icon: '📅' },
     { label: 'Analytics',     href: '/tutor-dashboard/analytics',          icon: '📊' },
     { label: 'Sell Resources',href: '/tutor-dashboard/resources/sell',     icon: '📚' },
+    { label: 'Edit Profile',  href: '/tutor-dashboard/profile/edit',       icon: '✏️' },
   ],
   student: [
     { label: 'Dashboard',     href: '/student-dashboard/dashboard',        icon: '🏠' },
     { label: 'My Bookings',   href: '/student-dashboard/bookings',         icon: '📅' },
     { label: 'Mock Exams',    href: '/student-dashboard/mock-exams',       icon: '📝' },
     { label: 'Study Plan',    href: '/student-dashboard/study-plan',       icon: '📖' },
+    { label: 'Edit Profile',  href: '/student-dashboard/profile/edit',     icon: '✏️' },
   ],
   parent: [
     { label: 'Dashboard',     href: '/parent-dashboard/dashboard',         icon: '🏠' },
     { label: 'My Children',   href: '/parent-dashboard/children',          icon: '👧' },
     { label: 'Payments',      href: '/parent-dashboard/payments',          icon: '💳' },
+    { label: 'Edit Profile',  href: '/parent-dashboard/profile/edit',      icon: '✏️' },
   ],
   school: [
     { label: 'Dashboard',     href: '/school-dashboard/dashboard',         icon: '🏠' },

@@ -56,8 +56,8 @@ export default function Footer() {
               <a href="mailto:hello@nexora.com" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
                 <Mail className="w-3.5 h-3.5" /> hello@nexora.com
               </a>
-              <a href="tel:+2348000000000" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
-                <Phone className="w-3.5 h-3.5" /> +234 800 000 0000
+              <a href="tel:+2348066306319" className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
+                <Phone className="w-3.5 h-3.5" /> +234 806 630 6319
               </a>
               <span className="flex items-center gap-2 text-sm text-white/60">
                 <MapPin className="w-3.5 h-3.5" /> 8 Bode Ajayi St, Ologuneru, Ibadan

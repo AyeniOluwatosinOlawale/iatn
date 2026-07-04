@@ -35,7 +35,7 @@ export default function ContactPage() {
               <h2 className="text-xl font-black text-gray-900 mb-5">Get in Touch</h2>
               {[
                 { icon: Mail, label: 'Email', value: 'hello@nexora.com', href: 'mailto:hello@nexora.com' },
-                { icon: Phone, label: 'Phone', value: '+234 800 000 0000', href: 'tel:+2348000000000' },
+                { icon: Phone, label: 'Phone', value: '+234 806 630 6319', href: 'tel:+2348066306319' },
                 { icon: MapPin, label: 'Office', value: 'Victoria Island, Lagos, Nigeria', href: null },
                 { icon: Clock, label: 'Hours', value: 'Mon – Fri, 8am – 6pm WAT', href: null },
               ].map(item => (

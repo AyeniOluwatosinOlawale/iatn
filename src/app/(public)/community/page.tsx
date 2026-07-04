@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { MessageSquare, Users, TrendingUp, ChevronRight, Heart, Eye, Pin, Star } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 const FORUMS = [
   {
@@ -66,7 +67,10 @@ export default function CommunityPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className="nexora-gradient text-white py-14 px-4">
+      <DualVideoHero
+        leftVideo="https://videos.pexels.com/video-files/3255777/3255777-hd_1920_1080_25fps.mp4"
+        rightVideo="https://videos.pexels.com/video-files/5212703/5212703-hd_1920_1080_25fps.mp4"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -86,7 +90,7 @@ export default function CommunityPage() {
             </Link>
           </div>
         </div>
-      </div>
+      </DualVideoHero>
 
       {/* Stats */}
       <div className="bg-[#0f3460] py-8 px-4">

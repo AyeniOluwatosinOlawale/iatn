@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Calendar, Clock, ChevronRight, Award, FileText, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -331,7 +332,10 @@ export default function ExamsPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className="nexora-gradient text-white py-14 px-4">
+      <DualVideoHero
+        leftVideo="https://videos.pexels.com/video-files/3196588/3196588-hd_1920_1080_25fps.mp4"
+        rightVideo="https://videos.pexels.com/video-files/8850285/8850285-hd_1920_1080_25fps.mp4"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -358,7 +362,7 @@ export default function ExamsPage() {
             ))}
           </div>
         </div>
-      </div>
+      </DualVideoHero>
 
       {/* Exam cards */}
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">

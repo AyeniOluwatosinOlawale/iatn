@@ -3,6 +3,7 @@ import { Star, Shield, Award, Users, BookOpen, TrendingUp, ArrowRight, CheckCirc
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import HeroSearch from '@/components/shared/HeroSearch'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 const stats = [
   { value: '2,000+', label: 'Verified Tutors' },
@@ -124,8 +125,12 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="nexora-gradient text-white pt-20 pb-28 px-4 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto text-center relative z-10">
+      <DualVideoHero
+        leftVideo="https://videos.pexels.com/video-files/5699453/5699453-hd_1920_1080_25fps.mp4"
+        rightVideo="https://videos.pexels.com/video-files/5649452/5649452-hd_1920_1080_25fps.mp4"
+        contentClassName="pt-20 pb-28 px-4"
+      >
+        <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
             Nigeria&apos;s #1 Academic Excellence Platform
@@ -141,7 +146,7 @@ export default function HomePage() {
 
           <HeroSearch />
         </div>
-      </section>
+      </DualVideoHero>
 
       {/* Stats */}
       <section className="bg-[#0f3460] py-10">

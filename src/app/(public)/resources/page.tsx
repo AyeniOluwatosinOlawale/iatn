@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -344,7 +345,10 @@ export default function ResourcesPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className="nexora-gradient text-white py-14 px-4">
+      <DualVideoHero
+        leftVideo="https://videos.pexels.com/video-files/4116598/4116598-hd_1920_1080_25fps.mp4"
+        rightVideo="https://videos.pexels.com/video-files/7988010/7988010-hd_1920_1080_25fps.mp4"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -385,7 +389,7 @@ export default function ResourcesPage() {
             </button>
           </div>
         </div>
-      </div>
+      </DualVideoHero>
 
       {/* Stats */}
       <div className="bg-[#0f3460] py-8 px-4">

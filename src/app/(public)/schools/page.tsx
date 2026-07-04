@@ -6,6 +6,7 @@ import { Search, MapPin, Star, Users, CheckCircle2, SlidersHorizontal, ChevronRi
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import { NIGERIAN_STATES } from '@/lib/utils'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 const SAMPLE_SCHOOLS = [
   {
@@ -148,7 +149,11 @@ export default function SchoolsPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className="text-white py-14 px-4" style={{ background: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)' }}>
+      <DualVideoHero
+        leftVideo="https://videos.pexels.com/video-files/8471889/8471889-hd_1920_1080_25fps.mp4"
+        rightVideo="https://videos.pexels.com/video-files/5310899/5310899-hd_1920_1080_25fps.mp4"
+        overlay="rgba(83,52,131,0.75)"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -205,7 +210,7 @@ export default function SchoolsPage() {
             ))}
           </div>
         </div>
-      </div>
+      </DualVideoHero>
 
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-8">

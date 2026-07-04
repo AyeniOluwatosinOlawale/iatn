@@ -695,7 +695,7 @@ export default function ResourcesPage() {
             </p>
             <div className="flex flex-wrap gap-2">
               {[
-                { name: 'Cambridge Timetable', url: 'https://www.cambridgeinternational.org/exam-administration/cambridge-exams-officers-guide/phase-3-just-before-the-exams/timetables/' },
+                { name: 'Cambridge Timetable', url: 'https://www.cambridgeinternational.org/exam-administration/cambridge-exams-officers-guide/' },
                 { name: 'JAMB Timetable', url: 'https://www.jamb.gov.ng/' },
                 { name: 'WAEC Timetable', url: 'https://waeconline.org.ng/' },
                 { name: 'IB Exam Schedule', url: 'https://www.ibo.org/programmes/diploma-programme/assessment-and-exams/getting-results/' },

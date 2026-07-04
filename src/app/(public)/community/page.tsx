@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ChevronRight, Heart, Star, PenSquare, Lock, Loader2, Eye, EyeOff, AlertCircle, MessageSquare, Clock } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 type PostRow = {
@@ -165,8 +166,10 @@ function CommunityContent() {
       <Navbar />
 
       {/* Hero */}
-      <div className="nexora-gradient text-white py-14 px-4">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative overflow-hidden nexora-gradient text-white py-14 px-4">
+        <DualVideoHero src1="/videos/hero-community2.mp4" src2="/videos/hero-community.mp4" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.78) 60%, rgba(26,26,46,0.75) 100%)' }} aria-hidden="true" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />

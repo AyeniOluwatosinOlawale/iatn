@@ -3,6 +3,7 @@ import { Star, Shield, Award, Users, BookOpen, TrendingUp, ArrowRight, CheckCirc
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import HeroSearch from '@/components/shared/HeroSearch'
+import DualVideoHero from '@/components/shared/DualVideoHero'
 
 const stats = [
   { value: '2,000+', label: 'Verified Tutors' },
@@ -125,6 +126,15 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="nexora-gradient text-white pt-20 pb-28 px-4 relative overflow-hidden">
+        {/* Background video */}
+        <DualVideoHero src1="/videos/hero-home2.mp4" src2="/videos/hero-home.mp4" />
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(15,52,96,0.82) 0%, rgba(22,33,62,0.80) 60%, rgba(26,26,46,0.80) 100%)' }}
+          aria-hidden="true"
+        />
+
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />

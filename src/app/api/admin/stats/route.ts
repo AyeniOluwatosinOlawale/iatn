@@ -16,16 +16,16 @@ export async function GET() {
     const all = users.users ?? []
     const count = (role: string) => all.filter(u => u.user_metadata?.role === role).length
 
-    const recent = all
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      .slice(0, 20)
-      .map(u => ({
-        email: u.email ?? 'unknown',
-        role: u.user_metadata?.role ?? 'unknown',
-        full_name: u.user_metadata?.full_name ?? '',
-        phone: u.user_metadata?.phone ?? '',
-        created_at: u.created_at,
-      }))
+    const mapUser = (u: typeof all[0]) => ({
+      id: u.id,
+      email: u.email ?? 'unknown',
+      role: u.user_metadata?.role ?? 'unknown',
+      full_name: u.user_metadata?.full_name ?? '',
+      phone: u.user_metadata?.phone ?? '',
+      created_at: u.created_at,
+    })
+
+    const sorted = [...all].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
     return NextResponse.json({
       total: all.length,
@@ -33,7 +33,8 @@ export async function GET() {
       tutors: count('tutor'),
       parents: count('parent'),
       schools: count('school'),
-      recent,
+      recent: sorted.slice(0, 20).map(mapUser),
+      all: sorted.map(mapUser),
     })
   } catch (err) {
     console.error('Admin stats error:', err)

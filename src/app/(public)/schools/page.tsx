@@ -150,8 +150,8 @@ export default function SchoolsPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="/videos/v9.mp4"
-        rightVideo="/videos/v10.mp4"
+        leftVideo="/videos/hero-a.mp4"
+        rightVideo="/videos/hero-b.mp4"
         overlay="rgba(83,52,131,0.75)"
       >
         <div className="max-w-6xl mx-auto">

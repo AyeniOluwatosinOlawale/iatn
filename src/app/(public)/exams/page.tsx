@@ -333,8 +333,8 @@ export default function ExamsPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="/videos/v5.mp4"
-        rightVideo="/videos/v6.mp4"
+        leftVideo="/videos/hero-a.mp4"
+        rightVideo="/videos/hero-b.mp4"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">

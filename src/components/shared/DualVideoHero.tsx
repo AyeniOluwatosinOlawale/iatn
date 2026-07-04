@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface DualVideoHeroProps {
   leftVideo: string
@@ -16,53 +16,80 @@ export default function DualVideoHero({
   rightVideo,
   overlay = 'rgba(15,52,96,0.72)',
   children,
-  minHeight = '380px',
+  minHeight = '420px',
   contentClassName = 'py-14 px-4',
 }: DualVideoHeroProps) {
-  const leftRef = useRef<HTMLVideoElement>(null)
-  const rightRef = useRef<HTMLVideoElement>(null)
+  const aRef = useRef<HTMLVideoElement>(null)
+  const bRef = useRef<HTMLVideoElement>(null)
+  const [active, setActive] = useState<'a' | 'b'>('a')
 
   useEffect(() => {
-    [leftRef.current, rightRef.current].forEach((v) => {
-      if (!v) return
-      v.muted = true
-      v.play().catch(() => {})
-    })
+    const a = aRef.current
+    const b = bRef.current
+    if (!a || !b) return
+
+    a.muted = true
+    b.muted = true
+
+    function onAEnd() {
+      b.currentTime = 0
+      b.play().catch(() => {})
+      setActive('b')
+    }
+    function onBEnd() {
+      a.currentTime = 0
+      a.play().catch(() => {})
+      setActive('a')
+    }
+
+    a.addEventListener('ended', onAEnd)
+    b.addEventListener('ended', onBEnd)
+    a.play().catch(() => {})
+
+    return () => {
+      a.removeEventListener('ended', onAEnd)
+      b.removeEventListener('ended', onBEnd)
+    }
   }, [])
 
   return (
-    <div className="relative overflow-hidden text-white" style={{ minHeight }}>
-      <div
+    <div style={{ position: 'relative', minHeight, overflow: 'hidden', color: 'white' }}>
+      {/* Video A */}
+      <video
+        ref={aRef}
+        src={leftVideo}
+        muted
+        playsInline
+        preload="auto"
         style={{
           position: 'absolute',
           inset: 0,
-          display: 'flex',
           width: '100%',
           height: '100%',
+          objectFit: 'cover',
+          opacity: active === 'a' ? 1 : 0,
+          transition: 'opacity 1.2s ease',
         }}
-      >
-        <video
-          ref={leftRef}
-          src={leftVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={{ width: '50%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
-        <video
-          ref={rightRef}
-          src={rightVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={{ width: '50%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
-      </div>
+      />
+      {/* Video B — hidden until A ends */}
+      <video
+        ref={bRef}
+        src={rightVideo}
+        muted
+        playsInline
+        preload="auto"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: active === 'b' ? 1 : 0,
+          transition: 'opacity 1.2s ease',
+        }}
+      />
 
+      {/* Overlay */}
       <div
         style={{
           position: 'absolute',
@@ -72,6 +99,7 @@ export default function DualVideoHero({
         }}
       />
 
+      {/* Content */}
       <div style={{ position: 'relative', zIndex: 2 }} className={contentClassName}>
         {children}
       </div>

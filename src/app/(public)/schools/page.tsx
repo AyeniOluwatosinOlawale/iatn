@@ -150,8 +150,8 @@ export default function SchoolsPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/8471889/8471889-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/5310899/5310899-hd_1920_1080_25fps.mp4"
+        leftVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        rightVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
         overlay="rgba(83,52,131,0.75)"
       >
         <div className="max-w-6xl mx-auto">

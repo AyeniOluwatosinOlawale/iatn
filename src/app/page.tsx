@@ -126,8 +126,8 @@ export default function HomePage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/5699453/5699453-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/5649452/5649452-hd_1920_1080_25fps.mp4"
+        leftVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        rightVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
         contentClassName="pt-20 pb-28 px-4"
       >
         <div className="max-w-5xl mx-auto text-center">

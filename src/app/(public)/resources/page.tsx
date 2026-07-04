@@ -346,8 +346,8 @@ export default function ResourcesPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/4116598/4116598-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/7988010/7988010-hd_1920_1080_25fps.mp4"
+        leftVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+        rightVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">

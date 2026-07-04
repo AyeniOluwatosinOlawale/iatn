@@ -333,8 +333,8 @@ export default function ExamsPage() {
 
       {/* Hero */}
       <DualVideoHero
-        leftVideo="https://videos.pexels.com/video-files/3196588/3196588-hd_1920_1080_25fps.mp4"
-        rightVideo="https://videos.pexels.com/video-files/8850285/8850285-hd_1920_1080_25fps.mp4"
+        leftVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+        rightVideo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 text-white/60 text-sm mb-3">

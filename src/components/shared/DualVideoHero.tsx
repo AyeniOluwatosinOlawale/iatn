@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+
 interface DualVideoHeroProps {
   leftVideo: string
   rightVideo: string
@@ -14,49 +16,65 @@ export default function DualVideoHero({
   rightVideo,
   overlay = 'rgba(15,52,96,0.72)',
   children,
-  minHeight = '340px',
+  minHeight = '380px',
   contentClassName = 'py-14 px-4',
 }: DualVideoHeroProps) {
+  const leftRef = useRef<HTMLVideoElement>(null)
+  const rightRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    [leftRef.current, rightRef.current].forEach((v) => {
+      if (!v) return
+      v.muted = true
+      v.play().catch(() => {})
+    })
+  }, [])
+
   return (
     <div className="relative overflow-hidden text-white" style={{ minHeight }}>
-      {/* Dual video background */}
-      <div className="absolute inset-0 flex">
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          width: '100%',
+          height: '100%',
+        }}
+      >
         <video
-          className="w-1/2 h-full object-cover"
+          ref={leftRef}
           src={leftVideo}
           autoPlay
           muted
           loop
           playsInline
-          preload="none"
+          preload="auto"
+          style={{ width: '50%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
         <video
-          className="w-1/2 h-full object-cover"
+          ref={rightRef}
           src={rightVideo}
           autoPlay
           muted
           loop
           playsInline
-          preload="none"
-          style={{ animationDelay: '2s' }}
+          preload="auto"
+          style={{ width: '50%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
       </div>
 
-      {/* Unified overlay — ties both panels together */}
       <div
-        className="absolute inset-0"
-        style={{ background: `linear-gradient(135deg, ${overlay} 0%, ${overlay} 100%)` }}
-      />
-      {/* Subtle centre seam blur so split isn't noticeable */}
-      <div
-        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 30% 100% at 50% 50%, rgba(0,0,0,0.18) 0%, transparent 100%)',
+          position: 'absolute',
+          inset: 0,
+          background: overlay,
+          zIndex: 1,
         }}
       />
 
-      {/* Content */}
-      <div className={`relative z-10 ${contentClassName}`}>{children}</div>
+      <div style={{ position: 'relative', zIndex: 2 }} className={contentClassName}>
+        {children}
+      </div>
     </div>
   )
 }

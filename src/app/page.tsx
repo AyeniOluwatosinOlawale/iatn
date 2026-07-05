@@ -144,7 +144,7 @@ export default function HomePage() {
             Find Nigeria&apos;s Best Tutors &amp; Schools
           </h1>
           <p className="text-lg sm:text-xl text-white/75 max-w-2xl mx-auto mb-8 text-balance">
-            Verified IGCSE, A-Level, IB, WAEC, JAMB, and SAT tutors and schools across Nigeria — all in one trusted platform.
+            Verified IGCSE, A-Level, IB, WAEC, JAMB, and SAT tutors and schools across Nigeria — plus an AI Tutor to solve any exam problem, all in one trusted platform.
           </p>
 
           <HeroSearch />

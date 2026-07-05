@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Calendar, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
+import { MapPin, Clock, Star, Award, CheckCircle2, BookOpen, Users, Shield, ChevronRight, Phone, Mail } from 'lucide-react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
 import SendMessageModal from '@/components/shared/SendMessageModal'
@@ -283,10 +283,6 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
                   )}
                 </div>
 
-                <Link href={`/book/${id}`} className="block w-full nexora-gradient text-white text-center font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity mb-3">
-                  <Calendar className="w-4 h-4 inline mr-2" />
-                  Book a Lesson
-                </Link>
                 <SendMessageModal
                   tutorName={t.full_name}
                   tutorEmail={t.email}

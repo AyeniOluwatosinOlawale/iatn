@@ -115,8 +115,8 @@ export default function SchoolsClient({ schools }: { schools: SchoolRow[] }) {
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white">Schools</span>
           </div>
-          <h1 className="text-3xl font-black mb-2">Find A-Level & IGCSE Schools in Nigeria</h1>
-          <p className="text-white/70 mb-7 max-w-xl">Compare verified Cambridge, Edexcel, and IB schools across Nigeria — real data, real schools.</p>
+          <h1 className="text-3xl font-black mb-2">Find Your School</h1>
+          <p className="text-white/70 mb-7 max-w-xl">Verified IGCSE, A-Level, IB, WAEC, JAMB, and SAT schools across Nigeria.</p>
 
           <div className="bg-white rounded-xl p-2 flex flex-col sm:flex-row gap-2 max-w-3xl">
             <div className="flex-1 flex items-center gap-3 px-3">

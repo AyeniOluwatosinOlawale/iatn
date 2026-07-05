@@ -95,11 +95,25 @@ For figures and diagrams: describe what you see, identify the key values/relatio
 Always use {curriculum} notation, units, and terminology throughout.`,
 }
 
+// Syllabus scope block injected into every prompt to keep answers within the selected exam boundary
+function syllabusScope(curriculum: string, subject: string): string {
+  return `
+⚠️ SYLLABUS BOUNDARY — NON-NEGOTIABLE:
+You are teaching exclusively for the **${curriculum} ${subject}** examination.
+- Every explanation, question, mark scheme, and example MUST fall within the official ${curriculum} ${subject} syllabus — no content beyond what this qualification actually examines.
+- Use only the terminology, notation, units, and command words recognised by ${curriculum} examiners.
+- If a student asks about a topic that is NOT on the ${curriculum} ${subject} syllabus, tell them clearly: "This topic is not assessed in ${curriculum} ${subject}." Then offer the closest syllabus-relevant topic instead.
+- Do not introduce university-level content, content from other curricula, or optional topics unless they appear in the ${curriculum} ${subject} specification.
+- Depth of answer should match the level this qualification demands — no deeper, no shallower.
+`
+}
+
 function buildSystemPrompt(mode: string, curriculum: string, subject: string): string {
   const base = SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.concept
-  return base
+  const resolved = base
     .replace(/\{curriculum\}/g, curriculum || 'Cambridge A-Level')
     .replace(/\{subject\}/g, subject || 'your subject')
+  return syllabusScope(curriculum || 'Cambridge A-Level', subject || 'your subject') + '\n' + resolved
 }
 
 // ─── Route Handler ────────────────────────────────────────────────────────────

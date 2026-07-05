@@ -278,8 +278,8 @@ export default async function SchoolProfilePage({ params }: { params: Promise<{ 
             <h3 className="font-bold text-slate-900 mb-3">Explore More</h3>
             <div className="space-y-2">
               {[
-                { label: 'All A-Level Schools', href: '/schools' },
-                { label: 'Find an A-Level Tutor', href: '/tutors' },
+                { label: 'All Schools', href: '/schools' },
+                { label: 'Find a Tutor', href: '/tutors' },
               ].map(link => (
                 <Link key={link.href} href={link.href} className="flex items-center justify-between text-sm text-slate-700 hover:text-[#533483] py-1.5 border-b border-slate-100 last:border-0 transition-colors">
                   {link.label}

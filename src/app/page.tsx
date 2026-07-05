@@ -141,12 +141,10 @@ export default function HomePage() {
             Nigeria&apos;s #1 Academic Excellence Platform
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6 text-balance">
-            Find Nigeria&apos;s Best<br />
-            <span className="text-purple-300">IGCSE & A-Level</span> Tutors<br />
-            <span className="text-purple-200 text-3xl sm:text-4xl lg:text-5xl">&amp; A-Level Schools</span>
+            Find Nigeria&apos;s Best Tutors &amp; Schools
           </h1>
           <p className="text-lg sm:text-xl text-white/75 max-w-2xl mx-auto mb-8 text-balance">
-            Verified tutors and top international schools — Cambridge results, reviews, and bookings all in one trusted platform.
+            Verified IGCSE, A-Level, IB, WAEC, JAMB, and SAT tutors and schools across Nigeria — all in one trusted platform.
           </p>
 
           <HeroSearch />

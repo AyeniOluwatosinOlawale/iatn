@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import SchoolsClient from './SchoolsClient'
 import type { SchoolRow } from './SchoolsClient'
 
-export const revalidate = 60
+export const revalidate = 0
 
 export default async function SchoolsPage() {
   const supabase = await createClient()

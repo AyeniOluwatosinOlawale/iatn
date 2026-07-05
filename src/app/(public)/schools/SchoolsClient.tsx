@@ -324,7 +324,7 @@ export default function SchoolsClient({ schools }: { schools: SchoolRow[] }) {
       <section className="py-16 px-4 bg-slate-50 border-t border-slate-200">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-black text-slate-900 mb-3">Is Your School Listed?</h2>
-          <p className="text-slate-600 mb-6">Join verified Cambridge and international schools on Nexora Academic. Reach thousands of parents actively looking for the right school.</p>
+          <p className="text-slate-600 mb-6">Join schools on Nexora Academic. Reach thousands of parents actively looking for the right school.</p>
           <Link
             href="/register?role=school"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90 transition-opacity"

@@ -7,4 +7,10 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.05,
   integrations: [Sentry.replayIntegration()],
+  environment: process.env.NODE_ENV,
+  allowUrls: [
+    /https:\/\/www\.nexora-academic\.com/,
+    /https:\/\/nexora-academic\.com/,
+    /https:\/\/nexora-academic\.vercel\.app/,
+  ],
 })

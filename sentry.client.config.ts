@@ -12,5 +12,7 @@ Sentry.init({
     /https:\/\/www\.nexora-academic\.com/,
     /https:\/\/nexora-academic\.com/,
     /https:\/\/nexora-academic\.vercel\.app/,
+    /https:\/\/faceattend\.co\.uk/,
+    /https:\/\/www\.faceattend\.co\.uk/,
   ],
 })

@@ -14,5 +14,9 @@ Sentry.init({
     /https:\/\/nexora-academic\.vercel\.app/,
     /https:\/\/faceattend\.co\.uk/,
     /https:\/\/www\.faceattend\.co\.uk/,
+    /https:\/\/anaai\.tech/,
+    /https:\/\/www\.anaai\.tech/,
+    /https:\/\/anaaiconsult\.co\.uk/,
+    /https:\/\/www\.anaaiconsult\.co\.uk/,
   ],
 })

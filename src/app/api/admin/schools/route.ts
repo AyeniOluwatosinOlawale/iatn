@@ -68,13 +68,13 @@ export async function POST(req: Request) {
           <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.6;">
             Your school now appears in the Nexora schools directory with a <strong>✓ Verified School</strong> badge.
           </p>
-          <a href="https://nexora-acedamic.com/school-dashboard/dashboard"
+          <a href="https://nexora-academic.com/school-dashboard/dashboard"
              style="display:block;text-align:center;background:linear-gradient(135deg,#0f3460,#7c3aed);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:16px 24px;border-radius:12px;">
             Go to School Dashboard →
           </a>
         </td></tr>
         <tr><td style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
-          <p style="margin:0;color:#94a3b8;font-size:12px;">Nexora Academic · nexora-acedamic.com</p>
+          <p style="margin:0;color:#94a3b8;font-size:12px;">Nexora Academic · nexora-academic.com</p>
         </td></tr>
       </table>
     </td></tr>

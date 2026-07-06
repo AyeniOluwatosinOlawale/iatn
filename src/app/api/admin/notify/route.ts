@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
               ${[
                 ['✅', 'Account created', 'Your Nexora account is live'],
                 ['📧', 'Verify your email', 'Check your inbox for a confirmation link'],
-                ['🚀', 'Get started', 'Log in to your dashboard at nexora-acedamic.com'],
+                ['🚀', 'Get started', 'Log in to your dashboard at nexora-academic.com'],
               ].map(([icon, title, desc]) => `
               <tr>
                 <td style="padding:10px 0;vertical-align:top;width:36px;font-size:18px;">${icon}</td>
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
         <!-- CTA -->
         <tr>
           <td style="padding:8px 32px 36px;">
-            <a href="https://nexora-acedamic.com/login"
+            <a href="https://nexora-academic.com/login"
                style="display:block;text-align:center;background:linear-gradient(135deg,#0f3460,#7c3aed);color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:16px 24px;border-radius:12px;">
               Go to Nexora Academic →
             </a>
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest) {
           <td style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
             <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.5;">
               Nexora Academic · 8 Bode Ajayi Street, Ologuneru, Ibadan, Oyo State, Nigeria<br>
-              <a href="https://nexora-acedamic.com" style="color:#7c3aed;text-decoration:none;">nexora-acedamic.com</a>
+              <a href="https://nexora-academic.com" style="color:#7c3aed;text-decoration:none;">nexora-academic.com</a>
             </p>
           </td>
         </tr>

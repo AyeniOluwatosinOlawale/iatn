@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         </tr>
         <tr>
           <td style="padding:16px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
-            <p style="margin:0;color:#94a3b8;font-size:11px;">Nexora Academic · nexora-acedamic.com</p>
+            <p style="margin:0;color:#94a3b8;font-size:11px;">Nexora Academic · nexora-academic.com</p>
           </td>
         </tr>
       </table>
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
         </tr>
         <tr>
           <td style="padding:16px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
-            <p style="margin:0;color:#94a3b8;font-size:11px;">Nexora Academic · nexora-acedamic.com</p>
+            <p style="margin:0;color:#94a3b8;font-size:11px;">Nexora Academic · nexora-academic.com</p>
           </td>
         </tr>
       </table>

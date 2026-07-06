@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = 'https://www.nexora-acedamic.com'
+const BASE_URL = 'https://www.nexora-academic.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

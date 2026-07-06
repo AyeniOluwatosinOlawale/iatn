@@ -11,7 +11,8 @@ Sentry.init({
   allowUrls: [
     /https:\/\/www\.nexora-academic\.com/,
     /https:\/\/nexora-academic\.com/,
-    /https:\/\/nexora-academic\.vercel\.app/,
+    /https:\/\/www\.nexora-acedamic\.com/,
+    /https:\/\/nexora-acedamic\.com/,
     /https:\/\/faceattend\.co\.uk/,
     /https:\/\/www\.faceattend\.co\.uk/,
     /https:\/\/anaai\.tech/,

@@ -45,6 +45,14 @@
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
+  "browserslist": [
+    "chrome >= 80",
+    "firefox >= 78",
+    "safari >= 13",
+    "edge >= 80",
+    "ios >= 13",
+    "samsung >= 10"
+  ],
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
